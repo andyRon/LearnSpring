@@ -1,4 +1,0 @@
-2020-03-05 17:23:34.332  INFO 18608 --- [main] com.andyron.Ch61LogbackApplication       : Starting Ch61LogbackApplication on Mac.local with PID 18608 (started by andyron in /Users/andyron/myfield/github/LearnSpring/SpringBoot2实战之旅/ch6-1-logback)
-2020-03-05 17:23:34.334 DEBUG 18608 --- [main] com.andyron.Ch61LogbackApplication       : Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
-2020-03-05 17:23:34.335  INFO 18608 --- [main] com.andyron.Ch61LogbackApplication       : No active profile set, falling back to default profiles: default
-2020-03-05 17:23:35.728  INFO 18608 --- [main] com.andyron.Ch61LogbackApplication       : Started Ch61LogbackApplication in 1.877 seconds (JVM running for 3.332)
