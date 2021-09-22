@@ -46,17 +46,17 @@ https://www.bilibili.com/video/av38657363
 
 单体应用：ALL IN ONE
 
-![](../images/learnspring-008.jpg)
+![](../../images/learnspring-008.jpg)
 
 
 
-![](../images/learnspring-009.jpg)
+![](../../images/learnspring-009.jpg)
 
 ### 3、开发环境准备
 
 配置使用自己下载的maven
 
-![](../images/learnspring-010.jpg)
+![](../../images/learnspring-010.jpg)
 
 
 
@@ -115,17 +115,17 @@ public class HelloController {
 
 将应用打包成jar包后，可直接使用`java -jar`命令运行。
 
-![打包](../images/learnspring-011.jpg)
+![打包](../../images/learnspring-011.jpg)
 
 包位置：
 
-![](../images/learnspring-012.jpg)
+![](../../images/learnspring-012.jpg)
 
 `java -jar spring-boot-01-helloworld-0.0.1-SNAPSHOT.jar`
 
 jar包内部结构：
 
-![](../images/learnspring-013.jpg)
+![](../../images/learnspring-013.jpg)
 
 ### 5、Hello World项目探究
 
@@ -238,13 +238,13 @@ public @interface EnableAutoConfiguration {
 
 ​		打断点debug运行：
 
-![](/Users/andyron/myfield/github/LearnSpring/images/learnspring-026.jpg)
+![](../../images/learnspring-026.jpg)
 
 ​		算一下包名（计算表达式）：
 
-​		![](/Users/andyron/myfield/github/LearnSpring/images/learnspring-027.jpg)
+​		![](../../images/learnspring-027.jpg)
 
-![](/Users/andyron/myfield/github/LearnSpring/images/learnspring-028.jpg)
+![](../../images/learnspring-028.jpg)
 
 
 
@@ -256,11 +256,11 @@ public @interface EnableAutoConfiguration {
 
 ​	**AutoConfigurationImportSelector**表示导入哪些组件的选择器；将所有需要导入的组件以全类名的方式返回；这些组件就会被添加到容器中；
 
-![](/Users/andyron/myfield/github/LearnSpring/images/learnspring-029.jpg)
+![](../../images/learnspring-029.jpg)
 
 ​	会给容器中导入非常多的自动配置类（xxxAutoConfiguration）；就是给容器中导入这个场景需要的所有组件，并配置好这些组件；	
 
-​	![自动配置类](/Users/andyron/myfield/github/LearnSpring/images/learnspring-030.jpg)
+​	![自动配置类](../../images/learnspring-030.jpg)
 
 有了自动配置类，免去了我们手动编写配置注入功能组件等的工作；
 
@@ -272,7 +272,7 @@ public @interface EnableAutoConfiguration {
 
 J2EE的整体整合解决方案和自动配置都在`spring-boot-autoconfigure-2.2.5.RELEASE.jar` (`.m2/repository/org/springframework/boot/spring-boot-autoconfigure/2.2.5.RELEASE/spring-boot-autoconfigure-2.2.5.RELEASE.jar!/org/springframework/boot/autoconfigure`)
 
-![](/Users/andyron/myfield/github/LearnSpring/images/learnspring-031.jpg)
+![](../../images/learnspring-031.jpg)
 
 ### 6、使用Spring Initializer快速创建Spring Boot项目
 
@@ -411,7 +411,7 @@ public class Person {
 
 调整：
 
-![idea配置乱码](/Users/andyron/myfield/github/LearnSpring/images/learnspring-014.jpg)
+![idea配置乱码](../../images/learnspring-014.jpg)
 
 #### 2）@Value获取值和@ConfigurationProperties获取值比较
 
@@ -556,7 +556,7 @@ spring:
 
   也可以直接在测试的时候，配置传入命令行参数
 
-  ![](../images/learnspring-015.jpg)
+  ![](../../images/learnspring-015.jpg)
 
 - 虚拟机参数 `-Dspring.profiles.active=dev`
 
@@ -949,7 +949,7 @@ public class HelloWorld {
 
 默认实现是使用logback，当然也可以使用其他实现。
 
-![concrete-bindings](../images/learnspring-016.jpg)
+![concrete-bindings](../../images/learnspring-016.jpg)
 
 每一个日志的实现框架都有自己的配置文件。使用slf4j以后，**配置文件还是做层日志实现框架自己的配置文件**；
 
@@ -963,7 +963,7 @@ a(slf4j+logback）：Spring（commons-logging）、Hibernate（jboss-logging）�
 
 图片来源是[官方遗留问题处理](http://www.slf4j.org/legacy.html)
 
-![legacy](../images/learnspring-017.jpg)
+![legacy](../../images/learnspring-017.jpg)
 
 
 
@@ -1003,7 +1003,7 @@ a(slf4j+logback）：Spring（commons-logging）、Hibernate（jboss-logging）�
 
 底层依赖关系(最新版本的有所变化)
 
-![底层依赖关系](../images/learnspring-018.jpg)
+![底层依赖关系](../../images/learnspring-018.jpg)
 
 总结：
 
@@ -1022,7 +1022,7 @@ public abstract class LogFactory {
     static LogFactory logFactory = new SLF4JLogFactory();
 ```
 
-![](../images/learnspring-019.jpg)		
+![](../../images/learnspring-019.jpg)		
 
 ​	4）、如果引入其他框架，一定要把这个框架的默认日志依赖移除掉。
 
@@ -1276,7 +1276,7 @@ webjars：以jar包的方式引入静态资源；
 
 https://www.webjars.org/
 
-![](../images/learnspring-020.jpg)
+![](../../images/learnspring-020.jpg)
 
 `localhost:8080/webjars/jquery/3.4.1/jquery.js`
 
@@ -1397,7 +1397,7 @@ https://www.thymeleaf.org/
 
 ​	th ： 任意html属性，来替换原生属性的值。
 
-![](../images/learnspring-021.jpg)
+![](../../images/learnspring-021.jpg)
 
 2）、表达式
 
@@ -1509,7 +1509,7 @@ Spring Boot 自动配置好了SpringMVC。
 
   都会经过`DispatcherServlet.doDispatch()`方法，在这个方法出打断点，然后以debug方式运行，然后再浏览器中任意访问，会发现我上面自定义的视图解析器已经被加载：
 
-  ![](../images/learnspring-022.jpg)
+  ![](../../images/learnspring-022.jpg)
 
 ​	
 
@@ -1704,7 +1704,7 @@ public class WebMvcAutoConfiguration {
 
 1. 编写国际化配置文件，抽取页面需要显示的国际化消息
 
-![](../images/learnspring-023.jpg)
+![](../../images/learnspring-023.jpg)
 
 
 
@@ -1745,7 +1745,7 @@ public class MessageSourceAutoConfiguration {
 
 把**File > Other Settings > Default Settings** (最新的版本已经变成**Perference for New Projects**) 编码格式都改成UTF-8。（这边的改动相当于全局改动，而不是单个项目）
 
-![](../images/learnspring-024.jpg)
+![](../../images/learnspring-024.jpg)
 
 原理：
 
