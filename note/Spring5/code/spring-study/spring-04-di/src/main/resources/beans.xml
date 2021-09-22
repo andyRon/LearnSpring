@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="address" class="com.andyron.pojo.Address">
+        <property name="address" value="上海"></property>
+    </bean>
+
+    <bean id="student" class="com.andyron.pojo.Student">
+        <!-- 普通注入 -->
+        <property name="name" value="Andy"></property>
+
+        <!-- Bean注入 -->
+        <property name="address" ref="address"></property>
+
+        <!-- 数组注入 -->
+        <property name="books">
+            <array>
+                <value>文明之光</value>
+                <value>社会心理学</value>
+                <value>深入理解Java虚拟机</value>
+                <value>Java核心技术</value>
+            </array>
+        </property>
+
+        <!-- list -->
+        <property name="hobbies" >
+            <list>
+                <value>音乐</value>
+                <value>代码</value>
+                <value>篮球</value>
+            </list>
+        </property>
+
+        <!-- map -->
+        <property name="card">
+            <map>
+                <entry key="身份证" value="3212*********"></entry>
+                <entry key="邮箱" value="******@163.com"></entry>
+            </map>
+        </property>
+
+        <!-- set -->
+        <property name="games">
+            <set>
+                <value>LOL</value>
+                <value>DOTA2</value>
+            </set>
+        </property>
+
+        <!-- null -->
+        <property name="wife">
+            <null/>
+        </property>
+
+        <!-- Properties -->
+        <property name="info">
+            <props>
+                <prop key="学号">20110103</prop>
+                <prop key="性别">男</prop>
+            </props>
+        </property>
+    </bean>
+</beans>
