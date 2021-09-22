@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="cat" class="com.andyron.pojo.Cat"></bean>
+    <bean id="dog" class="com.andyron.pojo.Dog"></bean>
+
+    <!-- `byName`配置后会自动在容器上下文中查找，和自己对象set方法后面的值对应的beanid！-->
+    <bean id="people" class="com.andyron.pojo.People" autowire="byName">
+        <property name="name" value="主人"></property>
+    </bean>
+</beans>
