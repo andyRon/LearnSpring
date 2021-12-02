@@ -1,0 +1,13 @@
+person:
+  name: andy${random.uuid}
+  age: 19
+  happy: true
+  birth: 2012/12/01
+  maps: {k1: v1,k2: v2}
+  lists:
+    - code
+    - music
+    - girl
+  dog:
+    name: ${person.hello:hello}_旺财
+    age: 4

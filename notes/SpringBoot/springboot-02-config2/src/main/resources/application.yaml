@@ -1,0 +1,3 @@
+debug: true
+#  配置文件中到底能配置什么？ 与自动装配中的spring.factories是相关的
+
