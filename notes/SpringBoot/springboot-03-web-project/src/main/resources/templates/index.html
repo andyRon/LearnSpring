@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title> - 登录</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.css}" rel="stylesheet">
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/login.css}" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+
+</head>
+
+<body class="signin">
+<div class="signinpanel">
+    <div class="row">
+        <div class="col-sm-12">
+            <form method="post" th:action="@{/user/login}">
+                <h4 class="no-margins" th:text="#{lgoin.tip}">请登录</h4>
+                <p class="m-t-md" style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+                <p class="m-t-md"></p>
+                <input type="text" name="username" class="form-control uname" th:placeholder="#{login.username}"/>
+                <input type="password" name="password" class="form-control pword m-b"
+                       th:placeholder="#{login.password}"/>
+                <!--                    <a href="">忘记密码了？</a>-->
+                <input type="checkbox" value="remember me"> [[#{login.rememberme}]]
+                <button class="btn btn-success btn-block">[[#{login.btn}]]</button>
+                <a class="btn btn-sm" th:href="@{/index.html(l='zh_CN')}">中文</a>
+                <a class="btn btn-sm" th:href="@{/index.html(l='en_US')}">English</a>
+            </form>
+        </div>
+    </div>
+    <div class="signup-footer">
+        <div class="pull-left">
+            &copy; 2021
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
