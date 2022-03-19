@@ -133,15 +133,15 @@ public UserDao userDao = new UserDaoOracleImpl();
 public  UserDao userDao;
 //利用set进行动态实现值的注入
 public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
+  this.userDao = userDao;
+}
 ```
 
 之前，程序的是主动创建对象，控制权在程序员手上； 使用了set注入后，程序员不再具有主动性，而是变成了被动的接受对象！
 
 
 
-这种思想，从本质上解决了问题，让程序员不用再去管理对象的创建。系统的耦合性大大降低~，可以更加专注的在业务的是线上（增加类似`UserDaoSqlserverImpl`的编写，而不要去频繁修改`UserServiceImpl`）！这是IOC的原型，控制反转，就是把控制权反转交给了用户，让程序更加通用。
+这种思想，从本质上解决了问题，让程序员不用再去管理对象的创建。系统的耦合性大大降低~，可以更加专注的在业务的是线上（增加类似`UserDaoSqlserverImpl`的编写，而不要去频繁修改`UserServiceImpl`）！这是IOC的原型，控制反转，就是**把控制权反转交给了用户**，让程序更加通用。
 
 
 
@@ -153,7 +153,7 @@ IOC是一种设计思想，DI（依赖注入）是实现IOC的一种方法。
 
 ![](../../images/learnspring-035.jpg)
 
-IoC是Spring框架的核心内容，使用多种方式完美的实现IoC，可以使用XML配置，也可以使用注解，新版本Spring也可不要配置。
+IoC是Spring框架的核心内容，使用多种方式完美的实现IoC，可以**使用XML配置**，也可以**使用注解**，新版本Spring也可**不要配置**。
 
 Spring容器在初始化时先读取配置文件，根据配置文件或元数据创建于组织对象存入容器中，程序是用时再从IOC容器中取出需要的对象。
 
@@ -257,7 +257,7 @@ hello对象是由Spring创建的，hello对象的属性是由Spring容器设置�
 
 依赖注入：利用set方法来进行注入的。
 
-IOC是一种编程思想，有主动的编程变成被动的接收。
+IOC是一种编程思想，**由主动的编程变成被动的接收**。
 
 
 
@@ -1001,7 +1001,7 @@ https://zhuanlan.zhihu.com/p/114244039
 
 ### 1 简单工厂
 
-BeanFactory
+ BeanFactory
 
 ### 2 工厂方法
 
