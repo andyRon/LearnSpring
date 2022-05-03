@@ -180,21 +180,21 @@ IDEA工具里面使用Maven开发的一个个独立的小Moudle，它具体是�
 
 #### 3、各微服务框架对比
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211026073720455.png)
-
-![image-20211026074002187](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211026074002187.png)
-
-| 功能点/服务框架 | Netflix/SpringCloud       | Motan | gRPC | Thrift | Dubbo/DubboX |
-| --------------- | ------------------------- | ----- | ---- | ------ | ------------ |
-| 功能定位        |                           |       |      |        |              |
-| 支持Rest        |                           |       |      |        |              |
-| 支持RPC         |                           |       |      |        |              |
-| 支持多语言      |                           |       |      |        |              |
-| 负载均衡        |                           |       |      |        |              |
-| 配置服务        |                           |       |      |        |              |
-| 服务调用链监控  | zuul提供边缘服务，API网关 | 否    | 否   | 否     | 否           |
-|                 |                           |       |      |        |              |
-|                 |                           |       |      |        |              |
+| 功能点/服务框架 | Netflix/SpringCloud                                          | Motan                                                        | gRPC                      | Thrift   | Dubbo/DubboX       |
+| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------- | -------- | ------------------ |
+| 功能定位        | 完整的微服务框架                                             | RPC框架，但整合了ZK或Consul，实现集群环境的基本服务注册/发现 | RPC框架                   | RPC框架  | 服务框架           |
+| 支持Rest        | 是，Ribbon支持多种可插拔的序列化选择                         | 否                                                           | 否                        | 否       | 否                 |
+| 支持RPC         | 否                                                           | 是（Hession2）                                               | 是                        | 是       | 是                 |
+| 支持多语言      | 是                                                           | 否                                                           | 是                        | 是       | 否                 |
+| 负载均衡        | 是（服务端zuul+客户端Ribbon），zuul-服务，动态路由，远端负载均衡Eureka（针对中间层服务器） | 是（客户端）                                                 | 否                        | 否       | 是（客户端）       |
+| 配置服务        | Netflix Archaius、Spring Cloud Config Server集中配置         | 是（ZK）                                                     | 否                        | 否       | 否                 |
+| 服务调用链监控  | 是，zuul提供边缘服务，API网关                                | 否                                                           | 否                        | 否       | 否                 |
+| 高可用/容错     | 是（服务端Hystrix+客户端Ribbon）                             | 是（客户端）                                                 | 否                        | 否       | 是（客户端）       |
+| 典型应用案例    | Netflix                                                      | Sina                                                         | Google                    | Facebook |                    |
+| 社区活跃度      | 高                                                           | 一般                                                         | 高                        | 一般     | 2017年重新开始维护 |
+| 学习难度        | 中                                                           | 低                                                           | 高                        | 高       | 低                 |
+| 文档丰富程度    | 高                                                           | 一般                                                         | 一般                      | 一般     | 高                 |
+| 其他            | Spring Cloud Bus提供更多管理端点                             | 支持降级                                                     | Netflix内部在开发继承gRPC | IDL定义  | 实践的公司比较多   |
 
 ## 3、SpringCloud概述
 
@@ -297,7 +297,7 @@ https://spring.io/projects/spring-cloud
 
 https://spring.io/projects/spring-cloud#learn
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211020215621692.png)
+![](images/image-20211020215621692.png)
 
 GA：通用稳定版本
 
@@ -312,7 +312,7 @@ GA：通用稳定版本
 
 实际开发版本关系
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211102195456016.png)
+![](images/image-20211102195456016.png)
 
 ## 4、Rest风格环境搭建
 
@@ -489,7 +489,7 @@ Eureka服务端
 
    如果强制停掉8001，7001会过一段时间才会提醒错误，这是一种保护机制
 
-   ![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211126103513021.png)
+   ![](images/image-20211126103513021.png)
 
 完善监控信息：
 
@@ -777,7 +777,7 @@ Ribbon和Eureka整合以后，客户端可以直接调用，不用关心iPhone�
 
 ### 建立多个服务提供者
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211129221345149.png)
+![](images/image-20211129221345149.png)
 
 
 
@@ -805,7 +805,7 @@ insert into dept (dname, db_source) values ("运维部", Database());
 
 3. 启动三个服务中心，三个服务提供者、一个消费者
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211129225910159.png)
+![](images/image-20211129225910159.png)
 
 此时访问http://localhost/consumer/dept/list，数据会根据情况从不同服务提供者获取
 
@@ -1110,17 +1110,17 @@ Hystrix 在2011年开始由Netflix的API团队开发，并逐渐在Netflix内部
 
 在一切都正常时，客户发来的请求的调用示意如下：
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201095317298.png)
+![](images/image-20211201095317298.png)
 
 当某一个后台服务出现超时，或者不可用，它将阻塞整个请求：
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201095349046.png)
+![](images/image-20211201095349046.png)
 
 对于访问量大的后台服务，如果一旦出现超时，数秒内整个应用的系统资源可能会被立刻耗尽。
 
 在应用中，任何一个通过网络实现的外部调用都是可能失败的。更甚的是，这些不可用的服务，将会逐渐耗尽所有调用其提供服务的其他应用的资源，最终可能导致整个系统的雪崩。
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201095451161.png)
+![](images/image-20211201095451161.png)
 
 对于通过第三方组件实现网络访问的情况，这种问题更加严重。第三方组件对于应用来说是一个黑盒，其实现细节不可见，对于不同的客户端组件，网络和资源的配置情况各不相同，并且通常难以修改和监控。
 
@@ -1150,7 +1150,7 @@ Hystrix 在2011年开始由Netflix的API团队开发，并逐渐在Netflix内部
 
 当采用Hystrix封装各依赖时，服务调用示意图如下：
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201095749803.png)
+![](images/image-20211201095749803.png)
 
 
 
@@ -1224,7 +1224,9 @@ Hystrix 在2011年开始由Netflix的API团队开发，并逐渐在Netflix内部
 
 有些服务整体不要用，就忍痛关掉，把资源给需要的：
 
-<img src="/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201104821063.png" style="zoom:50%;" />
+![](images/image-20211201104821063.png)
+
+
 
 在A服务请求很多时，可以考虑把B、C先关掉，把资源让给A服务
 
@@ -1304,7 +1306,7 @@ Hystrix 在2011年开始由Netflix的API团队开发，并逐渐在Netflix内部
 
 ### 监控
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201112002575.png)
+![](images/image-20211201112002575.png)
 
 1. 新建module，**springcloud-consumer-hystrix-dashboard**
 
@@ -1355,7 +1357,7 @@ Hystrix 在2011年开始由Netflix的API团队开发，并逐渐在Netflix内部
 
 6. 启动`DeptConsumerDashboard_9001`，访问http://localhost:9001/hystrix
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201114019607.png)
+![](images/image-20211201114019607.png)
 
 监控的地址、多长时间监控一次、监控实例的名字
 
@@ -1385,17 +1387,17 @@ Hystrix 在2011年开始由Netflix的API团队开发，并逐渐在Netflix内部
 
 8. 先访问一下http://localhost:8001/dept/get/1 查看是否能访问，然后访问http://localhost:8001/actuator/hystrix.stream ：
 
-   ![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201120801586.png)
+   ![](images/image-20211201120801586.png)
 
 9. 在http://localhost:9001/hystrix中填写相关数据（http://localhost:8001/actuator/hystrix.stream，2000，demo），得到监控页面，这个页面的数据，会随着http://localhost:8001/dept/get/1 的访问而变化
 
-   ![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201121141963.png)
+   ![](images/image-20211201121141963.png)
 
 #### 监控页面分析
 
 整图说明：
 
- ![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201121849170.png)
+ ![](images/image-20211201121849170.png)
 
 ##### 七色
 
@@ -1413,7 +1415,7 @@ Hystrix 在2011年开始由Netflix的API团队开发，并逐渐在Netflix内部
 
 复杂一点的
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201122218398.png)
+![](images/image-20211201122218398.png)
 
 
 
@@ -1480,7 +1482,7 @@ zuul包含了对请求的**路由和过滤**两个最主要的功能：
 
 4. 启动7001等注册中心，启动**springcloud-provider-dept-hystrix-8001**，启动9527
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201172148632.png)
+![](images/image-20211201172148632.png)
 
 正常通过http://localhost:8001/dept/get/1可以访问，先在可通过网关访问http://localhost:9527/springcloud-provider-dept/dept/get/1
 
@@ -1510,7 +1512,7 @@ SpringCloud提供了ConfigServer来解决这个问题，我们每一个微服务
 
 #### 什么是SpringCloud config分布式配置中心
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211201181441562.png)
+![](images/image-20211201181441562.png)
 
 Spring Cloud Config 为微服务架构中的微服务提供集中化的外部配置支持，配置服务器为**各个不同微服务应用**的所有环节提供了一个**中心化的外部配置**。
 
@@ -1779,6 +1781,6 @@ eureka:
 
 ## 总结
 
-![](/Users/andyron/myfield/github/LearnSpring/notes/SpringCloud/images/image-20211202105726565.png)
+![](images/image-20211202105726565.png)
 
 Spring cloud 面试题
