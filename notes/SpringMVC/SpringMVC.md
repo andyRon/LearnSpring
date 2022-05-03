@@ -62,7 +62,7 @@ Model2把一个项目分成三部分，包括**视图、控制、模型。**
 
 
 
-![image-20210924080441445](/Users/andyron/Library/Application Support/typora-user-images/image-20210924080441445.png)
+![](images/image-20210924080441445.png)
 
 1. 用户发请求
 2. Servlet接收请求数据，并调用对应的业务逻辑方法
@@ -131,7 +131,7 @@ DispatcherServlet的作用是将请求分发到不同的处理器。
 
 Spring MVC框架像许多其他MVC框架一样, **以请求为驱动** , **围绕一个中心Servlet分派请求及提供其他功能**，**DispatcherServlet是一个实际的Servlet (它继承自HttpServlet 基类)**。
 
-![img](https://kuangstudy.oss-cn-beijing.aliyuncs.com/bbs/2021/04/13/kuangstudyc49f3d6f-e0c6-4228-9bd7-6a40400c3bd4.png)
+![](images/kuangstudyc49f3d6f-e0c6-4228-9bd7-6a40400c3bd4.png)
 
 ### hellospring
 
@@ -237,13 +237,13 @@ Spring MVC框架像许多其他MVC框架一样, **以请求为驱动** , **围�
 
 ### SpringMVC原理
 
-![img](https://kuangstudy.oss-cn-beijing.aliyuncs.com/bbs/2021/04/13/kuangstudy00854e07-7eac-476c-a9dd-dcebb7ac0b89.png)
+![](https://kuangstudy.oss-cn-beijing.aliyuncs.com/bbs/2021/04/13/kuangstudy00854e07-7eac-476c-a9dd-dcebb7ac0b89.png)
 
 **前端控制器**相当于DispatcherServlet，**页面控制器/处理器**相当于Controller。
 
 SpringMVC的一个较完整的流程图，实线表示SpringMVC框架提供的技术，不需要开发者实现，虚线表示需要开发者实现：
 
-![img](https://kuangstudy.oss-cn-beijing.aliyuncs.com/bbs/2021/04/13/kuangstudy0214fd0a-0df0-4910-a467-5b7d61712868.png)
+![](https://kuangstudy.oss-cn-beijing.aliyuncs.com/bbs/2021/04/13/kuangstudy0214fd0a-0df0-4910-a467-5b7d61712868.png)
 
 简要分析执行流程
 
@@ -880,9 +880,14 @@ Maven资源过滤设置
 
 #### 查询
 
+```mermaid
+flowchart LR
+用户访问 --> 前端 --> controller --> service --> Dao --> 数据库
 ```
-用户访问 -》 前端 -》 controller -》 service -》Dao -》数据库
-```
+
+
+
+
 
 编码时一般反过来
 

@@ -68,7 +68,7 @@ Spring七大模块
 
 ![](../../images/learnspring-032.jpg)
 
-- 核心容器(Spring Core)：核心容器提供 Spring 框架的基本功能。核心容器的主要组件是`BeanFactory`，它是工厂模式的实现。BeanFactory使用控制反转 （IOC） 模式将应用程序的配置和依赖性规范与实际的应用程序代码分开。
+- 核心容器(Spring Core)：核心容器提供 Spring 框架的基本功能。核心容器的主要组件是`BeanFactory`，它是工厂模式的实现。BeanFactory使用控制反转 （IOC） 模式将**应用程序的配置和依赖性规范与实际的应用程序代码分开**。
 
 - Spring上下文(Spring Context)：Spring上下文是一个配置文件，继承BeanFactory，向Spring框架提供上下文信息。Spring上下文包括JNDI(Java命名和目录接口)、EJB(Enterprise Java Beans称为Java企业Bean)、电子邮件、国际化、校验和调度等功能。
 
@@ -147,7 +147,7 @@ public void setUserDao(UserDao userDao) {
 
 ### IOC的本质
 
- ![](../../images/learnspring-034.jpg)
+ <img src="../../images/learnspring-034.jpg"  />
 
 IOC是一种设计思想，DI（依赖注入）是实现IOC的一种方法。
 
@@ -183,7 +183,7 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 </dependency>
 ```
 
-### 3.2编写相关代码
+### 3.2 编写相关代码
 
 一个Hello实体类：
 
