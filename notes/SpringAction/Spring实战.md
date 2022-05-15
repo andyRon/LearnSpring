@@ -341,17 +341,15 @@ WebMvcConfigurer定义了多个方法来配置Spring MVC。尽管只是一个接
 
 ## 3 使用数据
 
-JDBC（Java Database Connectivity）
+Java开发中处理关系型数据时，可选方案常见的是：JDBC（Java Database Connectivity）和JPA（Java Persistence API）。
 
-JPA（Java Persistence API）
+### 3.1 使用JDBC读取和写入数据
 
+JdbcTemplate
 
+#### 1 调整领域对象以适应持久化
 
-#### 3.1 使用JDBC读取和写入数据
-
-
-
-##### 1-调整领域对象以适应持久化
+在将对象持久化到数据库的时候，通常最好有一个字段作为对象的唯一标识。
 
 为Taco类添加ID和时间戳字段：
 
@@ -367,11 +365,11 @@ public class Taco {
 
 
 
-##### 2-使用JdbcTemplate
+#### 2 使用JdbcTemplate
 
-添加JDBC和**H2嵌入式数据库**依赖。
+添加JDBC和**H2嵌入式数据库**依赖。🔖h2
 
-###### 定义JDBC repository
+##### 定义JDBC repository
 
 三个操作：查询所有配料信息；根据ID查询单个配料信息；保存配料对象。
 
@@ -388,21 +386,74 @@ public interface IngredientRepository {
 
 编写`IngredientRepository`的实现类`JdbcIngredientRepository`，使用JdbcTemplate来查询数据库。
 
+Spring的**构造型（stereotype）注解**：@Repository，@Controller、@Service和@Component。
 
+```java
+@Repository
+public class JdbcIngredientRepository implements IngredientRepository {
 
-Spring的**构造型（stereotype）注解**：@Repository，@Controller和@Component。
+    @Autowired
+    private JdbcTemplate jdbc;
 
-通过@Autowired标注的构造器将JdbcTemplate注入进来。
+    @Override
+    public Iterable<Ingredient> findAll() {
+        return jdbc.query("select id, name, type from Ingredient", this::mapRowToIngredient);
+    }
+
+    private Ingredient mapRowToIngredient(ResultSet rs, int rowNum) throws SQLException {
+        return new Ingredient(rs.getString("id"),
+                rs.getString("name"),
+                Ingredient.Type.valueOf(rs.getString("type")));
+    }
+
+    @Override
+    public Ingredient findOne(String id) {
+        return jdbc.queryForObject("select id, name, type from Ingredient where id = ?", this::mapRowToIngredient, id);
+        // Java 8的方法引用和lambda表达式后，另一种写法
+//        return jdbc.queryForObject("select id, name, type from Ingredient where id=?",
+//                new RowMapper<Ingredient>() {
+//                    @Override
+//                    public Ingredient mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                        return new Ingredient(
+//                                rs.getString("id"),
+//                                rs.getString("name"),
+//                                Ingredient.Type.valueOf(rs.getString("type")));
+//                    };
+//                }, id);
+    }
+ ... 
+}
+```
+
+通过@Autowired标注将JdbcTemplate注入进来。
+
+query()会接受要执行的SQL以及Spring RowMapper的一个实现（用来将结果集中的每行数据映射为一个对象）。
+
+queryForObject()方法的运行方式和query()非常类似，只不过它只返回一个对象，而不是对象的List。
 
 findAll()和findOne()中的**RowMapper**参数都是通过对mapRowToIngredient()的方法引用指定的。
 
-##### 3-定义模式和预加载数据
+##### 插入一行数据
+
+
+
+将JdbcIngredientRepository注入到DesignTacoController中。
+
+#### 3 定义模式和预加载数据
 
 ![](images/image-20200326225344735.png)
 
+- Ingredient：保存配料信息。
+- Taco：保存taco设计相关的信息。
+- Taco_Ingredients：Taco中的每行数据都对应一行或多行，将taco和与之相关的配料映射在一起。
+- Taco_Order：保存必要的订单细节。
+- Taco_Order_Tacos：Taco_Order中的每行数据都对应一行或多行，将订单和与之相关的taco映射在一起。
+
+Spring Boot，如果在应用的根类路径（resources目录）下存在名为schema.sql的文件，那么在应用启动的时候将会基于数据库执行这个文件中的SQL。还会在应用启动的时候执行根类路径下名为data.sql的文件。
 
 
-##### 4-插入数据
+
+#### 4 插入数据
 
 ###### 使用JdbcTemplate保存数据
 
@@ -418,13 +469,13 @@ findAll()和findOne()中的**RowMapper**参数都是通过对mapRowToIngredient(
 
 ###### 使用SimpleJdbcInsert插入数据
 
+🔖
 
 
-??  /design  提交数据报错
 
 
 
-#### 3.2 使用Spring Data JPA持久化数据
+### 3.2 使用Spring Data JPA持久化数据
 
 
 
