@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Andy Ron
  */
 @Component
-@ConfigurationProperties(prefix = "person")
+@ConfigurationProperties(prefix = "person2")
 //@Validated // 数据校验
 public class Person {
 
