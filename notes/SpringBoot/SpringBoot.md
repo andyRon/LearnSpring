@@ -1,7 +1,7 @@
 SpringBoot
 ---------------
 
-
+[SpringBoot最新教程IDEA版通俗易懂](https://www.bilibili.com/video/BV1PE411i7CV)
 
 ## 回顾
 
@@ -76,7 +76,7 @@ SpringCloud config（git）
 4. 通过切面和模版减少样式代码；
 
 ### 什么是Spring Boot
-学过javaweb的同学就知道，开发一个web应用，从最初开始接触Servlet结合Tomcat，跑出一个Hello Wolrld程序，是要经历特别多的步骤；后来就用了框架Struts（http://xxxx.do），再后来是SpringMVC，到了现在的SpringBoot，过一两年又会有其他web框架出现；不知道你们有没经历过框架不断的演进，然后自己开发项目所有的技术也再不断的变化、改造，反正我是都经历过了，哈哈。言归正传，什么是Spring Boot呢，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置，you can"just run"，能迅速的开发web应用，几行代码开发一个http接口。
+学过javaweb的同学就知道，开发一个web应用，从最初开始接触Servlet结合Tomcat，跑出一个Hello Wolrld程序，是要经过特别多的步骤；后来就用了框架Struts（http://xxxx.do），再后来是SpringMVC，到了现在的SpringBoot，过一两年又会有其他web框架出现。什么是Spring Boot呢，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置，you can"just run"，能迅速的开发web应用，几行代码开发一个http接口。
 
 
 
@@ -86,15 +86,15 @@ SpringCloud config（git）
 
 所有的技术框架的发展似乎都遵循了一条主线规律：从一个复杂应用场景衍生一种规范框架，人们只需要进行各种配置而不需要自己去实现它，这时候强大的配置功能成了优点；发展到一定程度之后，人们根据实际生产应用情况，选取其中实用功能和设计精华，重构出一些轻量级的框架；之后为了提高开发效率，嫌弃原先的各类配置过于麻烦，于是开始提倡“约定大于配置”，进而产生出一些一站式的解决方案。
 
-是的这就是Java企业级应用-》J2EE-》spring-》springboot的过程。
+是的这就是 Java企业级应用 --> J2EE --> spring --> springboot 的过程。
 
-随着Spring不断的发展，涉及的领域越来越多，项目整合开发需要配合各种各样的文件，慢慢变得不那么易用简单，违背了最初的理念，甚至人称配置地狱。Spring Boot正是在这样的一个背景下被抽象出来的开发框架，目的为了让大家更容易的使用Spring、更容易的集成各种常用的中间件、开源软件；
+随着Spring不断的发展，涉及的领域越来越多，项目整合开发需要配合各种各样的文件，慢慢变得不那么易用简单，违背了最初的理念，甚至人称配置地狱。Spring Boot正是在这样的一个背景下被抽象出来的开发框架，目的为了让大家**更容易的使用Spring、更容易的集成各种常用的中间件、开源软件**。
 
 Spring Boot基于Spring开发，Spirng Boot本身并不提供Spring框架的核心特性以及扩展功能，只是用于快速、敏捷地开发新一代基于Spring框架的应用程序。也就是说，它并不是用来替代Spring的解决方案，而是和Spring框架紧密结合用于提升Spring开发者体验的工具。
 
-Spring Boot以**约定大于配置**的核心思想，默认帮我们进行了很多设置，多数Spring Boot应用只需要很少的Spring配置。同时它集成了大量常用的第三方库配置（例如Redis、MongoDB、Jpa、RabbitMQ、Quartz等等），Spring Boot应用中这些第三方库几乎可以零配置的开箱即用，
+Spring Boot以**约定大于配置**的核心思想，默认帮我们进行了很多设置，多数Spring Boot应用只需要很少的Spring配置。同时它集成了大量常用的第三方库配置（例如Redis、MongoDB、JPA、RabbitMQ、Quartz等等），Spring Boot应用中这些第三方库几乎可以零配置的开箱即用。
 
-Spring Boot出生名门，从一开始就站在一个比较高的起点，又经过这几年的发展，生态足够完善，SpringBoot已经当之无愧成为Java领域最热门的技术。
+Spring Boot出生名门，从一开始就站在一个比较高的起点，又经过这几年的发展，生态足够完善，Spring Boot已经当之无愧成为Java领域最热门的技术。
 Spring Boot的主要优点：
 
 - 为所有Spring开发者更快的入门
@@ -131,9 +131,9 @@ MVC  MVVM  微服务架构
 
 ### 微服务架构
 
-all in one的架构方式，我们把所有的功能单元放在一个应用里面。然后我们把整个应用部署到服务器上。如果负载能力不行，我们将整个应用进行水平复制，进行扩展，然后在负载均衡。
+all in one的架构方式，我们把所有的功能单元放在一个应用里面。然后我们把整个应用部署到服务器上。如果负载能力不行，我们将整个应用进行水平复制，进行扩展，然后再负载均衡。
 
-所谓微服务架构，就是打破之前all in one的架构方式，把每个功能元素独立出来。把独立出来的功能元素的动态组合，需要的功能元素才去拿来组合，需要多一些时可以整合多个功能元素。所以微服务架构是对功能元素进行复制，而没有对整个应用进行复制。
+所谓微服务架构，就是打破之前all in one的架构方式，把每个**功能元素**独立出来。把独立出来的功能元素的动态组合，需要的功能元素才去拿来组合，需要多一些时可以整合多个功能元素。所以**微服务架构是对功能元素进行复制，而没有对整个应用进行复制**。
 这样做的好处是：
 
 1. 节省了调用资源。
@@ -145,13 +145,13 @@ all in one的架构方式，我们把所有的功能单元放在一个应用里�
 
 ### 如何构建微服务
 
-一个大型系统的微服务架构，就像一个复杂交织的神经网络，每一个神经元就是一个功能元素，它们各自完成自己的功能，然后通过http相互请求调用。比如一个电商系统，查缓存、连数据库、浏览页面、结账、支付等服务都是一个个独立的功能服务，都被微化了，它们作为一个个微服务共同构建了一个庞大的系统。如果修改其中的一个功能，只需要更新升级其中一个功能服务单元即可。
-但是这种庞大的系统架构给部署和运维带来很大的难度。于是，spring为我们带来了构建大型分布式微服务的全套、全程产品：
+一个大型系统的微服务架构，就像一个复杂交织的神经网络，每一个神经元就是一个功能元素，它们各自完成自己的功能，然后通过http相互请求调用。比如一个电商系统，<u>查缓存、连数据库、浏览页面、结账、支付</u>等服务都是一个个独立的功能服务，都被微化了，它们作为一个个微服务共同构建了一个庞大的系统。如果修改其中的一个功能，只需要更新升级其中一个功能服务单元即可。
+但是这种庞大的系统架构给部署和运维带来很大的难度。于是，Spring为我们带来了构建大型分布式微服务的全套、全程产品：
 
-- 构建一个个功能独立的微服务应用单元，可以使用springboot，可以帮我们快速构建一个应用； 
-- 大型分布式网络服务的调用，这部分由spring cloud来完成，实现分布式；
-- 在分布式中间，进行流式数据计算、批处理，我们有spring cloud data flow.
-- spring为我们想清楚了整个从开始构建应用到大型分布式应用全流程方案。
+- 构建一个个功能独立的微服务应用单元，可以使用Spring Boot，可以帮我们快速构建一个应用； 
+- 大型分布式网络服务的调用，这部分由Spring Cloud来完成，实现分布式；
+- 在分布式中间，进行流式数据计算、批处理，有Spring Cloud **Data Flow**](https://dataflow.spring.io/)；
+- Spring为我们想清楚了整个从开始构建应用到大型分布式应用全流程方案。
 
 ![](../../images/learnspring-033.jpg)
 
@@ -161,9 +161,7 @@ all in one的架构方式，我们把所有的功能单元放在一个应用里�
 
 官方：提供了一个快速生成的网站。IDEA集成了这个网站。
 
-
-
-所有springboot依赖都是使用`spring-boot-starter`开头的。
+所有Spring Boot依赖都是使用`spring-boot-starter`开头的。
 
 `spring-boot-starter-web`用于实现HTTP接口，包含了SpringMVC，RESTful，使用Tomcat作为默认嵌入式容器。
 
@@ -173,13 +171,13 @@ all in one的架构方式，我们把所有的功能单元放在一个应用里�
 java -jar  jar包
 ```
 
+版本号可以不写，会继承的父依赖。所有包的版本号都在spring-boot-dependencies里对应文件：
 
+```
+~/.m2/repository/org/springframework/boot/spring-boot-dependencies/2.5.5/spring-boot-dependencies-2.5.5.pom
+```
 
-版本号可以不写，会继承的父依赖
-
-
-
-spring boot banner
+spring boot banner定义，简单的方式只要将文件banner.txt放入src/main/resources即可，也可图片类型的Banner。配置方式也可通过自定义类实现`Banner`接口的方式。
 
 
 
@@ -222,14 +220,14 @@ public class Springbooot01HelloworldApplication {
 
 #### @SpringBootApplication
 
-```
+```java
 @SpringBootApplication：标注这个类是springboot的应用：启动类下的所有资源被导入
 	@Configuration：spring配置类
 	@Component：说明这个也是一个spring组件
 	
 @EnableAutoConfiguration：自动配置
 	@AutoConfigurationPackage：自动配置包
-		@Import({Registrar.class})：自动额皮质包注册
+		@Import({Registrar.class})：自动配置`包注册`
 	@Import({AutoConfigurationImportSelector.class})：自动配置导入选择
 
 ```
@@ -250,19 +248,17 @@ Properties properties = PropertiesLoaderUtils.loadProperties(resource); // 加�
 
 ```
 
-`META-INF/spring.factories`：自动配置的核心文件。他的位置在：
+`META-INF/spring.factories`：自动配置的核心文件。它的位置在：
 
 ![](images/image-20210930145824222.png)
 
-spring.factories文件中所都会被加载，但是否生效，通过下面一些列的注解来判断；
+**spring.factories**文件中所都会被加载，但是否生效，通过下面一些列的注解来判断；
 
 `@ConditionalOnxxx(xxx)`：核心注解，如果括号中的条件都满足，才会导入次注解注解的类。（包名为`org.springframework.boot.autoconfigure.condition`）
 
+总结：Spring Boot所有自动配置都是在启动的时候扫描并加载`spring.factories`文件，所有的自动配置类都在这里面，但不一定生效，要通过一系列`@ConditionalOnxxx(xxx)`注解判断。只要导入对应的start，就有对应的启动器，有了启动器，自动装配就会生效，然后配置成功！
 
-
-总结：springboot所有自动配置都是在启动的时候扫描并加载`spring.factories`文件，所有的自动配置类都在这里面，但不一定生效，要通过一系列`@ConditionalOnxxx(xxx)`注解判断。只要导入对应的start，就有对应的启动器，有了启动器，自动装配就会生效，然后配置成功！
-
-- 整合javaEE，解决方案和自动配置的东西都在`spring-boot-autoconfigure-xxxx.jar`包下；
+- 整合JavaEE，解决方案和自动配置的东西都在`spring-boot-autoconfigure-xxxx.jar`包下；
 - 它会把所有需要导入的组件，以类名的方式返回，这些组件就会被添加到容器；
 - 容器中也会存在非常多的`xxxAutoConfiguration`（`@Bean`），就是这些类给容器中导入了这个场景需要的所有组件；并自动配置，@Configuration，JavaConfig
 - 有了自动配置类，免去了我们手动编写配置文件的工作
@@ -1287,7 +1283,7 @@ https://swagger.io/
 
 5. 测试运行：http://localhost:8080/swagger-ui.html
 
-![image-20211013162217811](/Users/andyron/myfield/github/LearnSpring/note/SpringBoot/images/image-20211013162217811.png)
+![](images/image-20211013162217811.png)
 
 
 

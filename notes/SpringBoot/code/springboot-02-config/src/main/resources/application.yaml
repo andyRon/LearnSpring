@@ -1,0 +1,27 @@
+person:
+  name: andy${random.uuid}
+  age: 19
+  happy: true
+  birth: 2012/12/01
+  maps: {k1: v1,k2: v2}
+  lists:
+    - code
+    - music
+    - girl
+  dog:
+    name: ${person.hello:hello}_旺财
+    age: 4
+
+person2:
+  name: andy${random.uuid}
+  age: 29
+  happy: false
+  birth: 2002/12/01
+  maps: {k1: v1,k2: v2, k3: v3}
+  lists:
+    - code
+    - music
+    - girl
+  dog:
+    name: ${person.hello:my}_旺财
+    age: 4
