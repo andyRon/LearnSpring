@@ -13,7 +13,7 @@ person:
     age: 4
 
 person2:
-  name: andy${random.uuid}
+  name: andy
   age: 29
   happy: false
   birth: 2002/12/01
@@ -23,5 +23,17 @@ person2:
     - music
     - girl
   dog:
-    name: ${person.hello:my}_旺财
+    name: ${person.hello:my}_旺财 # 默认值
     age: 4
+
+
+boss:
+  first-name: jack
+  age: 58
+
+teacher:
+  name: 老李
+  age: 45
+  happy: true
+  birth:  1988/12/01
+  email: xxxxx@163.com

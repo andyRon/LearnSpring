@@ -5,37 +5,31 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
-
-/**
- * @author Andy Ron
- */
 @Component
-@ConfigurationProperties(prefix = "person2")
-public class Person {
+@ConfigurationProperties(prefix = "teacher")
+@Validated
+public class Teacher {
 
+    @NotNull
     private String name;
     private Integer age;
     private Boolean happy;
     private Date birth;
-    private Map<String, Object> maps;
-    private List<Object> lists;
-    private Dog dog;
+    @Email(message = "邮箱错误")
+    private String email;
 
-    public Person() {
+    public Teacher() {
     }
 
-    public Person(String name, Integer age, Boolean happy, Date birth, Map<String, Object> maps, List<Object> lists, Dog dog) {
+    public Teacher(String name, Integer age, Boolean happy, Date birth, String email) {
         this.name = name;
         this.age = age;
         this.happy = happy;
         this.birth = birth;
-        this.maps = maps;
-        this.lists = lists;
-        this.dog = dog;
+        this.email = email;
     }
 
     public String getName() {
@@ -70,40 +64,22 @@ public class Person {
         this.birth = birth;
     }
 
-    public Map<String, Object> getMaps() {
-        return maps;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMaps(Map<String, Object> maps) {
-        this.maps = maps;
-    }
-
-    public List<Object> getLists() {
-        return lists;
-    }
-
-    public void setLists(List<Object> lists) {
-        this.lists = lists;
-    }
-
-    public Dog getDog() {
-        return dog;
-    }
-
-    public void setDog(Dog dog) {
-        this.dog = dog;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "Teacher{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
                 ", happy=" + happy +
                 ", birth=" + birth +
-                ", maps=" + maps +
-                ", lists=" + lists +
-                ", dog=" + dog +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

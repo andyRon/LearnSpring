@@ -39,10 +39,7 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId></groupId>
-            <artifactId>spring-boot-srarter</artifactId>
-        </dependency>
+
     </dependencies>
 
     <build>

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class Dog {
     @Value("旺财")
     private String name;
-    @Value("4")
+    @Value("#{11*2}")
     private Integer age;
 
     public Dog(String name, Integer age) {
