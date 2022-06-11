@@ -3,7 +3,7 @@ SpringBoot
 
 [SpringBoot最新教程IDEA版通俗易懂](https://www.bilibili.com/video/BV1PE411i7CV)
 
-## 回顾
+## 0 回顾
 
 
 
@@ -104,7 +104,7 @@ Spring Boot的主要优点：
 
 
 
-## 微服务
+## 1 微服务
 
 MVC  MVVM  微服务架构
 
@@ -157,7 +157,7 @@ all in one的架构方式，我们把所有的功能单元放在一个应用里�
 
 
 
-## 第一个SpringBoot程序
+## 2 第一个SpringBoot程序
 
 官方：提供了一个快速生成的网站。IDEA集成了这个网站。
 
@@ -181,7 +181,7 @@ spring boot banner定义，简单的方式只要将文件banner.txt放入src/mai
 
 
 
-## 自动装配原理
+## 3 自动装配原理
 
 ### pom.xml
 
@@ -337,7 +337,7 @@ public ConfigurableApplicationContext run(String... args) {
 
 
 
-## 配置
+## 4 SpringBoot配置
 
 [官方所有配置及其说明](https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html)
 
@@ -348,7 +348,7 @@ SpringBoot使用一个全局的配置文件，名称固定为：
 
 配置文件的作用是修改springboot自动配置的默认值。
 
-推荐使用yaml格式，
+推荐使用yaml格式
 
 ```yaml
 name: andy
@@ -372,18 +372,18 @@ pets: [cat,dog,pig]
 
 
 
-yaml可以直接给实体类赋值
+### yaml直接给实体类赋值
 
 ```java
-@ConfigurationProperties(prefix = "person")
+@ConfigurationProperties(prefix = "person1")
 public class Person {
   ...
  
 ```
 
 ```yaml
-person:
-  name: andy
+person1:
+  name: andy${random.uuid}
   age: 19
   happy: true
   birth: 2012/12/01
@@ -393,7 +393,7 @@ person:
     - music
     - girl
   dog:
-    name: 旺财
+    name: ${person.hello:hello}_旺财
     age: 4
 ```
 
@@ -401,15 +401,107 @@ person:
 
 > application.properties由于编码的问题，容易产生乱码。 
 
-yaml支持松散语法（驼峰命名和-连接是可以绑定的）、JSR303数据校验
+配置文件中可以使用[SpEL](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#expressions)表达式。
 
-### JSR303
 
+
+### 通过@Value直接赋值
+
+```java
+@Component
+public class Dog {
+    @Value("旺财")
+    private String name;
+    @Value("#{11*2}") 
+    private Integer age;
+  // ....
+```
+
+两种方式的对比：
+
+|                | @ConfigurationProperties | @Value       |
+| -------------- | ------------------------ | ------------ |
+| 功能           | 批量                     | 一个一个指定 |
+| 松散绑定       | 支持                     | 不支持       |
+| SpEL           | 不支持                   | 支持         |
+| JSR303数据校验 | 支持                     | 不支持       |
+| 复杂类型封装   | 支持                     | 不支持       |
+
+yaml支持松散语法（驼峰命名和-连接是可以绑定的）、JSR303数据校验。
+
+选择：
+
+- 首选yaml
+- 在某些只需要获取配置文件中的某个值是，可以使用@Value
+- 专门编写一个JavaBean来和配置文件进行映射，就直接使用@ConfigurationProperties
+
+### 加载指定的配置文件
+
+ ```java
+ @Component
+ // javaconfig 绑定配置文件的值，可采取这种方式
+ // 加载指定的配置文件
+ @PropertySource(value = "classpath:student.properties")
+ public class Student {
+     // SpEl表达式
+     @Value("${id}")
+     long id;
+     @Value("${name}")
+     String name;
+     @Value("${score}")
+     Double score;
+  //... 
+ }  
+ ```
+
+
+
+> ==注意：==spring boot 自动注入的时候使用的是无参构造函数。如果添加了有参构造函数，也要手动添加无参构造函数。要不然会出现一些类似下面的报错：
+>
+> Parameter 0 of constructor in xxxx required a bean of type
+>
+> Could not autowire. No beans of 'long' type found.
+
+### JSR303校验
+
+```xml
+<dependency>
+  <groupId>javax.validation</groupId>
+  <artifactId>validation-api</artifactId>
+  <version>2.0.1.Final</version>
+</dependency>
+
+<dependency>
+  <groupId>org.hibernate.validator</groupId>
+  <artifactId>hibernate-validator</artifactId>
+  <version>6.0.21.Final</version>
+</dependency>
+```
+
+
+
+```java
+@Component
+@ConfigurationProperties(prefix = "teacher")
 @Validated
+public class Teacher {
+    @Email
+    private String email;
+  
+  // ...
+```
 
-🔖p10
+如果格式不对，会出现类似如下信息(默认错误信息可通过参数修改)：
+
+```java
+ default message [不是一个合法的电子邮件地址]; origin class path resource [application.yaml]
+```
+
+校验有很多注解格式可以使用。
 
 
+
+### 配置文件的位置
 
 配置文件`application.yaml`的位置可以是（优先顺序从高到低）：
 
@@ -461,21 +553,17 @@ spring:
 
 
 
-## 自动装配再理解
+## 5 自动装配再理解🔖
 
 配置文件中到底能配置什么？ 配置文件与自动装配中的spring.factories是相关的
 
 ```java
 // 表示这是一个配置类
-@Configuration(
-    proxyBeanMethods = false
-)
+@Configuration(proxyBeanMethods = false)
 // 自动配置属性：ServerProperties
 @EnableConfigurationProperties({ServerProperties.class})
 // spring的底层注解：根据
-@ConditionalOnWebApplication(
-    type = Type.SERVLET
-)
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnClass({CharacterEncodingFilter.class})
 @ConditionalOnProperty(
     prefix = "server.servlet.encoding",
@@ -529,9 +617,23 @@ public class ServerProperties {
 
 那么server相关的配置就全是`ServerProperties`中的属性。
 
-在配置文件中能配置的，都有一个规律，都是**xxPorperties**类的属性（属性的值就是配置的默认值），而这个类被**xxxAutoConfiguration**装配。
+在Spring Boot配置文件中能配置的，都有一个规律，都是**xxPorperties**类的属性（属性的值就是配置的默认值），而这个类被**xxxAutoConfiguration**装配。**xxPorperties**类通过注解@ConfigurationProperties配置配置的前缀，如：
 
-**xxPorperties**都有一个`@ConfigurationProperties(prefix = "spring.security")`注解。
+```java
+@ConfigurationProperties(prefix = "spring.activemq")
+public class ActiveMQProperties
+  
+@ConfigurationProperties(prefix = "spring.security")
+public class SecurityProperties  
+
+@ConfigurationProperties(prefix = "spring.cache")
+public class CacheProperties
+...
+```
+
+而类似`server.tomcat.accesslog.buffered`这种长的配置，就是类的传递过程（一般都是内部静态类），前面配置就是类`ServerProperties`中`Tomcat`类中`Accesslog`类中的buffered属性。
+
+配置的名称是按照类的驼峰转换为`-`连接表示。
 
 自动装配的精髓：
 
@@ -545,11 +647,46 @@ xxxxProperties：封装配置文件中相关属性；
 
 
 
-配置`debug: true`，可查看，那些自动配置类生效，那些没有。
+配置`debug: true`，可查看，那些自动配置类生效，那些没有。在控制面板中显示如下：
+
+```
+============================
+CONDITIONS EVALUATION REPORT
+============================
+
+
+Positive matches:
+-----------------
+
+   AopAutoConfiguration matched:
+      - @ConditionalOnProperty (spring.aop.auto=true) matched (OnPropertyCondition)
+
+   AopAutoConfiguration.ClassProxyingConfiguration matched:
+      - @ConditionalOnMissingClass did not find unwanted class 'org.aspectj.weaver.Advice' (OnClassCondition)
+      - @ConditionalOnProperty (spring.aop.proxy-target-class=true) matched (OnPropertyCondition)
+
+   DispatcherServletAutoConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.web.servlet.DispatcherServlet' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+
+   DispatcherServletAutoConfiguration.DispatcherServletConfiguration matched:
+      - @ConditionalOnClass found required class 'javax.servlet.ServletRegistration' (OnClassCondition)
+      - Default DispatcherServlet did not find dispatcher servlet beans (DispatcherServletAutoConfiguration.DefaultDispatcherServletCondition)
+
+   DispatcherServletAutoConfiguration.DispatcherServletRegistrationConfiguration matched:
+      - @ConditionalOnClass found required class 'javax.servlet.ServletRegistration' (OnClassCondition)
+      - DispatcherServlet Registration did not find servlet registration bean (DispatcherServletAutoConfiguration.DispatcherServletRegistrationCondition)
+      
+ ...
+```
 
 
 
-## SpringBoot Web 开发
+
+
+## 6 SpringBoot Web 开发
+
+
 
 SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修改那些东西？能不能呢扩展？
 
@@ -635,12 +772,13 @@ http://localhost:8080/webjars/jquery/3.6.0/jquery.js。
 private String staticPathPattern = "/**";
 ```
 
-`WebProperties`
+`WebProperties`：`spring.web.resources.static-locations`
 
 ```java
 // 下面优先级从上到下，越低
 private static final String[] CLASSPATH_RESOURCE_LOCATIONS = { "classpath:/META-INF/resources/",
 				"classpath:/resources/", "classpath:/static/", "classpath:/public/" };
+private String[] staticLocations = CLASSPATH_RESOURCE_LOCATIONS;
 ```
 
 > 默认`java/`和`resources`都属于classpath。
@@ -866,7 +1004,7 @@ http Last-Modified  过期时间
 
 
 
-## Data
+## 7 Data
 
 ### 整合JDBC的使用
 
@@ -950,7 +1088,7 @@ log4j
 
 
 
-## SpringSecurity
+## 8 SpringSecurity
 
 [Spring Security Reference5.5.2](https://docs.spring.io/spring-security/site/docs/current/reference/html5/)
 
@@ -1043,7 +1181,7 @@ http.csrf().disable();
 
 
 
-## Shiro
+## 9 Shiro
 
 ### 什么是Shiro 
 
@@ -1172,7 +1310,7 @@ Md5CredentialsMatcher
 
 🔖p44 p45
 
-## 分析项目
+## 10 分析项目
 
 springboot项目直接修改数据库连接
 
@@ -1185,7 +1323,7 @@ https://github.com/WinterChenS/my-site
 
 swagger
 
-## Swagger
+## 11 Swagger
 
 学习目标
 
@@ -1434,7 +1572,7 @@ public String hello2(@ApiParam("用户名") String username) {
 
 
 
-## 任务
+## 12 任务
 
 异步任务
 
@@ -1515,11 +1653,13 @@ Cron表达式
 
 
 
-## 集成Redis
+## 13 集成Redis
 
 P54-55  来源于狂神说redis
 
-## 分布式Dubbo+Zookeeper
+
+
+## 14 分布式Dubbo+Zookeeper
 
 ### 分布式理论
 
