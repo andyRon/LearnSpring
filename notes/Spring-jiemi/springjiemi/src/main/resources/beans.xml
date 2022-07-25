@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+        "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans >
+    <bean id="djNewsProvider" class="com.andyron.ch02.ch21.FXNewsProvider">
+        <property name="newsListener">
+            <ref bean="djNewsListener"/>
+        </property>
+        <property name="newsPersister">
+            <ref bean="djNewsPersister"/>
+        </property>
+    </bean>
+
+    <bean id="djNewsListener" class="com.andyron.ch02.ch21.DowJonesNewsListener" >
+    </bean>
+    <bean id="djNewsPersister" class="com.andyron.ch02.ch21.DowJonesNewsPersister">
+    </bean>
+
+</beans>
