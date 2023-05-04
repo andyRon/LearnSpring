@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- 根据类型自动装配 -->
+<!--    <bean id="userController" class="com.andyron.spring6.iocxml.auto.controller.UserController" autowire="byType"></bean>-->
+<!--    <bean id="userService" class="com.andyron.spring6.iocxml.auto.service.UserServiceImpl" autowire="byType"></bean>-->
+<!--    <bean id="userDao" class="com.andyron.spring6.iocxml.auto.dao.UserDaoImpl"></bean>-->
+
+    <!-- 根据属性自动装配，要保证id名称与对应属性名相同 -->
+    <bean id="userController" class="com.andyron.spring6.iocxml.auto.controller.UserController" autowire="byName"></bean>
+    <bean id="userService" class="com.andyron.spring6.iocxml.auto.service.UserServiceImpl" autowire="byName"></bean>
+    <bean id="userDao" class="com.andyron.spring6.iocxml.auto.dao.UserDaoImpl"></bean>
+</beans>
