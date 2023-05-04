@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 为集合类型属性赋值 map -->
+    <bean id="teacher1" class="com.andyron.spring6.iocxml.dimap.Teacher">
+        <property name="teacherId" value="101"></property>
+        <property name="teacherName" value="李讲师"></property>
+    </bean>
+    <bean id="teacher2" class="com.andyron.spring6.iocxml.dimap.Teacher">
+        <property name="teacherId" value="102"></property>
+        <property name="teacherName" value="赵讲师"></property>
+    </bean>
+
+    <bean id="student" class="com.andyron.spring6.iocxml.dimap.Student">
+        <property name="sid" value="202"></property>
+        <property name="sname" value="小张"></property>
+        <property name="teacherMap">
+            <map>
+                <entry>
+                    <key>
+                        <value>10010</value>
+                    </key>
+                    <ref bean="teacher1"></ref>
+                </entry>
+                <entry>
+                    <key>
+                        <value>10020</value>
+                    </key>
+                    <ref bean="teacher2"></ref>
+                </entry>
+            </map>
+        </property>
+    </bean>
+</beans>
