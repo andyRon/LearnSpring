@@ -874,9 +874,66 @@ Spring 通过注解实现自动装配的步骤如下：
 
 #### 开启组件扫描
 
+Spring 默认不使用注解装配 Bean，因此我们需要在 Spring 的 XML 配置中，通过 `<context:component-scan>` 元素开启 Spring Beans的自动扫描功能。开启此功能后，Spring 会自动从扫描指定的包（base-package 属性设置）及其子包下的所有类，如果类上使用了 @Component 注解，就将该类装配到容器中。
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 开启组件扫描 -->
+    <context:component-scan base-package="com.andyron"></context:component-scan>
+</beans>
+```
+
+##### 情况一：最基本的扫描方式
+
+```xml
+<context:component-scan base-package="com.andyron"></context:component-scan>
+```
+
+##### 情况二：指定要排除的组件
+
+```xml
+<context:component-scan base-package="com.andyron.spring6">
+  <!-- context:exclude-filter标签：指定排除规则 -->
+  <!--
+             type：设置排除或包含的依据
+            type="annotation"，根据注解排除，expression中设置要排除的注解的全类名
+            type="assignable"，根据类型排除，expression中设置要排除的类型的全类名
+        -->
+  <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+  <!--<context:exclude-filter type="assignable" expression="com.atguigu.spring6.controller.UserController"/>-->
+</context:component-scan>
+```
+
+##### 情况三：仅扫描指定组件
+
+```xml
+<context:component-scan base-package="com.atguigu" use-default-filters="false">
+    <!-- context:include-filter标签：指定在原有扫描规则的基础上追加的规则 -->
+    <!-- use-default-filters属性：取值false表示关闭默认扫描规则 -->
+    <!-- 此时必须设置use-default-filters="false"，因为默认规则即扫描指定包下所有类 -->
+    <!-- 
+ 		type：设置排除或包含的依据
+		type="annotation"，根据注解排除，expression中设置要排除的注解的全类名
+		type="assignable"，根据类型排除，expression中设置要排除的类型的全类名
+	-->
+    <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	<!--<context:include-filter type="assignable" expression="com.atguigu.spring6.controller.UserController"/>-->
+</context:component-scan>
+```
+
 
 
 #### 使用注解定义 Bean
+
+Spring 提供了以下多个注解，这些注解可以直接标注在 Java 类上，将它们定义成 Spring Bean。
 
 | 注解        | 说明                                                         |
 | ----------- | ------------------------------------------------------------ |
@@ -885,37 +942,282 @@ Spring 通过注解实现自动装配的步骤如下：
 | @Service    | 该注解通常作用在业务层（Service 层），用于将业务层的类标识为 Spring 中的 Bean，其功能与 @Component 相同。 |
 | @Controller | 该注解通常作用在控制层（如SpringMVC 的 Controller），用于将控制层的类标识为 Spring 中的 Bean，其功能与 @Component 相同。 |
 
-
+```java
+@Component(value = "user") // 类似 <bean id="user" class="...">，value默认值就是类名（首字母小写）可省略
+public class User {
+}
+```
 
 #### 实验一：@Autowired注入
 
+单独使用@Autowired注解，**默认根据类型装配**。【默认是byType】
 
+```java
+package org.springframework.beans.factory.annotation;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Autowired {
+    boolean required() default true;
+}
+```
+
+- 注解可以标注在：构造方法上、方法上、形参上、属性上、注解上
+
+- 该注解有一个required属性，默认值是true，表示在注入的时候要求被注入的Bean必须是存在的，如果不存在则报错。如果required属性设置为false，表示注入的Bean存在或者不存在都没关系，存在的话就注入，不存在的话，也不报错。
+
+##### 场景一：属性注入
+
+```java
+    // 第一种方式 属性注入
+    @Autowired
+    private UserService userService;
+```
+
+##### 场景二：set注入
+
+```java
+    // 第二种方式 set方式注入
+    private UserService userService;
+    @Autowired
+    public void setUserService1(UserService userService) {
+        this.userService = userService;
+    }
+```
+
+##### 场景三：构造方法注入
+
+```java
+    // 第三种方式 构造方法注入
+    private UserService userService;
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+```
+
+##### 场景四：形参上注入
+
+```java
+    // 第四种方式 形参上注入
+    private UserService userService;
+    public UserController(@Autowired UserService userService) {
+        this.userService = userService;
+    }
+```
+
+##### 场景五：只有一个构造函数，无注解
+
+```java
+    // 第五种方式 只有一个有参构造函数式，不需要@Autowired
+    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+```
+
+##### 场景六：@Autowired注解和@Qualifier注解联合
+
+```java
+    // 第六种方式：两个注解，根据名称注入
+    @Autowired
+    @Qualifier(value = "userRedisDaoImpl")
+    private UserDao userDao;
+```
+
+当UserDao有多个实现bean时，可使用@`Qualifier`进行根据名称装配。
 
 #### 实验二：@Resource注入
 
+@Resource注解也可以完成属性注入。那它和@Autowired注解有什么区别？
 
+- @Resource注解是JDK扩展包中的，也就是说属于JDK的一部分。所以该注解是标准注解，更加具有通用性。(JSR-250标准中制定的注解类型。JSR是Java规范提案。)
+- @Autowired注解是Spring框架自己的。
+- **@Resource注解默认根据名称装配byName，未指定name时，使用属性名作为name。通过name找不到的话会自动启动通过类型byType装配。**
+- **@Autowired注解默认根据类型装配byType，如果想根据名称装配，需要配合@Qualifier注解一起用。**
+- @Resource注解用在属性上、setter方法上。
+- @Autowired注解用在属性上、setter方法上、构造方法上、构造方法参数上。
+
+@Resource注解属于JDK扩展包，所以不在JDK当中，需要额外引入以下依赖：【**如果是JDK8的话不需要额外引入依赖。高于JDK11或低于JDK8需要引入以下依赖。**】
+
+```xml
+<dependency>
+    <groupId>jakarta.annotation</groupId>
+    <artifactId>jakarta.annotation-api</artifactId>
+    <version>2.1.1</version>
+</dependency>
+```
+
+##### 场景一：根据name注入
+
+![](images/image-20230505085018318.png)
+
+##### 场景二：根据属性名注入
+
+![](images/image-20230505085641254.png)
+
+##### 场景三：根据类型注入
+
+```java
+    // 根据类型注入
+    @Resource
+    private UserService userService;
+```
+
+> **总结：**
+>
+> @Resource注解：默认byName注入，没有指定name时把属性名当做name，根据name找不到时，才会byType注入。byType注入时，某种类型的Bean只能有一个
 
 #### Spring全注解开发
+
+全注解开发就是不再使用spring配置文件了，写一个配置类来代替配置文件。
+
+```java
+@Configuration
+@ComponentScan("com.andyron.spring6")
+public class SpringConfig {
+}
+```
+
+```java
+ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+UserController bean = context.getBean(UserController.class);
+bean.add();
+```
 
 
 
 ## 4 原理-手写IoC
 
-
-
 ### 4.1 回顾Java反射
 
+#### 获取Class对象多种方式
 
+```java
+//1 类名.class
+Class clazz1 = Car.class;
 
-### 4.2 实现Spring的IoC
+//2 对象.getClass()
+Class clazz2 = new Car().getClass();
 
+//3 Class.forName("全路径")
+Class clazz3 = Class.forName("com.atguigu.reflect.Car");
 
+//实例化
+Car car = (Car)clazz3.getConstructor().newInstance();
+System.out.println(car);
+```
+
+#### 获取构造方法
+
+```java
+Class clazz = Car.class;
+//获取所有构造
+// getConstructors()获取所有public的构造方法
+//        Constructor[] constructors = clazz.getConstructors();
+// getDeclaredConstructors()获取所有的构造方法public  private
+Constructor[] constructors = clazz.getDeclaredConstructors();
+for (Constructor c:constructors) {
+  System.out.println("方法名称："+c.getName()+" 参数个数："+c.getParameterCount());
+}
+
+//指定有参数构造创建对象
+//1 构造public
+// Constructor c1 = clazz.getConstructor(String.class, int.class, String.class);
+// Car car1 = (Car)c1.newInstance("夏利", 10, "红色");
+// System.out.println(car1);
+
+//2 构造private
+Constructor c2 = clazz.getDeclaredConstructor(String.class, int.class, String.class);
+c2.setAccessible(true);
+Car car2 = (Car)c2.newInstance("捷达", 15, "白色");
+System.out.println(car2);
+```
+
+#### 获取属性
+
+```java
+Class clazz = Car.class;
+Car car = (Car)clazz.getDeclaredConstructor().newInstance();
+//获取所有public属性
+//Field[] fields = clazz.getFields();
+//获取所有属性（包含私有属性）
+Field[] fields = clazz.getDeclaredFields();
+for (Field field:fields) {
+  if(field.getName().equals("name")) {
+    //设置允许访问
+    field.setAccessible(true);
+    field.set(car,"五菱宏光");
+    System.out.println(car);
+  }
+  System.out.println(field.getName());
+}
+```
+
+#### 获取方法
+
+```java
+Car car = new Car("奔驰",10,"黑色");
+Class clazz = car.getClass();
+//1 public方法
+Method[] methods = clazz.getMethods();
+for (Method m1:methods) {
+  //System.out.println(m1.getName());
+  //执行方法 toString
+  if(m1.getName().equals("toString")) {
+    String invoke = (String)m1.invoke(car);
+    //System.out.println("toString执行了："+invoke);
+  }
+}
+
+//2 private方法
+Method[] methodsAll = clazz.getDeclaredMethods();
+for (Method m:methodsAll) {
+  //执行方法 run
+  if(m.getName().equals("run")) {
+    m.setAccessible(true);
+    m.invoke(car);
+  }
+}
+```
+
+### 4.2 实现Spring的IoC❤️
+
+子模块 andyron-spring
 
 
 
 ## 5 面向切面：AOP
 
+### 5.1 场景模拟
+
 **搭建子模块：spring6-aop**
+
+
+
+#### 提出问题
+
+**①现有代码缺陷**
+
+针对带日志功能的实现类，我们发现有如下缺陷：
+
+- 对核心业务功能有干扰，导致程序员在开发核心业务功能时分散了精力
+- 附加功能分散在各个业务功能方法中，不利于统一维护
+
+**②解决思路**
+
+解决这两个问题，核心就是：解耦。我们需要把附加功能从业务功能代码中抽取出来。
+
+**③困难**
+
+解决问题的困难：要抽取的代码在方法内部，靠以前把子类中的重复代码抽取到父类的方式没法解决。所以需要引入新的技术。
 
 
 
