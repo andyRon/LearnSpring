@@ -2,6 +2,8 @@
 
 本书会将Spring和Spring Boot当成一回事。
 
+https://github.com/habuma/spring-in-action-6-samples
+
 # 介绍
 
 Rod Johnson最初的目标，根据技术的发展，不断优化和革新，让Java应用的开发更加便利和高效。

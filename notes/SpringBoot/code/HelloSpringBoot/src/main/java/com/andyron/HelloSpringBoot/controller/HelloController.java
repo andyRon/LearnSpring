@@ -15,4 +15,9 @@ public class HelloController {
     public String hello() {
         return "hello, spring boot";
     }
+
+    @GetMapping("/")
+    public String home() {
+        return "home";
+    }
 }
