@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>spring6-aop</artifactId>
+    <artifactId>spring-jdbc-tx</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -18,17 +18,23 @@
     </properties>
 
     <dependencies>
-        <!--spring aop依赖-->
+        <!--spring jdbc  Spring 持久化层支持jar包-->
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
+            <artifactId>spring-jdbc</artifactId>
             <version>6.0.2</version>
         </dependency>
-        <!--spring aspects依赖-->
+        <!-- MySQL驱动 -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aspects</artifactId>
-            <version>6.0.2</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.30</version>
+        </dependency>
+        <!-- 数据源 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.2.15</version>
         </dependency>
     </dependencies>
 
