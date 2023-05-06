@@ -1200,7 +1200,7 @@ for (Method m:methodsAll) {
 
 **搭建子模块：spring6-aop**
 
-
+![](images/image-20230505152550252.png)
 
 #### 提出问题
 
@@ -1223,31 +1223,387 @@ for (Method m:methodsAll) {
 
 ### 5.2 代理模式
 
+#### 概念
+
+二十三种设计模式中的一种，属于结构型模式。它的作用就是通过提供一个代理类，让我们在调用目标方法的时候，不再是直接对目标方法进行调用，而是通过代理类**间接**调用。让不属于目标方法核心逻辑的代码从目标方法中剥离出来——**解耦**。调用目标方法时先调用代理对象的方法，减少对目标方法的调用和打扰，同时让附加功能能够集中在一起也有利于统一维护。
+
+![](images/image-20230505152315707.png)
+
+使用代理后：
+
+![](images/image-20230505152344540.png)
+
+**生活中的代理**
+
+- 广告商找大明星拍广告需要经过经纪人
+- 合作伙伴找大老板谈合作要约见面时间需要经过秘书
+- 房产中介是买卖双方的代理
+
+**相关术语**
+
+- 代理：将非核心逻辑剥离出来以后，封装这些非核心逻辑的类、对象、方法。
+- 目标：被代理“套用”了非核心逻辑代码的类、对象、方法。
+
+#### 静态代理
+
+```java
+public class CalculatorStaticProxy implements Calculator {
+    
+    // 将被代理的目标对象声明为成员变量
+    private Calculator target;
+    
+    public CalculatorStaticProxy(Calculator target) {
+        this.target = target;
+    }
+    
+    @Override
+    public int add(int i, int j) {
+    
+        // 附加功能由代理类中的代理方法来实现
+        System.out.println("[日志] add 方法开始了，参数是：" + i + "," + j);
+    
+        // 通过目标对象来实现核心业务逻辑
+        int addResult = target.add(i, j);
+    
+        System.out.println("[日志] add 方法结束了，结果是：" + addResult);
+    
+        return addResult;
+    }
+}
+```
+
+> 静态代理确实实现了解耦，但是由于代码都写死了，完全不具备任何的灵活性。就拿日志功能来说，将来其他地方也需要附加日志，那还得再声明更多个静态代理类，那就产生了大量重复的代码，日志功能还是分散的，没有统一管理。
+>
+> 提出进一步的需求：将日志功能集中到一个代理类中，将来有任何日志需求，都通过这一个代理类来实现。这就需要使用动态代理技术了。
+
+#### 动态代理
+
+![](images/image-20230505152623294.png)
+
+
+
+
+
+
+
 
 
 ### 5.3 AOP概念及相关术语
 
+#### 概述
 
+AOP（Aspect Oriented Programming）是一种设计思想，是软件设计领域中的面向切面编程，它是面向对象编程的一种补充和完善，它以==通过预编译方式和运行期动态代理方式实现，在不修改源代码的情况下，给程序动态统一添加额外功能的一种技术==。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。
+
+#### 相关术语
+
+##### ①横切关注点
+
+分散在每个各个模块中解决==同一样的问题==，如==用户验证、日志管理、事务处理、数据缓存==都属于横切关注点。
+
+从每个方法中抽取出来的==同一类非核心业务==。在同一个项目中，我们可以使用多个横切关注点对相关方法进行多个不同方面的增强。
+
+这个概念不是语法层面的，而是根据附加功能的逻辑上的需要：有十个附加功能，就有十个横切关注点。
+
+![](images/image-20230505153705310.png)
+
+##### ②通知（增强）
+
+**增强，通俗说，就是你想要增强的功能，比如 安全，事务，日志等。**
+
+每一个横切关注点上要做的事情都需要写一个方法来实现，这样的方法就叫==通知方法==。
+
+- 前置通知：在被代理的目标方法**前**执行
+- 返回通知：在被代理的目标方法**成功结束**后执行（**寿终正寝**）
+- 异常通知：在被代理的目标方法**异常结束**后执行（**死于非命**）
+- 后置通知：在被代理的目标方法**最终结束**后执行（**盖棺定论**）
+- 环绕通知：使用try...catch...finally结构围绕**整个**被代理的目标方法，包括上面四种通知对应的所有位置
+
+![](images/image-20230505153731472.png)
+
+##### ③切面
+
+封装通知方法的类。
+
+![](images/image-20230505153747527.png)
+
+##### ④目标
+
+被代理的目标对象。
+
+##### ⑤代理
+
+向目标对象应用通知之后创建的代理对象。
+
+##### ⑥连接点
+
+这也是一个纯逻辑概念，不是语法定义的。
+
+把方法排成一排，每一个横切位置看成x轴方向，把方法从上到下执行的顺序看成y轴，x轴和y轴的交叉点就是连接点。**通俗说，就是spring允许你使用通知的地方**
+
+![](images/image-20230505153807278.png)
+
+##### ⑦切入点
+
+定位连接点的方式。
+
+每个类的方法中都包含多个连接点，所以连接点是类中客观存在的事物（从逻辑上来说）。
+
+如果把连接点看作数据库中的记录，那么切入点就是查询记录的 SQL 语句。
+
+**Spring 的 AOP 技术可以通过切入点定位到特定的连接点。通俗说，要实际去增强的方法**
+
+切点通过 org.springframework.aop.Pointcut 接口进行描述，它使用类和方法作为连接点的查询条件。
+
+
+
+#### 作用
+
+- 简化代码：把方法中固定位置的重复的代码**抽取**出来，让被抽取的方法更专注于自己的核心功能，提高内聚性。
+
+- 代码增强：把特定的功能封装到切面类中，看哪里有需要，就往上套，被**套用**了切面逻辑的方法就被切面给增强了。
+
+  
 
 ### 5.4 基于注解的AOP
 
+两种动态代理：
 
+![](images/image-20230505154238950.png)
+
+![](images/image-20230505154416156.png)
+
+- 动态代理分为JDK动态代理和cglib动态代理
+- 当目标类有接口的情况使用JDK动态代理和cglib动态代理，没有接口时只能使用cglib动态代理
+- JDK动态代理动态生成的代理类会在com.sun.proxy包下，类名为$proxy1，和目标类实现相同的接口
+- cglib动态代理动态生成的代理类会和目标在在相同的包下，会继承目标类
+- 动态代理（InvocationHandler）：JDK原生的实现方式，需要被代理的目标类必须实现接口。因为这个技术要求**代理对象和目标对象实现同样的接口**（兄弟两个拜把子模式）。
+- cglib：通过**继承被代理的目标类**（认干爹模式）实现代理，所以不需要目标类实现接口。
+- AspectJ：是AOP思想的一种实现。本质上是静态代理，**将代理逻辑“织入”被代理的目标类编译得到的字节码文件**，所以最终效果是动态的。weaver就是织入器。Spring只是借用了AspectJ中的注解。
+
+#### 准备工作
+
+在子模块：spring6-aop
+
+```xml
+    <!--spring aop依赖-->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>6.0.2</version>
+    </dependency>
+    <!--spring aspects依赖-->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aspects</artifactId>
+        <version>6.0.2</version>
+    </dependency>
+```
+
+
+
+```java
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!-- 开启组件扫描 -->
+    <context:component-scan base-package="com.andyron.aop.annoaop"></context:component-scan>
+
+    <!-- 开启aspectj自动代理，为目标对象生成代理，让spring认识注解@Aspect-->
+    <aop:aspectj-autoproxy />
+</beans>
+```
+
+
+
+#### 创建切面类并配置
+
+```java
+package com.andyron.aop.annoaop;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+
+/**
+ * 切面类
+ * @author andyron
+ **/
+@Aspect
+@Component
+public class LogAspect {
+    // 设置切入点和通知类型
+    // 五种通知类型
+    /*
+    切入点表达式：`execution(访问修饰符 增强方法返回类型 增强方法所在类全类名.方法名 (参数列表)`
+     */
+
+    // 前置 @Before(value="切入点表达式配置切入点")
+    @Before(value = "execution(public int com.andyron.aop.annoaop.CalculatorImpl.*(..))")
+    public void beforeMethod(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+        System.out.println("Logger --> 前置通知，方法名称：" + methodName + "，参数：" + Arrays.toString(args));
+    }
+
+    // 后置 @After
+    @After(value = "execution(* com.andyron.aop.annoaop.CalculatorImpl.*(..))")
+    public void afterMethod(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println("Logger --> 后置通知，方法名称：" + methodName);
+    }
+
+    /**
+     * 返回 @AfterReturning
+     * @param res  增强目标方法的返回值 参数名要与注解中returning的值相同
+     */
+    @AfterReturning(value = "execution(* com.andyron.aop.annoaop.CalculatorImpl.*(..))", returning = "res")
+    public void afterReturningMethod(JoinPoint joinPoint, Object res) { //
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println("Logger --> 返回通知，方法名称：" + methodName + "，返回结果：" + res);
+    }
+
+    // 异常 @AfterThrowing
+    @AfterThrowing(value = "execution(* com.andyron.aop.annoaop.CalculatorImpl.*(..))", throwing = "ex")
+    public void afterThrowingMethod(JoinPoint joinPoint, Throwable ex) {
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println("Logger --> 异常通知，方法名称：" + methodName + "异常：" + ex);
+    }
+
+    // 环绕 @Around
+    @Around(value = "execution(* com.andyron.aop.annoaop.CalculatorImpl.*(..))")
+    public Object aroundMethod(ProceedingJoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        String argString = Arrays.toString(joinPoint.getArgs());
+        Object res = null;
+        try {
+            System.out.println("环绕通知===目标方法之前执行");
+
+            // 调用目标方法
+            res = joinPoint.proceed();
+            System.out.println("环绕通知===目标方法返回值之后");
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            System.out.println("环绕通知===目标方法出现异常执行");
+        } finally {
+            System.out.println("环绕通知===目标方法执行完毕执行");
+        }
+        return res;
+    }
+}
+```
 
 
 
 #### 各种通知
 
-
+> 各种通知的执行顺序：
+>
+> - Spring版本5.3.x以前：
+>   - 前置通知
+>   - 目标操作
+>   - 后置通知
+>   - 返回通知或异常通知
+> - Spring版本5.3.x以后：
+>   - 前置通知
+>   - 目标操作
+>   - 返回通知或异常通知
+>   - 后置通知
 
 #### 切入点表达式语法
 
+**语法细节**
 
+- 用*号代替“权限修饰符”和“返回值”部分表示“权限修饰符”和“返回值”不限
+- 在包名的部分，一个“*”号只能代表包的层次结构中的一层，表示这一层是任意的。
+  - 例如：*.Hello匹配com.Hello，不匹配com.atguigu.Hello
+- 在包名的部分，使用“*..”表示包名任意、包的层次深度任意
+- 在类名的部分，类名部分整体用*号代替，表示类名任意
+- 在类名的部分，可以使用*号代替类名的一部分
+  - 例如：*Service匹配所有名称以Service结尾的类或接口
+
+- 在方法名部分，可以使用*号表示方法名任意
+- 在方法名部分，可以使用*号代替方法名的一部分
+  - 例如：*Operation匹配所有方法名以Operation结尾的方法
+
+- 在方法参数列表部分，使用(..)表示参数列表任意
+- 在方法参数列表部分，使用(int,..)表示参数列表以一个int类型的参数开头
+- 在方法参数列表部分，基本数据类型和对应的包装类型是不一样的
+  - 切入点表达式中使用 int 和实际方法中 Integer 是不匹配的
+- 在方法返回值部分，如果想要明确指定一个返回值类型，那么必须同时写明权限修饰符
+  - 例如：execution(public int *..*Service.*(.., int))	正确
+    例如：execution(* int *..*Service.*(.., int))	错误
+
+![](images/image-20230505163127794.png)
 
 #### 重用切入点表达式
+
+```java
+// 重用切入点表达式（就是重复使用切入点表达式）
+@Pointcut(value = "execution(* com.andyron.aop.annoaop.CalculatorImpl.*(..))")
+public void pointcut() {}
+```
+
+```java
+// 后置 @After
+//    @After(value = "com.andyron.aop.annoaop.LogAspect.pointcut()") // 不在同一个类里
+@After(value = "pointcut()")
+public void afterMethod(JoinPoint joinPoint) {
+}
+```
 
 
 
 #### 获取通知的相关信息
+
+**①获取连接点信息**
+
+获取连接点信息可以在通知方法的参数位置设置JoinPoint类型的形参
+
+```java
+@Before("execution(public int com.atguigu.aop.annotation.CalculatorImpl.*(..))")
+public void beforeMethod(JoinPoint joinPoint){
+    //获取连接点的签名信息
+    String methodName = joinPoint.getSignature().getName();
+    //获取目标方法到的实参信息
+    String args = Arrays.toString(joinPoint.getArgs());
+    System.out.println("Logger-->前置通知，方法名："+methodName+"，参数："+args);
+}
+```
+
+**②获取目标方法的返回值**
+
+@AfterReturning中的属性returning，用来将通知方法的某个形参，接收目标方法的返回值
+
+```java
+@AfterReturning(value = "execution(* com.atguigu.aop.annotation.CalculatorImpl.*(..))", returning = "result")
+public void afterReturningMethod(JoinPoint joinPoint, Object result){
+    String methodName = joinPoint.getSignature().getName();
+    System.out.println("Logger-->返回通知，方法名："+methodName+"，结果："+result);
+}
+```
+
+**③获取目标方法的异常**
+
+@AfterThrowing中的属性throwing，用来将通知方法的某个形参，接收目标方法的异常
+
+```java
+@AfterThrowing(value = "execution(* com.atguigu.aop.annotation.CalculatorImpl.*(..))", throwing = "ex")
+public void afterThrowingMethod(JoinPoint joinPoint, Throwable ex){
+    String methodName = joinPoint.getSignature().getName();
+    System.out.println("Logger-->异常通知，方法名："+methodName+"，异常："+ex);
+}
+```
 
 
 
@@ -1257,9 +1613,37 @@ for (Method m:methodsAll) {
 
 #### 切面的优先级
 
+相同目标方法上同时存在多个切面时，切面的优先级控制切面的**内外嵌套**顺序。
 
+- 优先级高的切面：外面
+- 优先级低的切面：里面
+
+使用@Order注解可以控制切面的优先级：
+
+- @Order(较小的数)：优先级高
+- @Order(较大的数)：优先级低
+
+![](images/image-20230505164014493.png)
 
 ### 5.5 基于XML的AOP
+
+```xml
+<!-- 开启组件扫描 -->
+    <context:component-scan base-package="com.andyron.aop.xmlaop"></context:component-scan>
+
+    <!-- 配置aop五种通知类型 -->
+    <aop:config>
+        <!-- 配置切面类 -->
+        <aop:aspect ref="logAspect">
+            <aop:pointcut id="pointCut" expression="execution(* com.andyron.aop.xmlaop.CalculatorImpl.*(..))"/>
+            <aop:before method="beforeMethod" pointcut-ref="pointCut"></aop:before>
+            <aop:after method="afterMethod" pointcut-ref="pointCut"></aop:after>
+            <aop:after-returning method="afterReturningMethod" returning="res" pointcut-ref="pointCut"></aop:after-returning>
+            <aop:after-throwing method="afterThrowingMethod" throwing="ex" pointcut-ref="pointCut"></aop:after-throwing>
+            <aop:around method="aroundMethod" pointcut-ref="pointCut"></aop:around>
+        </aop:aspect>
+    </aop:config>
+```
 
 
 
@@ -1267,7 +1651,51 @@ for (Method m:methodsAll) {
 
 ## 6 单元测试：JUnit
 
+在之前的测试方法中，几乎都能看到以下的两行代码：
 
+```java
+ApplicationContext context = new ClassPathXmlApplicationContext("xxx.xml");
+Xxxx xxx = context.getBean(Xxxx.class);
+```
+
+这两行代码的作用是创建Spring容器，最终获取到对象，但是每次测试都需要重复编写。针对上述问题，我们需要的是程序能自动帮我们创建容器。我们都知道JUnit无法知晓我们是否使用了 Spring 框架，更不用说帮我们创建 Spring 容器了。Spring提供了一个运行器，可以读取配置文件（或注解）来创建容器。我们只需要告诉它配置文件位置就可以了。这样一来，我们通过Spring整合JUnit可以使程序创建spring容器了
+
+搭建spring6-junit模块。
+
+junit5：
+
+```java
+@SpringJUnitConfig(locations = "classpath:bean.xml")
+public class SpringTestJunit5 {
+    @Autowired
+    private User user;
+
+    @Test
+    public void testUser() {
+        System.out.println(user);
+        user.run();
+    }
+}
+```
+
+junit4:
+
+```java
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:bean.xml")
+public class SpringTestJunit4 {
+    @Autowired
+    private User user;
+
+    @Test
+    public void testUser4() {
+        System.out.println(user);
+        user.run();
+    }
+}
+```
+
+> 注意：junit5的`@Test`的是`org.junit.jupiter.api.Test`，而junit4的是`org.junit.Test`。
 
 ## 7 事务
 
@@ -1311,6 +1739,39 @@ for (Method m:methodsAll) {
 
 #### 编程式事务
 
+事务功能的相关操作全部通过自己编写代码来实现：
+
+```java
+Connection conn = ...;
+    
+try {
+    
+    // 开启事务：关闭事务的自动提交
+    conn.setAutoCommit(false);
+    
+    // 核心操作
+    
+    // 提交事务
+    conn.commit();
+    
+}catch(Exception e){
+    
+    // 回滚事务
+    conn.rollBack();
+    
+}finally{
+    
+    // 释放数据库连接
+    conn.close();
+    
+}
+```
+
+编程式的实现方式存在缺陷：
+
+- 细节没有被屏蔽：具体操作过程中，所有细节都需要程序员自己来完成，比较繁琐。
+- 代码复用性不高：如果没有有效抽取出来，每次实现功能都需要自己编写代码，代码就没有得到复用。
+
 
 
 #### 声明式事务
@@ -1332,33 +1793,258 @@ for (Method m:methodsAll) {
 
 ### 7.3 基于注解的声明式事务
 
+![](images/image-20230506155310363.png)
+
 
 
 #### 加入事务
 
+在spring配置文件中引入tx命名空间
 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+```
+
+在Spring的配置文件中添加配置：
+
+```xml
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="druidDataSource"></property>
+    </bean>
+    <!--
+     开启事务的注解驱动
+     通过注解@Transactional所标识的方法或标识的类中所有的方法，都会被事务管理器管理事务
+     transaction-manager属性的默认值是transactionManager，如果事务管理器bean的id正好就是这个默认值，则可以省略这个属性
+     -->
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+```
+
+
+
+在业务层添加注解`@Transactional`，可以在类上（影响类中所有的方法），也可以在具体方法上（只会影响该方法）。
+
+```java
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+@Documented
+@Reflective
+public @interface Transactional {
+    @AliasFor("transactionManager")
+    String value() default "";
+
+    @AliasFor("value")
+    String transactionManager() default "";
+
+    String[] label() default {};
+
+    Propagation propagation() default Propagation.REQUIRED;
+
+    Isolation isolation() default Isolation.DEFAULT;
+
+    int timeout() default -1;
+
+    String timeoutString() default "";
+
+    boolean readOnly() default false;
+
+    Class<? extends Throwable>[] rollbackFor() default {};
+
+    String[] rollbackForClassName() default {};
+
+    Class<? extends Throwable>[] noRollbackFor() default {};
+
+    String[] noRollbackForClassName() default {};
+}
+```
 
 
 
 #### 事务属性：只读
 
+对一个查询操作来说，如果我们把它设置成只读，就能够明确告诉数据库，这个操作不涉及写操作。这样数据库就能够针对查询操作来进行优化。
+
+```
+Caused by: java.sql.SQLException: Connection is read-only. Queries leading to data modification are not allowed
+```
+
 
 
 #### 事务属性：超时
+
+事务在执行过程中，有可能因为遇到某些问题，导致程序卡住，从而长时间占用数据库资源。而长时间占用资源，大概率是因为程序运行出现了问题（可能是Java程序或MySQL数据库或网络连接等等）。此时这个很可能出问题的程序应该被回滚，撤销它已做的操作，事务结束，把资源让出来，让其他正常程序可以执行。
+
+概括来说就是一句话：超时回滚，释放资源。（抛出异常）
+
+```java
+//超时时间单位秒
+@Transactional(timeout = 3)
+```
 
 
 
 #### 事务属性：回滚策略
 
+声明式事务默认只针对运行时异常回滚，编译时异常不回滚。
 
+可以通过@Transactional中相关属性设置回滚策略
 
-#### 事务属性：隔离级别
+- rollbackFor属性：需要设置一个Class类型的对象
+- rollbackForClassName属性：需要设置一个字符串类型的全类名
+- noRollbackFor属性：需要设置一个Class类型的对象
+- rollbackFor属性：需要设置一个字符串类型的全类名
+
+```java
+@Transactional(noRollbackFor = ArithmeticException.class)
+//@Transactional(noRollbackForClassName = "java.lang.ArithmeticException")
+```
+
+设置哪些异常不回滚
+
+#### 事务属性：隔离级别🔖
+
+**①介绍**
+
+数据库系统必须具有隔离并发运行各个事务的能力，使它们不会相互影响，避免各种并发问题。一个事务与其他事务隔离的程度称为隔离级别。SQL标准中规定了多种事务隔离级别，不同隔离级别对应不同的干扰程度，隔离级别越高，数据一致性就越好，但并发性越弱。
+
+隔离级别一共有四种：
+
+- 读未提交：READ UNCOMMITTED
+
+  允许Transaction01读取Transaction02未提交的修改。
+
+- 读已提交：READ COMMITTED、
+
+  要求Transaction01只能读取Transaction02已提交的修改。
+
+- 可重复读：REPEATABLE READ
+
+  确保Transaction01可以多次从一个字段中读取到相同的值，即Transaction01执行期间禁止其它事务对这个字段进行更新。
+
+- 串行化：SERIALIZABLE
+
+  确保Transaction01可以多次从一个表中读取到相同的行，在Transaction01执行期间，禁止其它事务对这个表进行添加、更新、删除操作。可以避免任何并发问题，但性能十分低下。
+
+各个隔离级别解决并发问题的能力见下表：
+
+| 隔离级别         | ==脏读== | 不可重复读 | ==幻读== |
+| ---------------- | -------- | ---------- | -------- |
+| READ UNCOMMITTED | 有       | 有         | 有       |
+| READ COMMITTED   | 无       | 有         | 有       |
+| REPEATABLE READ  | 无       | 无         | 有       |
+| SERIALIZABLE     | 无       | 无         | 无       |
+
+各种数据库产品对事务隔离级别的支持程度：
+
+| 隔离级别         | Oracle  | MySQL   |
+| ---------------- | ------- | ------- |
+| READ UNCOMMITTED | ×       | √       |
+| READ COMMITTED   | √(默认) | √       |
+| REPEATABLE READ  | ×       | √(默认) |
+| SERIALIZABLE     | √       | √       |
+
+**②使用方式**
+
+```java
+@Transactional(isolation = Isolation.DEFAULT)//使用数据库默认的隔离级别
+@Transactional(isolation = Isolation.READ_UNCOMMITTED)//读未提交
+@Transactional(isolation = Isolation.READ_COMMITTED)//读已提交
+@Transactional(isolation = Isolation.REPEATABLE_READ)//可重复读
+@Transactional(isolation = Isolation.SERIALIZABLE)//串行化
+```
 
 
 
 #### 事务属性：传播行为
 
+事务方法之间调用，事务如何使用
 
+**①介绍**
+
+什么是事务的传播行为？
+
+在service类中有a()方法和b()方法，a()方法上有事务，b()方法上也有事务，当a()方法执行过程中调用了b()方法，事务是如何传递的？合并到一个事务里？还是开启一个新的事务？这就是事务传播行为。
+
+一共有七种传播行为：
+
+- ==REQUIRED==：支持当前事务，如果不存在就新建一个(默认)**【没有就新建，有就加入】**
+- SUPPORTS：支持当前事务，如果当前没有事务，就以非事务方式执行**【有就加入，没有就不管了】**
+- MANDATORY：必须运行在一个事务中，如果当前没有事务正在发生，将抛出一个异常**【有就加入，没有就抛异常】**
+- ==REQUIRES_NEW==：开启一个新的事务，如果一个事务已经存在，则将这个存在的事务挂起**【不管有没有，直接开启一个新事务，开启的新事务和之前的事务不存在嵌套关系，之前事务被挂起】**
+- NOT_SUPPORTED：以非事务方式运行，如果有事务存在，挂起当前事务**【不支持事务，存在就挂起】**
+- NEVER：以非事务方式运行，如果有事务存在，抛出异常**【不支持事务，存在就抛异常】**
+- NESTED：如果当前正有一个事务在进行中，则该方法应当运行在一个嵌套式事务中。被嵌套的事务可以独立于外层事务进行提交或回滚。如果外层事务不存在，行为就像REQUIRED一样。**【有事务的话，就在这个事务里再嵌套一个完全独立的事务，嵌套的事务可以独立的提交和回滚。没有事务就和REQUIRED一样。】**
+
+**②测试**
+
+![](images/image-20230506191657629.png)
+
+创建接口CheckoutService：
+
+```java
+package com.atguigu.spring6.service;
+
+public interface CheckoutService {
+    void checkout(Integer[] bookIds, Integer userId);
+}
+```
+
+创建实现类CheckoutServiceImpl：
+
+```java
+package com.atguigu.spring6.service.impl;
+
+@Service
+public class CheckoutServiceImpl implements CheckoutService {
+
+    @Autowired
+    private BookService bookService;
+
+    @Override
+    @Transactional
+    //一次购买多本图书
+    public void checkout(Integer[] bookIds, Integer userId) {
+        for (Integer bookId : bookIds) {
+            bookService.buyBook(bookId, userId);
+        }
+    }
+}
+```
+
+在BookController中添加方法：
+
+```java
+@Autowired
+private CheckoutService checkoutService;
+
+public void checkout(Integer[] bookIds, Integer userId){
+    checkoutService.checkout(bookIds, userId);
+}
+```
+
+在数据库中将用户的余额修改为100元
+
+**③观察结果**
+
+可以通过@Transactional中的propagation属性设置事务传播行为
+
+修改BookServiceImpl中buyBook()上，注解@Transactional的propagation属性
+
+`@Transactional(propagation = Propagation.REQUIRED)`，默认情况，表示如果当前线程上有已经开启的事务可用，那么就在这个事务中运行。经过观察，购买图书的方法buyBook()在checkout()中被调用，checkout()上有事务注解，因此在此事务中执行。所购买的两本图书的价格为80和50，而用户的余额为100，因此在购买第二本图书时余额不足失败，导致整个checkout()回滚，即只要有一本书买不了，就都买不了
+
+`@Transactional(propagation = Propagation.REQUIRES_NEW)`，表示不管当前线程上是否有已经开启的事务，都要开启新事务。同样的场景，每次购买图书都是在buyBook()的事务中执行，因此第一本图书购买成功，事务结束，第二本图书购买失败，只在第二次的buyBook()中回滚，购买第一本图书不受影响，即能买几本就买几本。
+
+🔖p69
 
 #### 全注解配置事务
 
@@ -1366,7 +2052,7 @@ for (Method m:methodsAll) {
 
 ### 7.4 基于XML的声明式事务
 
-
+🔖
 
 ## 8 资源操作：Resources
 
@@ -1378,9 +2064,110 @@ Java的标准java.net.URL类和各种URL前缀的标准处理程序无法满足�
 
 ### 8.2 Resource接口
 
+Spring 的 Resource 接口位于 org.springframework.core.io 中。 旨在成为一个更强大的接口，用于抽象对低级资源的访问。以下显示了Resource接口定义的方法
 
+```java
+public interface Resource extends InputStreamSource {
+
+    boolean exists();
+
+    boolean isReadable();
+
+    boolean isOpen();
+
+    boolean isFile();
+
+    URL getURL() throws IOException;
+
+    URI getURI() throws IOException;
+
+    File getFile() throws IOException;
+
+    ReadableByteChannel readableChannel() throws IOException;
+
+    long contentLength() throws IOException;
+
+    long lastModified() throws IOException;
+
+    Resource createRelative(String relativePath) throws IOException;
+
+    String getFilename();
+
+    String getDescription();
+}
+```
+
+Resource接口继承了InputStreamSource接口，提供了很多InputStreamSource所没有的方法。InputStreamSource接口，只有一个方法：
+
+```java
+public interface InputStreamSource {
+
+    InputStream getInputStream() throws IOException;
+
+}
+```
+
+**其中一些重要的方法：**
+
+getInputStream(): 找到并打开资源，返回一个InputStream以从资源中读取。预计每次调用都会返回一个新的InputStream()，调用者有责任关闭每个流
+exists(): 返回一个布尔值，表明某个资源是否以物理形式存在
+isOpen: 返回一个布尔值，指示此资源是否具有开放流的句柄。如果为true，InputStream就不能够多次读取，只能够读取一次并且及时关闭以避免内存泄漏。对于所有常规资源实现，返回false，但是InputStreamResource除外。
+getDescription(): 返回资源的描述，用来输出错误的日志。这通常是完全限定的文件名或资源的实际URL。
+
+**其他方法：**
+
+isReadable(): 表明资源的目录读取是否通过getInputStream()进行读取。
+isFile(): 表明这个资源是否代表了一个文件系统的文件。
+getURL(): 返回一个URL句柄，如果资源不能够被解析为URL，将抛出IOException
+getURI(): 返回一个资源的URI句柄
+getFile(): 返回某个文件，如果资源不能够被解析称为绝对路径，将会抛出FileNotFoundException
+lastModified(): 资源最后一次修改的时间戳
+createRelative(): 创建此资源的相关资源
+getFilename(): 资源的文件名是什么 例如：最后一部分的文件名 myfile.txt
 
 ### 8.3 Resource的实现类
+
+Resource 接口是 Spring 资源访问策略的抽象，它本身并不提供任何资源访问实现，具体的资源访问由该接口的实现类完成——每个实现类代表一种资源访问策略。Resource一般包括这些实现类：UrlResource、ClassPathResource、FileSystemResource、ServletContextResource、InputStreamResource、ByteArrayResource
+
+#### 1 UrlResource访问网络资源
+
+Resource的一个实现类，用来访问网络资源，它支持URL的绝对路径。
+
+http:------该前缀用于访问基于HTTP协议的网络资源。
+
+ftp:------该前缀用于访问基于FTP协议的网络资源
+
+file: ------该前缀用于从文件系统中读取资源
+
+
+
+#### 2 ClassPathResource 访问类路径下资源
+
+ClassPathResource 用来访问类加载路径下的资源，相对于其他的 Resource 实现类，其主要优势是方便访问类加载路径里的资源，尤其对于 Web 应用，ClassPathResource 可自动搜索位于 classes 下的资源文件，无须使用绝对路径访问。
+
+
+
+#### 3 FileSystemResource 访问文件系统资源
+
+Spring 提供的 FileSystemResource 类用于访问文件系统资源，使用 FileSystemResource 来访问文件系统资源并没有太大的优势，因为 Java 提供的 File 类也可用于访问文件系统资源。
+
+
+
+#### 4 ServletContextResource
+
+这是ServletContext资源的Resource实现，它解释相关Web应用程序根目录中的相对路径。它始终支持流(stream)访问和URL访问，但只有在扩展Web应用程序存档且资源实际位于文件系统上时才允许java.io.File访问。无论它是在文件系统上扩展还是直接从JAR或其他地方（如数据库）访问，实际上都依赖于Servlet容器。
+
+
+
+#### 5 InputStreamResource
+
+InputStreamResource 是给定的输入流(InputStream)的Resource实现。它的使用场景在没有特定的资源实现的时候使用(感觉和@Component 的适用场景很相似)。与其他Resource实现相比，这是已打开资源的描述符。 因此，它的isOpen()方法返回true。如果需要将资源描述符保留在某处或者需要多次读取流，请不要使用它。
+
+
+
+#### 6 ByteArrayResource
+
+字节数组的Resource实现类。通过给定的数组创建了一个ByteArrayInputStream。它对于从任何给定的字节数组加载内容非常有用，而无需求助于单次使用的InputStreamResource。
 
 
 
@@ -1392,27 +2179,126 @@ Java的标准java.net.URL类和各种URL前缀的标准处理程序无法满足�
 
 ### 8.5 ResourceLoader 接口
 
+Spring 提供如下两个标志性接口：
+
+**（1）ResourceLoader ：** 该接口实现类的实例可以获得一个Resource实例。
+
+**（2） ResourceLoaderAware ：** 该接口实现类的实例将获得一个ResourceLoader的引用。
+
+在ResourceLoader接口里有如下方法：
+
+（1）**Resource getResource（String location）** ： 该接口仅有这个方法，用于返回一个Resource实例。ApplicationContext实现类都实现ResourceLoader接口，因此ApplicationContext可直接获取Resource实例。
+
+
+
+#### ResourceLoader 总结
+
+Spring将采用和ApplicationContext相同的策略来访问资源。也就是说，如果ApplicationContext是FileSystemXmlApplicationContext，res就是FileSystemResource实例；如果ApplicationContext是ClassPathXmlApplicationContext，res就是ClassPathResource实例
+
+当Spring应用需要进行资源访问时，实际上并不需要直接使用Resource实现类，而是调用ResourceLoader实例的getResource()方法来获得资源，ReosurceLoader将会负责选择Reosurce实现类，也就是确定具体的资源访问策略，从而将应用程序和具体的资源访问策略分离开来
+
+另外，使用ApplicationContext访问资源时，可通过不同前缀指定强制使用指定的ClassPathResource、FileSystemResource等实现类
+
+```java
+Resource res = ctx.getResource("calsspath:bean.xml");
+Resrouce res = ctx.getResource("file:bean.xml");
+Resource res = ctx.getResource("http://localhost:8080/beans.xml");
+```
+
 
 
 
 
 ### 8.6 ResourceLoaderAware接口
 
-
+🔖p75
 
 ### 8.7 使用Resource 作为属性
 
+>  通俗的讲就是，通过依赖注入的方式，把资源位置从代码中转移到配置文件中。
 
+前面介绍了 Spring 提供的资源访问策略，但这些依赖访问策略要么需要使用 Resource 实现类，要么需要使用 ApplicationContext 来获取资源。实际上，当应用程序中的 Bean 实例需要访问资源时，Spring 有更好的解决方法：直接利用依赖注入。从这个意义上来看，Spring 框架不仅充分利用了策略模式来简化资源访问，而且还将策略模式和 IoC 进行充分地结合，最大程度地简化了 Spring 资源访问。
+
+归纳起来，**如果 Bean 实例需要访问资源，有如下两种解决方案：**
+
+- **代码中获取 Resource 实例。**
+- **使用依赖注入。**
+
+对于第一种方式，当程序获取 Resource 实例时，总需要提供 Resource 所在的位置，不管通过 FileSystemResource 创建实例，还是通过 ClassPathResource 创建实例，或者通过 ApplicationContext 的 getResource() 方法获取实例，都需要提供资源位置。这意味着：资源所在的物理位置将被耦合到代码中，如果资源位置发生改变，则必须改写程序。因此，通常建议采用第二种方法，让 Spring 为 Bean 实例**依赖注入**资源。
 
 ### 8.8 应用程序上下文和资源路径
 
-
+🔖p77
 
 ## 9 国际化：i18n
 
 子模块spring6-i18n
 
+### Java国际化
 
+1. Java自身是支持国际化的，java.util.Locale用于指定当前用户所属的语言环境等信息，java.util.ResourceBundle用于查找绑定对应的资源文件。Locale包含了language信息和country信息。
+
+2. 配置文件命名规则：
+    **basename_language_country.properties**
+    必须遵循以上的命名规则，java才会识别。其中，basename是必须的，语言和国家是可选的。这里存在一个优先级概念，如果同时提供了messages.properties和messages_zh_CN.propertes两个配置文件，如果提供的locale符合en_CN，那么优先查找messages_en_CN.propertes配置文件，如果没查找到，再查找messages.properties配置文件。最后，提示下，所有的配置文件必须放在classpath中，一般放在resources目录下
+
+### Spring6国际化
+
+#### MessageSource接口
+
+spring中国际化是通过MessageSource这个接口来支持的
+
+**常见实现类**
+
+**ResourceBundleMessageSource**
+
+这个是基于Java的ResourceBundle基础类实现，允许仅通过资源名加载国际化资源
+
+**ReloadableResourceBundleMessageSource**
+
+这个功能和第一个类的功能类似，多了定时刷新功能，允许在不重启系统的情况下，更新资源的信息
+
+**StaticMessageSource**
+
+它允许通过编程的方式提供国际化信息，一会我们可以通过这个来实现db中存储国际化信息的功能。
+
+
+
+动态参数
+
+```
+andyron.com=welcome {0}, time:{1}
+```
+
+```xml
+<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+  <property name="basenames">
+    <list>
+      <value>andyron</value>
+    </list>
+  </property>
+  <property name="defaultEncoding">
+    <value>utf-8</value>
+  </property>
+</bean>
+```
+
+
+
+```java
+ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+// 传递动态参数，使用数组形式对应{0} {1}顺序
+Object[] objs = new Object[]{"world", new Date().toString()};
+
+String message = context.getMessage("andyron.com", objs, Locale.CHINA);
+System.out.println(message);
+```
+
+
+
+乱码时注意修改：
+
+![](images/image-20230506224811713.png)
 
 ## 10 数据校验：Validation
 
@@ -1430,6 +2316,267 @@ Java的标准java.net.URL类和各种URL前缀的标准处理程序无法满足�
 
 **除此之外，还可以实现自定义校验**
 
+子模块 spring6-validator
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.hibernate.validator</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>7.0.5.Final</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>jakarta.el</artifactId>
+        <version>4.0.1</version>
+    </dependency>
+</dependencies>
+```
+
+
+
+### 10.2 实验一：通过Validator接口实现
+
+```java
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
+
+public class PersonValidator implements Validator {
+    // 指定校验的类型
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return Person.class.equals(clazz);
+    }
+    // 校验规则
+    @Override
+    public void validate(Object target, Errors errors) {
+        // name不能为空
+        ValidationUtils.rejectIfEmpty(errors, "name", "name.empty", "name is null");
+        // age 不能小于0，不能大于200
+        Person p = (Person) target;
+        if (p.getAge() < 0) {
+            errors.rejectValue("age", "age.value.error", "age < 0");
+        } else if (p.getAge() > 200) {
+            errors.rejectValue("age", "age.value.error.old", "age > 200");
+        }
+    }
+}
+```
+
+```java
+Person person = new Person();
+person.setAge(-10);
+person.setName("andy");
+
+// 创建person对应dtabinder
+DataBinder binder = new DataBinder(person);
+
+// 设置校验器
+binder.setValidator(new PersonValidator());
+
+// 调用方法执行校验
+binder.validate();
+
+// 输出校验结果
+BindingResult result = binder.getBindingResult();
+System.out.println(result.getAllErrors());
+```
+
+### 10.3 实验二：Bean Validation注解实现
+
+使用Bean Validation校验方式，就是如何将Bean Validation需要使用的javax.validation.ValidatorFactory 和javax.validation.Validator注入到容器中。spring默认有一个实现类LocalValidatorFactoryBean，它实现了上面Bean Validation中的接口，并且也实现了org.springframework.validation.Validator接口。
+
+1. 创建配置类
+
+```java
+@Configuration
+@ComponentScan("com.andyron.spring6.validator2")
+public class ValidationConfig {
+    @Bean
+    public LocalValidatorFactoryBean validator() {
+        return new LocalValidatorFactoryBean();
+    }
+}
+```
+
+2. 在实体类，使用注解定义校验规则
+
+```java
+    @NotNull
+    private String name;
+    @Max(120)
+    @Min(0)
+    private int age;
+```
+
+> **常用注解说明**
+> @NotNull	限制必须不为null
+> @NotEmpty	只作用于字符串类型，字符串不为空，并且长度不为0
+> @NotBlank	只作用于字符串类型，字符串不为空，并且trim()后不为空串
+> @DecimalMax(value)	限制必须为一个不大于指定值的数字
+> @DecimalMin(value)	限制必须为一个不小于指定值的数字
+> @Max(value)	限制必须为一个不大于指定值的数字
+> @Min(value)	限制必须为一个不小于指定值的数字
+> @Pattern(value)	限制必须符合指定的正则表达式
+> @Size(max,min)	限制字符长度必须在min到max之间
+> @Email	验证注解的元素值是Email，也可以通过正则表达式和flag指定自定义的email格式
+
+3. 使用两种不同的校验器实现
+
+`jakarta.validation.Validator`
+
+
+
+`org.springframework.validation.Validator`
+
+
+
+### 10.4 实验三：基于方法实现校验
+
+
+
+### 10.5 实验四：实现自定义校验
+
+**第一步 自定义校验注解**
+
+```java
+package com.atguigu.spring6.validation.method4;
+
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+import java.lang.annotation.*;
+
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Constraint(validatedBy = {CannotBlankValidator.class})
+public @interface CannotBlank {
+    //默认错误消息
+    String message() default "不能包含空格";
+
+    //分组
+    Class<?>[] groups() default {};
+
+    //负载
+    Class<? extends Payload>[] payload() default {};
+
+    //指定多个时使用
+    @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @interface List {
+        CannotBlank[] value();
+    }
+}
+```
+
+**第二步 编写真正的校验类**
+
+```java
+package com.atguigu.spring6.validation.method4;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
+public class CannotBlankValidator implements ConstraintValidator<CannotBlank, String> {
+
+        @Override
+        public void initialize(CannotBlank constraintAnnotation) {
+        }
+
+        @Override
+        public boolean isValid(String value, ConstraintValidatorContext context) {
+                //null时不进行校验
+                if (value != null && value.contains(" ")) {
+                  //获取默认提示信息
+                  String defaultConstraintMessageTemplate = context.getDefaultConstraintMessageTemplate();
+                  System.out.println("default message :" + defaultConstraintMessageTemplate);
+                  //禁用默认提示信息
+                  context.disableDefaultConstraintViolation();
+                  //设置提示语
+                  context.buildConstraintViolationWithTemplate("can not contains blank").addConstraintViolation();
+                  return false;
+                }
+                return true;
+        }
+}
+```
+
+
+
 
 
 ## 11 提前编译：AOT
+
+### 11.1、AOT概述
+
+![](images/image-20230507012559909.png)
+
+#### 11.1.1、JIT与AOT的区别
+
+JIT和AOT 这个名词是指两种不同的编译方式，这两种编译方式的主要区别在于是否在“运行时”进行编译
+
+**（1）JIT， Just-in-time,动态(即时)编译，边运行边编译；**
+
+在程序运行时，根据算法计算出热点代码，然后进行 JIT 实时编译，这种方式吞吐量高，有运行时性能加成，可以跑得更快，并可以做到动态生成代码等，但是相对启动速度较慢，并需要一定时间和调用频率才能触发 JIT 的分层机制。JIT 缺点就是编译需要占用运行时资源，会导致进程卡顿。
+
+**（2）AOT，Ahead Of Time，指运行前编译，预先编译。**
+
+AOT 编译能直接将源代码转化为机器码，内存占用低，启动速度快，可以无需 runtime 运行，直接将 runtime 静态链接至最终的程序中，但是无运行时性能加成，不能根据程序运行情况做进一步的优化，AOT 缺点就是在程序运行前编译会使程序安装的时间增加。                                                           
+
+**简单来讲：**JIT即时编译指的是在程序的运行过程中，将字节码转换为可在硬件上直接运行的机器码，并部署至托管环境中的过程。而 AOT 编译指的则是，在程序运行之前，便将字节码转换为机器码的过程。
+
+```
+.java -> .class -> (使用jaotc编译工具) -> .so（程序函数库,即编译好的可以供其他程序使用的代码和数据）
+```
+
+![](images/image-20230507012419011.png)
+
+**（3）AOT的优点**
+
+**简单来讲，**Java 虚拟机加载已经预编译成二进制库，可以直接执行。不必等待及时编译器的预热，减少 Java 应用给人带来“第一次运行慢” 的不良体验。
+
+在程序运行前编译，可以避免在运行时的编译性能消耗和内存消耗
+可以在程序运行初期就达到最高性能，程序启动速度快
+运行产物只有机器码，打包体积小
+
+**AOT的缺点**
+
+由于是静态提前编译，不能根据硬件情况或程序运行情况择优选择机器指令序列，理论峰值性能不如JIT
+没有动态能力，同一份产物不能跨平台运行
+
+第一种即时编译 (JIT) 是默认模式，Java Hotspot 虚拟机使用它在运行时将字节码转换为机器码。后者提前编译 (AOT)由新颖的 GraalVM 编译器支持，并允许在构建时将字节码直接静态编译为机器码。
+
+现在正处于云原生，降本增效的时代，Java 相比于 Go、Rust 等其他编程语言非常大的弊端就是启动编译和启动进程非常慢，这对于根据实时计算资源，弹性扩缩容的云原生技术相冲突，Spring6 借助 AOT 技术在运行时内存占用低，启动速度快，逐渐的来满足 Java 在云原生时代的需求，对于大规模使用 Java 应用的商业公司可以考虑尽早调研使用 JDK17，通过云原生技术为公司实现降本增效。
+
+
+
+#### 11.1.2、Graalvm
+
+Spring6 支持的 AOT 技术，这个 GraalVM  就是底层的支持，Spring 也对 GraalVM 本机映像提供了一流的支持。GraalVM 是一种高性能 JDK，旨在加速用 Java 和其他 JVM 语言编写的应用程序的执行，同时还为 JavaScript、Python 和许多其他流行语言提供运行时。 GraalVM 提供两种运行 Java 应用程序的方法：在 HotSpot JVM 上使用 Graal 即时 (JIT) 编译器或作为提前 (AOT) 编译的本机可执行文件。 GraalVM 的多语言能力使得在单个应用程序中混合多种编程语言成为可能，同时消除了外语调用成本。GraalVM 向 HotSpot Java 虚拟机添加了一个用 Java 编写的高级即时 (JIT) 优化编译器。
+
+GraalVM 具有以下特性：
+
+（1）一种高级优化编译器，它生成更快、更精简的代码，需要更少的计算资源
+
+（2）AOT 本机图像编译提前将 Java 应用程序编译为本机二进制文件，立即启动，无需预热即可实现最高性能
+
+（3）Polyglot 编程在单个应用程序中利用流行语言的最佳功能和库，无需额外开销
+
+（4）高级工具在 Java 和多种语言中调试、监视、分析和优化资源消耗
+
+总的来说对云原生的要求不算高短期内可以继续使用 2.7.X 的版本和 JDK8，不过 Spring 官方已经对 Spring6 进行了正式版发布。
+
+
+
+#### 11.1.3、Native Image
+
+目前业界除了这种在JVM中进行AOT的方案，还有另外一种实现Java AOT的思路，那就是直接摒弃JVM，和C/C++一样通过编译器直接将代码编译成机器代码，然后运行。这无疑是一种直接颠覆Java语言设计的思路，那就是GraalVM Native Image。它通过C语言实现了一个超微缩的运行时组件 —— Substrate VM，基本实现了JVM的各种特性，但足够轻量、可以被轻松内嵌，这就让Java语言和工程摆脱JVM的限制，能够真正意义上实现和C/C++一样的AOT编译。这一方案在经过长时间的优化和积累后，已经拥有非常不错的效果，基本上成为Oracle官方首推的Java AOT解决方案。
+Native Image 是一项创新技术，可将 Java 代码编译成独立的本机可执行文件或本机共享库。在构建本机可执行文件期间处理的 Java 字节码包括所有应用程序类、依赖项、第三方依赖库和任何所需的 JDK 类。生成的自包含本机可执行文件特定于不需要 JVM 的每个单独的操作系统和机器体系结构。
+
+🔖
+
+
+

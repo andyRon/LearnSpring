@@ -14,6 +14,11 @@
         <module>spring6-ioc-annotation</module>
         <module>andyron-spring</module>
         <module>spring6-aop</module>
+        <module>spring6-junit</module>
+        <module>spring-jdbc-tx</module>
+        <module>spring6-resources</module>
+        <module>spring6-i18n</module>
+        <module>spring6-validator</module>
     </modules>
 
     <properties>
@@ -53,6 +58,20 @@
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
             <version>2.1.1</version>
+        </dependency>
+
+        <!--spring对junit的支持相关依赖-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>6.0.2</version>
+        </dependency>
+
+        <!-- junit4测试 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
         </dependency>
     </dependencies>
 </project>
