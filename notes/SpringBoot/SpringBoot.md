@@ -177,6 +177,8 @@ java -jar  jar包
 ~/.m2/repository/org/springframework/boot/spring-boot-dependencies/2.5.5/spring-boot-dependencies-2.5.5.pom
 ```
 
+![](images/image-20230516183317918.png)
+
 spring boot banner定义，简单的方式只要将文件banner.txt放入src/main/resources即可，也可图片类型的Banner。配置方式也可通过自定义类实现`Banner`接口的方式。
 
 
@@ -233,6 +235,7 @@ public class Springbooot01HelloworldApplication {
 ```
 
 `AutoConfigurationImportSelector`类中：
+
 ```java
 // 获取所有配置
 List<String> configurations = this.getCandidateConfigurations(annotationMetadata, attributes);
@@ -553,16 +556,29 @@ spring:
 
 
 
-## 5 自动装配再理解🔖
+## 5 自动装配再理解
 
-配置文件中到底能配置什么？ 配置文件与自动装配中的spring.factories是相关的
+**配置文件中到底能配置什么？** 配置文件与自动装配中的spring.factories是相关的。
+
+`AutoConfigurationImportSelector` `getAutoConfigurationEntry()`  `getCandidateConfigurations()`
+
+`SpringFactoriesLoader.loadFactoryNames()`  最终在 `loadSpringFactories()`方法中获取`META-INF/spring.factories`中的类地址：
+
+```java
+ Enumeration<URL> urls = classLoader.getResources("META-INF/spring.factories");
+```
+
+每一个`spring.factories`中的`xxxAutoConfiguration`都有可能是容器中的组件。
+
+
 
 ```java
 // 表示这是一个配置类
 @Configuration(proxyBeanMethods = false)
 // 自动配置属性：ServerProperties
 @EnableConfigurationProperties({ServerProperties.class})
-// spring的底层注解：根据
+
+// spring的底层注解：根据不同的条件，来判断当前配置或者类是否生效
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnClass({CharacterEncodingFilter.class})
 @ConditionalOnProperty(
@@ -581,9 +597,7 @@ public class HttpEncodingAutoConfiguration {
 }
 ```
 
-`@EnableConfigurationProperties`
-
-
+`@EnableConfigurationProperties({ServerProperties.class})`
 
 ```java
 @ConfigurationProperties(
@@ -617,7 +631,11 @@ public class ServerProperties {
 
 那么server相关的配置就全是`ServerProperties`中的属性。
 
-在Spring Boot配置文件中能配置的，都有一个规律，都是**xxPorperties**类的属性（属性的值就是配置的默认值），而这个类被**xxxAutoConfiguration**装配。**xxPorperties**类通过注解@ConfigurationProperties配置配置的前缀，如：
+![](images/image-20230516205327745.png)
+
+
+
+在Spring Boot配置文件中能配置的，都有一个规律，都是**==xxPorperties==**类的属性（属性的值就是配置的默认值），而这个类被**==xxxAutoConfiguration==**装配。**xxPorperties**类通过注解@ConfigurationProperties配置了配置文件中前缀，如：
 
 ```java
 @ConfigurationProperties(prefix = "spring.activemq")
@@ -635,15 +653,15 @@ public class CacheProperties
 
 配置的名称是按照类的驼峰转换为`-`连接表示。
 
-自动装配的精髓：
+**自动装配的精髓**：
 
 1. SpringBoot启动会自动加载大量自动装配类。
 2. 我们看我们需要的功能有没有在SpringBoot默认写好的自动配置类当中；
 3. 我们再来看这个自动配置类中到底配置了哪些组件；（只要我们要用的组件存在在其中，我们就不需要再手动配置了）
-4. 给容器中自动配置类添加组件的时候，会从properties类中获取某些属性。我们只需要在配置文件中指定这些属性的值即可；
+4. 给容器中自动配置类添加组件的时候，会从`xxxproperties`类中获取某些属性。我们只需要在配置文件中指定这些属性的值即可；
 
-xxxxAutoConfigurartion：自动配置类；给容器中添加组件
-xxxxProperties：封装配置文件中相关属性；
+`xxxAutoConfigurartion`：自动配置类；给容器中添加组件
+`xxxProperties`：封装配置文件中相关属性；【通过springboot配置文件来修改这些属性】
 
 
 
@@ -655,7 +673,7 @@ CONDITIONS EVALUATION REPORT
 ============================
 
 
-Positive matches:
+Positive matches:  生效的
 -----------------
 
    AopAutoConfiguration matched:
@@ -678,6 +696,24 @@ Positive matches:
       - DispatcherServlet Registration did not find servlet registration bean (DispatcherServletAutoConfiguration.DispatcherServletRegistrationCondition)
       
  ...
+ 
+ Negative matches:  没有生效
+-----------------
+
+   ActiveMQAutoConfiguration:
+      Did not match:
+         - @ConditionalOnClass did not find required class 'javax.jms.ConnectionFactory' (OnClassCondition)
+
+   AopAutoConfiguration.AspectJAutoProxyingConfiguration:
+      Did not match:
+         - @ConditionalOnClass did not find required class 'org.aspectj.weaver.Advice' (OnClassCondition)
+ ...
+ 
+ Exclusions:
+-----------
+
+    None
+ 
 ```
 
 
@@ -685,8 +721,6 @@ Positive matches:
 
 
 ## 6 SpringBoot Web 开发
-
-
 
 SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修改那些东西？能不能呢扩展？
 
@@ -852,11 +886,7 @@ public class ThymeleafProperties {
 
 [29.1.1 Spring MVC Auto-configuration](https://docs.spring.io/spring-boot/docs/2.1.6.RELEASE/reference/html/boot-features-developing-web-applications.html#boot-features-spring-mvc)
 
-
-
-ContentNegotiatingViewResolver
-
-
+`ContentNegotiatingViewResolver`
 
 自定义视图解析器：
 
@@ -880,7 +910,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
 }
 ```
 
-所有的请求都要经过DispatcherServlet的doDispatch方法，可通过在这个方法打断点查看自定义视图解析器是否生效 
+所有的请求都要经过`DispatcherServlet`的doDispatch方法，可通过在这个方法打断点查看自定义视图解析器是否生效 
 
 ![](images/image-20211001180338305.png)
 
