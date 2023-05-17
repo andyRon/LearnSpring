@@ -237,7 +237,7 @@ Spring MVC框架像许多其他MVC框架一样, **以请求为驱动** , **围�
 
 ### SpringMVC原理
 
-![](https://kuangstudy.oss-cn-beijing.aliyuncs.com/bbs/2021/04/13/kuangstudy00854e07-7eac-476c-a9dd-dcebb7ac0b89.png)
+![](images/kuangstudy00854e07-7eac-476c-a9dd-dcebb7ac0b89.png)
 
 **前端控制器**相当于DispatcherServlet，**页面控制器/处理器**相当于Controller。
 
@@ -373,7 +373,7 @@ HandlerAdapter将视图逻辑名或模型传递给DispatcherServlet。
 
 场景二：你的同行跑来问你一个问题，但是当他自己把问题说完，或说到一半的时候就想出答案走了，留下一脸茫然的你。
 
-其实上面两种场景现象就是所谓的小黄鸭调试法（Rubber Duck Debuging），又称橡皮鸭调试法，它是我们软件工程中最常使用调试方法之一。
+其实上面两种场景现象就是所谓的==小黄鸭调试法（Rubber Duck Debuging）==，又称橡皮鸭调试法，它是我们软件工程中最常使用调试方法之一。
 
 
 

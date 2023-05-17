@@ -24,10 +24,10 @@ class Springboot02ConfigApplicationTests {
     Teacher teacher;
     @Test
     void contextLoads() {
-//        System.out.println(person);
-//        System.out.println(dog);
-//        System.out.println(student);
-//        System.out.println(boss);
+        System.out.println(person);
+        System.out.println(dog);
+        System.out.println(student);
+        System.out.println(boss);
         System.out.println(teacher);
     }
 
