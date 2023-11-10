@@ -7,16 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author Andy Ron
- */
-public class HelloController implements Controller {
+ * @author andyron
+ **/
+//定义控制器
+//注意点：不要导错包，实现Controller接口，重写方法；
+public class ControllerTest1 implements Controller {
+
     public ModelAndView handleRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
-        //ModelAndView 模型和视图
+        //返回一个模型视图对象
         ModelAndView mv = new ModelAndView();
-        //封装对象，放在ModelAndView中。Model
-        mv.addObject("msg","HelloSpringMVC!！");
-        //封装要跳转的视图，放在ModelAndView中
-        mv.setViewName("hello"); //: /WEB-INF/jsp/hello.jsp
+        mv.addObject("msg","Test1Controller");
+        mv.setViewName("test");
         return mv;
     }
 }

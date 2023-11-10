@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form action="/e/t1" method="post">
+<form action="/s4/e/t1" method="post">
     <input type="text" name="name">
     <input type="submit">
 </form>

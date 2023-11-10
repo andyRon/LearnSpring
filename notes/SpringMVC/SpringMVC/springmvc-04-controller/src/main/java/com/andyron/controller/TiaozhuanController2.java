@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * 通过SpringMVC来实现转发和重定向 - 有视图解析器
  * @author Andy Ron
  */
 @Controller
