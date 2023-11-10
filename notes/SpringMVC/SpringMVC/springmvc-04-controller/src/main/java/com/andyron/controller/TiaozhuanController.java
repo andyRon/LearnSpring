@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * 通过SpringMVC来实现转发和重定向 - 无需视图解析器
+ * 测试前，需要在配置文件中把视图解析器配置去掉
  * @author Andy Ron
  */
 @Controller

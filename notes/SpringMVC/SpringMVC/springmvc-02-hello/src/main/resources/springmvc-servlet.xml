@@ -11,7 +11,7 @@
     <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>
 
 
-    <!--视图解析器:DispatcherServlet给他的ModelAndView
+    <!-- 添加视图解析器:DispatcherServlet给他的ModelAndView
     1. 获取了ModelAndView的数据
     2. 解析ModelAndView视图的名字
     3. 拼接视图名字，找到对应的视图，/WEB-INF/jsp/hello.jsp
@@ -27,6 +27,6 @@
     </bean>
 
 
-    <!--Handler-->
+    <!--将自己的类交给SpringIOC容器，注册bean-->
     <bean id="/hello" class="com.andyron.controller.HelloController"/>
 </beans>

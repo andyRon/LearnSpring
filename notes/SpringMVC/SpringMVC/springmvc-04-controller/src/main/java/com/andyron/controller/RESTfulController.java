@@ -22,13 +22,22 @@ public class RESTfulController {
 
      */
 
-
     @RequestMapping("/add/{a}/{b}")
     public String test(@PathVariable int a, @PathVariable int b, Model model) {
 
         model.addAttribute("msg", a + b);
 
         return "test";
+    }
+
+    //映射访问路径
+    @RequestMapping("/commit/{p1}/{p2}")
+    public String index(@PathVariable int p1, @PathVariable String p2, Model model){
+
+        String result = p1+p2;
+        model.addAttribute("msg", "结果："+result);
+        return "test";
+
     }
 
     @RequestMapping(value = "/add2/{a}/{b}", method = RequestMethod.POST)

@@ -9,13 +9,13 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>springmvc-01-servlet</module>
         <module>springmvc-02-hello</module>
         <module>springmvc-03-anno</module>
         <module>springmvc-04-controller</module>
         <module>springmvc-05-json</module>
         <module>springmvc-06-ajax</module>
         <module>springmvc-07-Interceptor</module>
+        <module>springmvc-01</module>
     </modules>
 
     <dependencies>
