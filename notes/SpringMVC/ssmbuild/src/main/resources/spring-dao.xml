@@ -45,5 +45,4 @@
         <!-- 要扫描的dao包 -->
         <property name="basePackage" value="com.andyron.dao"/>
     </bean>
-
 </beans>

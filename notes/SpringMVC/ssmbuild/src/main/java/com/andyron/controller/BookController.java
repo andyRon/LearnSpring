@@ -83,4 +83,4 @@ public class BookController {
         model.addAttribute("list", list);
         return "allBook";
     }
-            }
+}

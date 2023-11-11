@@ -28,5 +28,9 @@
             <mvc:mapping path="/**"/>
             <bean class="com.andyron.config.MyInterceptor"/>
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="loginInterceptor" class="com.andyron.config.LoginInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
 </beans>
