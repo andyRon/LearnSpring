@@ -754,7 +754,9 @@ public String index(@PathVariable int p1, @PathVariable String p2, Model model){
 
 其实上面两种场景现象就是所谓的==小黄鸭调试法（Rubber Duck Debuging）==，又称橡皮鸭调试法，它是我们软件工程中最常使用调试方法之一。
 
+小黄鸭调试法，又称橡皮鸭调试法、黄鸭除虫法（Rubber Duck Debugging）是可在软件工程中使用的一种调试代码的方法。方法就是在程序的调试或测试过程中，操作人耐心地向小黄鸭解释每一行程序的作用，以此来激发灵感与发现矛盾。
 
+许多程序员都有向别人提问及解释编程问题的经历，而对象甚至可能是完全不懂编程的人。而就在解释的过程中，程序员可能就发觉了问题的解决方案。一边阐述代码的意图，一边观察它实际上的行为并做调试，两者间的任何不协调都会变得更明显，使人更容易发现错误所在。
 
 ## 数据处理及跳转
 
@@ -1108,6 +1110,10 @@ class MyRequest extends HttpServletRequestWrapper {
 
 ## JSON交互处理
 
+
+
+
+
 前后端分离：
 
 后端部署后端，提供接口和数据；
@@ -1120,11 +1126,48 @@ class MyRequest extends HttpServletRequestWrapper {
 
 `@RestController`
 
+### 什么是JSON
+
+**JSON 键值对**是用来保存 JavaScript 对象的一种方式，和 JavaScript 对象的写法也大同小异，键/值对组合中的键名写在前面并用双引号 `""` 包裹，使用冒号 `:` 分隔，然后紧接着值。
+
+```json
+{"name": "QinJiang"}
+{"age": "3"}
+{"sex": "男"}
+```
+
+JSON 和 JavaScript 对象的关系：JSON 是 JavaScript 对象的字符串表示法，它使用文本表示一个 JS 对象的信息，本质是一个字符串。
+
+```js
+var obj = {a: 'Hello', b: 'World'}; //这是一个对象，注意键名也是可以使用引号包裹的
+var json = '{"a": "Hello", "b": "World"}'; //这是一个 JSON 字符串，本质是一个字符串
+```
+
+#### JSON 和 JavaScript 对象互转
+
+要实现从JSON字符串转换为JavaScript 对象，使用 JSON.parse() 方法：
+
+```js
+var obj = JSON.parse('{"a": "Hello", "b": "World"}');
+//结果是 {a: 'Hello', b: 'World'}
+```
+
+要实现从JavaScript 对象转换为JSON字符串，使用 JSON.stringify() 方法：
+
+```js
+var json = JSON.stringify({a: 'Hello', b: 'World'});
+//结果是 '{"a": "Hello", "b": "World"}'
+```
+
+
+
 ### Java生成json字符串
 
 **Jackson**应该是目前比较好的json解析工具了，另外还有阿里的 fastjson等。
 
 
+
+在类上直接使用 `@RestController` ，这样子，里面所有的方法都只会返回 json 字符串了，不用再每一个都添加`@ResponseBody` 。
 
 #### Jackson
 
@@ -1143,14 +1186,13 @@ class MyRequest extends HttpServletRequestWrapper {
 
 ```java
 @GetMapping("/j2")
-    public String test2() throws JsonProcessingException {
-        User user = new User(1, "小王", 18);
+public String test2() throws JsonProcessingException {
+  User user = new User(1, "小王", 18);
 
-        ObjectMapper objectMapper = new ObjectMapper();  // 使用jackson
-
-        return objectMapper.writeValueAsString(user);
-
-    }
+  ObjectMapper objectMapper = new ObjectMapper();  // 使用jackson
+  String str = objectMapper.writeValueAsString(user); // json字符串
+  return str; // 由于@ResponseBody或@RestController 注解，这里会将str转成json格式返回；
+}
 ```
 
 #### FastJson
@@ -1203,14 +1245,14 @@ fastjson 三个主要的类：
 
 
 
-## 整合SSM
+## 整合SSM❤️
 
 ```mermaid
 flowchart LR
 需求分析 --> 设计数据库 --> 业务 --> 前端界面
 ```
 
-### 环境需求
+环境需求
 
 ### 创建数据库
 
@@ -1235,39 +1277,187 @@ INSERT  INTO `books`(`bookID`,`bookName`,`bookCounts`,`detail`)VALUES
 
 ### 基本环境搭建
 
-新建一Maven项目！ ssmbuild ， 添加web的支持 
+- 新建一Maven项目！ ssmbuild ， 添加web的支持 
 
-导入相关的pom依赖！
+- 导入相关的pom依赖！
 
-Maven资源过滤设置
+- Maven资源过滤设置
 
-建立基本结构和配置框架！
+```xml
+<build>
+   <resources>
+       <resource>
+           <directory>src/main/java</directory>
+           <includes>
+               <include>**/*.properties</include>
+               <include>**/*.xml</include>
+           </includes>
+           <filtering>false</filtering>
+       </resource>
+       <resource>
+           <directory>src/main/resources</directory>
+           <includes>
+               <include>**/*.properties</include>
+               <include>**/*.xml</include>
+           </includes>
+           <filtering>false</filtering>
+       </resource>
+   </resources>
+</build>
+```
+
+- 建立基本结构和配置框架！
+
+com.andyron.pojo
+
+com.andyron.dao
+
+com.andyron.service
+
+com.andyron.controller
+
+mybatis-config.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+       PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+       "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+</configuration>
+```
+
+applicationContext.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+</beans>
+```
 
 
 
 ### Mybatis层编写
 
-数据库配置文件 **db.properties**
-
-编写MyBatis的核心配置文件
-
-编写数据库对应的实体类 com.kuang.pojo.Books
-
-编写Dao层的 Mapper接口
-
-编写接口对应的 Mapper.xml 文件。
-
-编写Service层的接口和实现类
+- 数据库配置文件 **db.properties**
+- 编写MyBatis的核心配置文件
+- 编写数据库对应的实体类 com.andyron.pojo.Books
+- 编写Dao层的 Mapper接口
+- 编写接口对应的 Mapper.xml 文件。
+- 编写Service层的接口和实现类
 
 
 
 ### Spring层
 
-配置**Spring整合MyBatis**，数据源使用c3p0连接池；
+1. 配置**Spring整合MyBatis**，数据源使用c3p0连接池；
 
-编写Spring整合Mybatis的相关的配置文件； spring-dao.xml
+2. 编写Spring整合Mybatis的相关的配置文件； spring-dao.xml
 
-**Spring整合service层**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 1.关联数据库配置文件 -->
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <!-- 2.连接池
+        dbcp：半自动化操作，不能自动连接
+        c3p0：自动化操作（自动化的加载配置文件,并且可以自动设置到对象中！）
+        druid
+        hikari
+    -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <!-- c3p0连接池的私有属性 -->
+        <property name="maxPoolSize" value="30"/>
+        <property name="minPoolSize" value="10"/>
+        <!-- 关闭连接后不自动commit -->
+        <property name="autoCommitOnClose" value="false"/>
+        <!-- 获取连接超时时间 -->
+        <property name="checkoutTimeout" value="10000"/>
+        <!-- 当获取连接失败重试次数 -->
+        <property name="acquireRetryAttempts" value="2"/>
+    </bean>
+
+    <!-- 3.sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 绑定MyBatis的配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <!-- 4.配置dao接口扫描包，动态实现了Dao接口注入到Spring容器中   -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 注入sqlSessionFactory -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!-- 要扫描的dao包 -->
+        <property name="basePackage" value="com.andyron.dao"/>
+    </bean>
+</beans>
+```
+
+
+
+3. **Spring整合service层**， spring-service.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 1.扫描service下的包-->
+    <context:component-scan base-package="com.andyron.service"/>
+
+    <!-- 2.将我们所有的业务类，注入到spring，可以通过配置或注解实现 -->
+    <bean id="booksServiceImpl" class="com.andyron.service.BooksServiceImpl">
+        <property name="booksMapper" ref="booksMapper"/>
+    </bean>
+
+    <!-- 3.声明式事务配置 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 注入数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 4.aop事务支持！-->
+
+    <!-- 结合AOP实现事务的织入 -->
+    <!-- 配置事务通知；-->
+<!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+<!--        &lt;!&ndash; 给那些方法配置事务 &ndash;&gt;-->
+<!--        &lt;!&ndash; 配置事务的传播特性：newpropagation= &ndash;&gt;-->
+<!--        <tx:attributes>-->
+<!--            <tx:method name="*" propagation="REQUIRED"/>-->
+<!--        </tx:attributes>-->
+<!--    </tx:advice>-->
+<!--    &lt;!&ndash; 配置事务切入 &ndash;&gt;-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="txPointCut" expression="execution(* com.andyron.dao.*.*(..))"/>-->
+<!--        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>-->
+<!--    </aop:config>-->
+
+</beans>
+```
+
+
 
 
 
@@ -1281,12 +1471,121 @@ Maven资源过滤设置
 
    乱码过滤
 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <!-- DispatcherServlet -->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:applicationContext.xml</param-value>
+        </init-param>
+        <!-- 和Tomcat一起启动 -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- 乱码过滤-->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Session -->
+    <session-config>
+        <session-timeout>15</session-timeout>
+    </session-config>
+
+</web-app>
+```
+
+
+
 3. 配置springMVC配置文件：**spring-mvc.xml**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 1.开启SpringMVC注解驱动 -->
+    <mvc:annotation-driven/>
+
+    <!-- 2.静态资源过滤 -->
+    <mvc:default-servlet-handler/>
+
+    <!-- 3.扫描包：controller-->
+    <context:component-scan base-package="com.andyron.controller"/>
+
+    <!-- 4.配置视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+</beans>
+```
+
 4. Spring配置整合文件，applicationContext.xml
 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="classpath:spring-dao.xml"/>
+    <import resource="classpath:spring-service.xml"/>
+    <import resource="classpath:spring-mvc.xml"/>
+
+</beans>
+```
 
 
-### Controller 和 视图层编写
+
+### Controller和视图层编写
+
+1. BookController 类编写
+
+
+
+2. 编写首页 **index.jsp**
+
+
+
+3. 书籍列表页面 **allbook.jsp**
+
+
+
+4. 添加书籍页面：**addBook.jsp**
+
+
+
+5. 修改书籍页面  **updateBook.jsp**
+
+
+
+6. **配置Tomcat运行**
 
 
 
@@ -1294,7 +1593,9 @@ Maven资源过滤设置
 
 
 
-#### 查询
+> SSM整合案例，一定要烂熟于心
+
+#### 过程
 
 ```mermaid
 flowchart LR
@@ -1311,7 +1612,85 @@ flowchart LR
 
 ## Ajax
 
-**AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）。**
+### 介绍
+
+- **AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）。**
+
+- AJAX 是一种在无需重新加载整个网页的情况下，能够更新部分网页的技术。
+- **Ajax 不是一种新的编程语言，而是一种用于创建更好更快以及交互性更强的Web应用程序的技术。**
+- 在 2005 年，Google 通过其 Google Suggest 使 AJAX 变得流行起来。Google Suggest能够自动帮你完成搜索单词。
+- Google Suggest 使用 AJAX 创造出动态性极强的 web 界面：当您在谷歌的搜索框输入关键字时，JavaScript 会把这些字符发送到服务器，然后服务器会返回一个搜索建议的列表。
+- 就和国内百度的搜索框一样!
+
+- 传统的网页(即不用ajax技术的网页)，想要更新内容或者提交一个表单，都需要重新加载整个网页。
+- 使用ajax技术的网页，通过在后台服务器进行少量的数据交换，就可以实现异步局部更新。
+- 使用Ajax，用户可以创建接近本地桌面应用的直接、高可用、更丰富、更动态的Web用户界面。
+
+
+
+### 伪造Ajax
+
+ajax-frame.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>iframe体验页面无刷新</title>
+
+  <script>
+    function go(){
+      var url = document.getElementById("url").value;
+      //所有的值变量 提前获取
+      document.getElementById("iframe1").src=url;
+    }
+  </script>
+</head>
+<body>
+<div>
+  <p>请输入地址:</p>
+  <p>
+    <input type="text" id="url" value="https://www.csdn.net/">
+    <input type="button" value="提交" onclick="go()">
+  </p>
+
+</div>
+<div>
+  <iframe id="iframe1" style="width: 100%;height: 500px"></iframe>
+</div>
+</body>
+</html>
+```
+
+直接用IDEA打开（右击，run）测试
+
+![](images/image-20231111121519715.png)
+
+![](images/image-20231111121546398.png)
+
+
+
+### 利用AJAX可以做什么
+
+- 注册时，输入用户名自动检测用户是否已经存在。
+- 登陆时，提示用户名密码错误
+- 删除数据行时，将行ID发送到后台，后台在数据库中删除，数据库删除成功后，在页面DOM中将数据行也删除。
+- ....等等
+
+### jQuery.ajax
+
+JS原生XMLHttpRequest的不方便使用，JS原生XMLHttpRequest。
+
+Ajax的核心是XMLHttpRequest对象(XHR)。XHR为向服务器发送请求和解析服务器响应提供了接口。能够以异步方式从服务器获取新数据。
+
+jQuery 提供多个与 AJAX 有关的方法。
+
+通过 jQuery AJAX 方法，您能够使用 HTTP Get 和 HTTP Post 从远程服务器上请求文本、HTML、XML 或 JSON – 同时您能够把这些外部数据直接载入网页的被选元素中。
+
+
+
+
 
 > 新建SpringMVC项目的一般过程：
 >
@@ -1335,7 +1714,13 @@ flowchart LR
 >
 > 7. 测试项目是否可以走通
 
-🔖p24 14:30
+
+
+🔖  深入理解直接访问jsp、html文件，不受springmvc配置影响
+
+https://mp.weixin.qq.com/s/tB4YX4H59wYS6rxaO3K2_g
+
+
 
 
 
@@ -1361,4 +1746,38 @@ SpringMVC的处理器拦截器类似于Servlet开发中的过滤器Filter,用于
 
 
 
-🔖 p28 p29 p30
+### 文件上传和下载
+
+文件上传是项目开发中最常见的功能之一 ,springMVC 可以很好的支持文件上传，但是SpringMVC上下文中默认没有装配MultipartResolver，因此默认情况下其不能处理文件上传工作。如果想使用Spring的文件上传功能，则需要在上下文中配置MultipartResolver。
+
+前端表单要求：为了能上传文件，必须将表单的method设置为POST，并将enctype设置为multipart/form-data。只有在这样的情况下，浏览器才会把用户选择的文件以二进制数据发送给服务器；
+
+**对表单中的 enctype 属性做个详细的说明：**
+
+- application/x-www=form-urlencoded：默认方式，只处理表单域中的 value 属性值，采用这种编码方式的表单会将表单域中的值处理成 URL 编码方式。
+- multipart/form-data：这种编码方式会以二进制流的方式来处理表单数据，这种编码方式会把文件域指定文件的内容也封装到请求参数中，不会对字符编码。
+- text/plain：除了把空格转换为 "+" 号外，其他字符都不做编码处理，这种方式适用直接通过表单发送邮件。
+
+```html
+<form action="" enctype="multipart/form-data" method="post">
+   <input type="file" name="file"/>
+   <input type="submit">
+</form>
+```
+
+一旦设置了enctype为multipart/form-data，浏览器即会采用二进制流的方式来处理表单数据，而对于文件上传的处理则涉及在服务器端解析原始的HTTP响应。在2003年，Apache Software Foundation发布了开源的Commons FileUpload组件，其很快成为Servlet/JSP程序员上传文件的最佳选择。
+
+- Servlet3.0规范已经提供方法来处理文件上传，但这种上传需要在Servlet中完成。
+- 而Spring MVC则提供了更简单的封装。
+- Spring MVC为文件上传提供了直接的支持，这种支持是用即插即用的MultipartResolver实现的。
+- Spring MVC使用Apache Commons FileUpload技术实现了一个MultipartResolver实现类：
+- CommonsMultipartResolver。因此，SpringMVC的文件上传还需要依赖Apache Commons FileUpload的组件。
+
+
+
+
+
+🔖 https://mp.weixin.qq.com/s/NWJoYiirbkSDz6x01Jji3g
+
+
+

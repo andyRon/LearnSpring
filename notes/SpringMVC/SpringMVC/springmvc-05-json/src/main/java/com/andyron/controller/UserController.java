@@ -19,7 +19,7 @@ import java.util.List;
  * @author Andy Ron
  */
 //@Controller
-@RestController
+@RestController  // 在类上直接使用 `@RestController` ，这样子，里面所有的方法都只会返回 json 字符串了，不用再每一个都添加`@ResponseBody` 。
 public class UserController {
 
 //    @ResponseBody // 表示不走视图解析器，直接返回给客户端
@@ -27,7 +27,6 @@ public class UserController {
 //    @RequestMapping(value = "/j1", produces = "application/json;charset=utf-8") // 在配置文件统一配置json乱码问题
     public String test1() {
         User user = new User(1, "小明", 18);
-
         return user.toString();
     }
 
@@ -37,9 +36,8 @@ public class UserController {
         User user = new User(1, "小王", 18);
 
         ObjectMapper objectMapper = new ObjectMapper();  // 使用jackson
-
-        return objectMapper.writeValueAsString(user);
-
+        String str = objectMapper.writeValueAsString(user); // json字符串
+        return str; // 由于@ResponseBody或@RestController 注解，这里会将str转成json格式返回；
     }
 
     @GetMapping("/j3")
@@ -59,10 +57,10 @@ public class UserController {
         ObjectMapper mapper = new ObjectMapper();
         //创建时间一个对象，java.util.Date
         Date date = new Date();
-        //将我们的对象解析成为json格式
-        return mapper.writeValueAsString(date);
+        return mapper.writeValueAsString(date); // Jackson 默认是会把时间转成timestamps形式
     }
 
+    // 取消timestamps形式 ， 自定义时间格式
     @GetMapping("/j5")
     public String test5() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -74,5 +72,6 @@ public class UserController {
         mapper.setDateFormat(sdf);
 
         return mapper.writeValueAsString(new Date());
+        // "2023-11-11 10:28:38"
     }
 }
