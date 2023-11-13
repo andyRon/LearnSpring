@@ -1,6 +1,7 @@
 package com.andyron.swagger.controller;
 
 import com.andyron.swagger.pojo.User;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Andy Ron
  */
+@Api(tags = "Hello模块")
 @RestController
 public class HelloController {
-
+    @ApiOperation("hello接口")
     @GetMapping("/hello")
     public String hello() {
         return "Hello, Swagger!";
