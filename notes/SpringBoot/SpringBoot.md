@@ -3,9 +3,9 @@ SpringBoot
 
 [SpringBoot最新教程IDEA版通俗易懂](https://www.bilibili.com/video/BV1PE411i7CV)
 
+https://github.com/spring-projects/spring-boot
+
 ## 0 回顾
-
-
 
 Javase: OOP
 
@@ -17,7 +17,7 @@ javaweb：独立开发MVC三层架构的网站，原始
 
 ssm：简化了开发流程，但配置也开始较为复杂
 
-上面👆的都是打war包在Tomcat中运行
+上面👆的都是**打war包在Tomcat中运行**
 
 spring再简化：SpringBoot，jar包，内嵌Tomcat，微服务架构
 
@@ -70,10 +70,14 @@ SpringCloud config（git）
 ### Spring是如何简化Java开发的
 为了降低Java开发的复杂性，Spring采用了以下4种关键策略： 
 
-1. 基于POJO的轻量级和最小侵入性编程； 
+1. 基于POJO的轻量级和最小侵入性编程，所有东西都是bean； 
 2. 通过I0C，依赖注入（DI）和面向接口实现松耦合； 
 3. 基于切面（AOP）和惯例进行声明式编程；
-4. 通过切面和模版减少样式代码；
+4. 通过切面和模版减少样式代码，RedisTemplate，xxxTemplate；
+
+> 这里的惯例是指**==约定优于配置（convention over configuration）==**，是一种软件设计范式，旨在减少软件开发人员需做决定的数量，获得简单的好处，而又不失灵活性。
+>
+> 本质是说，开发人员仅需规定应用中不符约定的部分。例如，如果模型中有个名为Sale的类，那么数据库中对应的表就会默认命名为sales。只有在偏离这一约定时，例如将该表命名为"products_sold"，才需写有关这个名字的配置。
 
 ### 什么是Spring Boot
 学过javaweb的同学就知道，开发一个web应用，从最初开始接触Servlet结合Tomcat，跑出一个Hello Wolrld程序，是要经过特别多的步骤；后来就用了框架Struts（http://xxxx.do），再后来是SpringMVC，到了现在的SpringBoot，过一两年又会有其他web框架出现。什么是Spring Boot呢，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置，you can"just run"，能迅速的开发web应用，几行代码开发一个http接口。
@@ -88,9 +92,9 @@ SpringCloud config（git）
 
 是的这就是 Java企业级应用 --> J2EE --> spring --> springboot 的过程。
 
-随着Spring不断的发展，涉及的领域越来越多，项目整合开发需要配合各种各样的文件，慢慢变得不那么易用简单，违背了最初的理念，甚至人称配置地狱。Spring Boot正是在这样的一个背景下被抽象出来的开发框架，目的为了让大家**更容易的使用Spring、更容易的集成各种常用的中间件、开源软件**。
+随着Spring不断的发展，涉及的领域越来越多，项目整合开发需要配合各种各样的文件，慢慢变得不那么易用简单，违背了最初的理念，甚至人称==配置地狱==。Spring Boot正是在这样的一个背景下被抽象出来的开发框架，目的为了让大家**更容易的使用Spring、更容易的集成各种常用的中间件、开源软件**。
 
-Spring Boot基于Spring开发，Spirng Boot本身并不提供Spring框架的核心特性以及扩展功能，只是用于快速、敏捷地开发新一代基于Spring框架的应用程序。也就是说，它并不是用来替代Spring的解决方案，而是和Spring框架紧密结合用于提升Spring开发者体验的工具。
+Spring Boot基于Spring开发，Spirng Boot本身并不提供Spring框架的核心特性以及扩展功能，==只是用于快速、敏捷地开发新一代基于Spring框架的应用程序==。也就是说，它并不是用来替代Spring的解决方案，而是和Spring框架紧密结合用于提升Spring开发者体验的工具。
 
 Spring Boot以**约定大于配置**的核心思想，默认帮我们进行了很多设置，多数Spring Boot应用只需要很少的Spring配置。同时它集成了大量常用的第三方库配置（例如Redis、MongoDB、JPA、RabbitMQ、Quartz等等），Spring Boot应用中这些第三方库几乎可以零配置的开箱即用。
 
@@ -145,12 +149,12 @@ all in one的架构方式，我们把所有的功能单元放在一个应用里�
 
 ### 如何构建微服务
 
-一个大型系统的微服务架构，就像一个复杂交织的神经网络，每一个神经元就是一个功能元素，它们各自完成自己的功能，然后通过http相互请求调用。比如一个电商系统，<u>查缓存、连数据库、浏览页面、结账、支付</u>等服务都是一个个独立的功能服务，都被微化了，它们作为一个个微服务共同构建了一个庞大的系统。如果修改其中的一个功能，只需要更新升级其中一个功能服务单元即可。
+一个大型系统的微服务架构，就像一个复杂交织的神经网络，每一个神经元就是一个功能元素，它们各自完成自己的功能，然后通过http相互请求调用。比如一个电商系统，**==查缓存、连数据库、浏览页面、结账、支付==**等服务都是一个个独立的功能服务，都被微化了，它们作为一个个微服务共同构建了一个庞大的系统。如果修改其中的一个功能，只需要更新升级其中一个功能服务单元即可。
 但是这种庞大的系统架构给部署和运维带来很大的难度。于是，Spring为我们带来了构建大型分布式微服务的全套、全程产品：
 
 - 构建一个个功能独立的微服务应用单元，可以使用Spring Boot，可以帮我们快速构建一个应用； 
-- 大型分布式网络服务的调用，这部分由Spring Cloud来完成，实现分布式；
-- 在分布式中间，进行流式数据计算、批处理，有[Spring Cloud **Data Flow**](https://dataflow.spring.io/)；
+- **大型分布式网络服务的调用**，这部分由Spring Cloud来完成，实现分布式；
+- 在分布式中间，进行流式数据计算、批处理，有[Spring Cloud Data Flow](https://dataflow.spring.io/)；
 - Spring为我们想清楚了整个从开始构建应用到大型分布式应用全流程方案。
 
 ![](../../images/learnspring-033.jpg)
@@ -160,6 +164,29 @@ all in one的架构方式，我们把所有的功能单元放在一个应用里�
 ## 2 第一个SpringBoot程序
 
 官方：提供了一个快速生成的网站。IDEA集成了这个网站。
+
+项目创建方式：
+
+1. 使用[Spring Initializr](https://start.spring.io/) 的 Web页面创建项目
+2. 使用 IDEA 直接创建项目
+
+新建项目**项目结构分析：**
+
+通过上面步骤完成了基础项目的创建。就会自动生成以下文件。
+
+1. 程序的主启动类
+
+2. 一个 application.properties 配置文件
+
+3. 一个 测试类
+
+4. 一个 pom.xml
+
+
+
+
+
+
 
 所有Spring Boot依赖都是使用`spring-boot-starter`开头的。
 
@@ -187,27 +214,25 @@ spring boot banner定义，简单的方式只要将文件banner.txt放入src/mai
 
 ### pom.xml
 
-- `spring-boot-dependencies`：核心依赖的父工程
-- 上面的核心依赖，有版本号，我们引入依赖时不需要指定版本
+- `spring-boot-starter-parent`，主要是管理项目的资源过滤及插件。
 
+- `spring-boot-dependencies`：这里才是真正管理SpringBoot应用里面所有依赖版本的地方，SpringBoot的版本控制中心；**以后我们导入依赖默认是不需要写版本；但是如果导入的包没有在依赖中管理着就需要手动配置版本了**。
 
-
-### 启动器
+### 启动器spring-boot-starter-xxx
 
 ```xml
 <dependency
   <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-starter</artifactId>
+  <artifactId>spring-boot-starter-web</artifactId>
 </dependency>
 ```
 
-- 启动器就是SpringBoot的启动场景；比如`spring-boot-starter-web`就会帮我们自动导入web环境所有的依赖。
-- SpringBoot将所有的功能场景，都变成了一个个的启动器
-- 我们要使用什么功能，就只需要找到对应的启动器就可以了
+- **spring-boot-starter-xxx**：就是spring-boot的场景启动器
+- **spring-boot-starter-web**：帮我们导入了web模块正常运行所依赖的组件；
 
+SpringBoot将所有的功能场景，都变成了一个个的starter（启动器）只需要在项目中引入这些starter即可，所有相关的依赖都会导入进来 ， 我们要用什么功能就导入什么样的场景启动器即可 ；我们未来也可以自己自定义 starter。
 
-
-### 主程序
+### 主启动类
 
 ```java
 @SpringBootApplication
@@ -222,25 +247,71 @@ public class Springbooot01HelloworldApplication {
 
 #### @SpringBootApplication
 
+作用：标注在某个类上说明这个类是SpringBoot的主配置类 ， SpringBoot就应该运行这个类的main方法来启动SpringBoot应用；
+
 ```java
 @SpringBootApplication：标注这个类是springboot的应用：启动类下的所有资源被导入
-	@Configuration：spring配置类
-	@Component：说明这个也是一个spring组件
-	
-@EnableAutoConfiguration：自动配置
-	@AutoConfigurationPackage：自动配置包
-		@Import({Registrar.class})：自动配置`包注册`
-	@Import({AutoConfigurationImportSelector.class})：自动配置导入选择
-
+  @SpringBootConfiguration
+    @Configuration：spring配置类
+    @Component：说明这个也是一个spring组件
+  @EnableAutoConfiguration：自动配置
+    @AutoConfigurationPackage：自动配置包
+      @Import({AutoConfigurationPackages.Registrar.class})：自动配置`包注册`
+    @Import({AutoConfigurationImportSelector.class})：自动配置导入选择
+	@ComponentScan
 ```
 
-`AutoConfigurationImportSelector`类中：
+#### @ComponentScan
+
+这个注解在Spring中很重要 ,它对应XML配置中的元素。
+
+作用：自动扫描并加载符合条件的组件或者bean，将这个bean定义加载到IOC容器中
+
+#### @SpringBootConfiguration
+
+作用：SpringBoot的配置类 ，标注在某个类上，表示这是一个SpringBoot的配置类；
+
+```java
+// 点进去得到下面的 @Component
+@Configuration
+public @interface SpringBootConfiguration {}
+
+@Component
+public @interface Configuration {}
+```
+
+这里的@Configuration，说明这是一个配置类 ，配置类就是对应Spring的xml 配置文件；
+
+里面的@Component说明，启动类本身也是Spring中的一个组件而已，负责启动应用.
+
+#### @EnableAutoConfiguration ：开启自动配置功能
+
+以前我们需要自己配置的东西，而现在SpringBoot可以自动帮我们配置 ；@EnableAutoConfiguration告诉SpringBoot开启自动配置功能，这样自动配置才能生效；
+
+- `@AutoConfigurationPackage` ：自动配置包
+
+```java
+@Import({AutoConfigurationPackages.Registrar.class})
+public @interface AutoConfigurationPackage {
+}
+```
+
+- `@import` ：Spring底层注解@import， 给容器中导入一个组件
+
+- `AutoConfigurationPackages.Registrar.class` 作用：将主启动类的所在包及包下面所有子包里面的所有组件扫描到Spring容器；
+
+- `@Import({AutoConfigurationImportSelector.class})` ：给容器导入组件；
+
+- `AutoConfigurationImportSelector`：自动配置导入选择器。
+
+1️⃣这个类中有一个这样的方法：
 
 ```java
 // 获取所有配置
 List<String> configurations = this.getCandidateConfigurations(annotationMetadata, attributes);
 
-protected List<String> getCandidateConfigurations(AnnotationMetadata metadata, AnnotationAttributes attributes) {
+protected List<String> getCandidateConfigurations(AnnotationMetadata metadata, AnnotationAttributes attributes) {	
+  			// getSpringFactoriesLoaderFactoryClass()方法返回的就是我们最开始看的启动自动导入配置文件的注解类；EnableAutoConfiguration
         List<String> configurations = SpringFactoriesLoader.loadFactoryNames(this.getSpringFactoriesLoaderFactoryClass(), this.getBeanClassLoader());
         Assert.notEmpty(configurations, "No auto configuration classes found in META-INF/spring.factories. If you are using a custom packaging, make sure that file is correct.");
         return configurations;
@@ -251,9 +322,87 @@ Properties properties = PropertiesLoaderUtils.loadProperties(resource); // 加�
 
 ```
 
+2️⃣这个方法又调用了`SpringFactoriesLoader`类的静态方法`loadFactoryNames()`：
+
+```java
+public static List<String> loadFactoryNames(Class<?> factoryType, @Nullable ClassLoader classLoader) {
+  ClassLoader classLoaderToUse = classLoader;
+  if (classLoaderToUse == null) {
+    classLoaderToUse = SpringFactoriesLoader.class.getClassLoader();
+  }
+  String factoryTypeName = factoryType.getName();
+  return loadSpringFactories(classLoaderToUse).getOrDefault(factoryTypeName, Collections.emptyList());
+}
+```
+
+3️⃣loadSpringFactories 方法：
+
+```java
+private static Map<String, List<String>> loadSpringFactories(ClassLoader classLoader) {
+  // 获得classLoader
+  Map<String, List<String>> result = cache.get(classLoader);
+  if (result != null) {
+    return result;
+  }
+
+  result = new HashMap<>();
+  try {
+    // 去获取一个资源 "META-INF/spring.factories"
+    Enumeration<URL> urls = classLoader.getResources(FACTORIES_RESOURCE_LOCATION);
+    // 将读取到的资源遍历，封装成为一个Properties
+    while (urls.hasMoreElements()) {
+      URL url = urls.nextElement();
+      UrlResource resource = new UrlResource(url);
+      Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+      for (Map.Entry<?, ?> entry : properties.entrySet()) {
+        String factoryTypeName = ((String) entry.getKey()).trim();
+        String[] factoryImplementationNames =
+          StringUtils.commaDelimitedListToStringArray((String) entry.getValue());
+        for (String factoryImplementationName : factoryImplementationNames) {
+          result.computeIfAbsent(factoryTypeName, key -> new ArrayList<>())
+            .add(factoryImplementationName.trim());
+        }
+      }
+    }
+
+    // Replace all lists with unmodifiable lists containing unique elements
+    result.replaceAll((factoryType, implementations) -> implementations.stream().distinct()
+                      .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList)));
+    cache.put(classLoader, result);
+  }
+  catch (IOException ex) {
+    throw new IllegalArgumentException("Unable to load factories from location [" +
+                                       FACTORIES_RESOURCE_LOCATION + "]", ex);
+  }
+  return result;
+}
+```
+
+#### spring.factories
+
 `META-INF/spring.factories`：自动配置的核心文件。它的位置在：
 
 ![](images/image-20210930145824222.png)
+
+> 在上面的自动配置类随便找一个打开看看，比如 ：WebMvcAutoConfiguration
+>
+> ![](images/image-20231112114934877.png)
+>
+> 可以看到这些一个个的都是JavaConfig配置类，而且都注入了一些Bean，可以找一些自己认识的类，看着熟悉一下！
+>
+> 所以，<u>自动配置真正实现是从classpath中搜寻所有的`META-INF/spring.factories`配置文件 ，并将其中对应的 `org.springframework.boot.autoconfigure.` 包下的配置项，通过反射实例化为对应标注了@Configuration的JavaConfig形式的IOC容器配置类 ， 然后将这些都汇总成为一个实例并加载到IOC容器中。</u>
+>
+> **结论：**
+>
+> 1. SpringBoot在启动的时候从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值；
+> 2. 将这些值作为自动配置类导入容器，自动配置类就生效，帮我们进行自动配置工作；
+> 3. 整个J2EE的整体解决方案和自动配置都在springboot-autoconfigure的jar包中；
+> 4. 它会给容器中导入非常多的自动配置类（`xxxAutoConfiguration`）,就是给容器中导入这个场景需要的所有组件，并配置好这些组件；
+> 5. 有了自动配置类，免去了我们手动编写配置注入功能组件等的工作；
+
+
+
+
 
 **spring.factories**文件中所都会被加载，但是否生效，通过下面一些列的注解来判断；
 
@@ -283,35 +432,67 @@ Properties properties = PropertiesLoaderUtils.loadProperties(resource); // 加�
 
 #### SpringApplication
 
-`SpringApplication.run()`做了四件事：
+`SpringApplication.run()`分为两部分：一部分是SpringApplication的实例化，二是具体的run方法的执行；
+
+```java
+public static ConfigurableApplicationContext run(Class<?>[] primarySources, String[] args) {
+  return new SpringApplication(primarySources).run(args);
+}
+```
+
+```java
+public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySources) {
+  this.resourceLoader = resourceLoader;
+  Assert.notNull(primarySources, "PrimarySources must not be null");
+  this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
+  this.webApplicationType = WebApplicationType.deduceFromClasspath();
+  this.bootstrapRegistryInitializers = getBootstrapRegistryInitializersFromSpringFactories();
+  setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
+  setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+  this.mainApplicationClass = deduceMainApplicationClass();
+}
+```
+
+SpringApplication的实例化做了四件事：
 
 1. 推断应用的类型是普通的项目还是Web项目
 2. 查找并加载所有可用初始化器，设置到 initializers属性中
 3. 找出所有的应用程序监听器，设置到 listeners属性中
 4. 推断并设置main方法的定义类，找到运行的主类
 
-run启动后会在springboot系统中独立开启一个java进程。
+
 
 ```java
 public ConfigurableApplicationContext run(String... args) {
   StopWatch stopWatch = new StopWatch();
+  // 计时器实例并启动应用监听器开始监听
   stopWatch.start();
   DefaultBootstrapContext bootstrapContext = this.createBootstrapContext();
   ConfigurableApplicationContext context = null;
+  // step1: headless系统属性设置
   this.configureHeadlessProperty();
+  // 2 初始化监听器
   SpringApplicationRunListeners listeners = this.getRunListeners(args);
+  // 3 启动已准备好的监听器
   listeners.starting(bootstrapContext, this.mainApplicationClass);
 
   try {
+    // 4 装配环境参数
     ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
     ConfigurableEnvironment environment = this.prepareEnvironment(listeners, bootstrapContext, applicationArguments);
     this.configureIgnoreBeanInfo(environment);
+    // 5 打印banner图案
     Banner printedBanner = this.printBanner(environment);
+    // 6 上下文区域
     context = this.createApplicationContext();
     context.setApplicationStartup(this.applicationStartup);
+    // 8 上下文前置处理：配置监听、environment环境配置、initialize初始化设置（可扩展）、资源获取并load
     this.prepareContext(bootstrapContext, context, environment, listeners, applicationArguments, printedBanner);
+    // 9 上下文刷新：bean工厂加载、通过工厂生成bean、刷新生命周期
     this.refreshContext(context);
+    // 10 上下文后置结束处理
     this.afterRefresh(context, applicationArguments);
+    // 计时器监听结束
     stopWatch.stop();
     if (this.logStartupInfo) {
       (new StartupInfoLogger(this.mainApplicationClass)).logStarted(this.getApplicationLog(), stopWatch);
@@ -333,6 +514,8 @@ public ConfigurableApplicationContext run(String... args) {
   }
 }
 ```
+
+run启动后会在springboot系统中独立开启一个java进程。
 
 ![SpringApplication.run](../../images/SpringApplication.run.png)
 
@@ -373,9 +556,104 @@ pets:
 pets: [cat,dog,pig]
 ```
 
+### yaml
+
+#### 概述
+
+YAML是 "YAML Ain't a Markup Language" （YAML不是一种标记语言）的递归缩写。在开发的这种语言时，YAML 的意思其实是："Yet Another Markup Language"（仍是一种标记语言）
+
+**这种语言以数据作为中心，而不是以标记语言为重点！**
+
+以前的配置文件，大多数都是使用xml来配置，对比yaml和xml
+
+传统xml配置：
+
+```xml
+<server>
+    <port>8081<port>
+</server>
+```
+
+yaml配置：
+
+```yaml
+server：
+  prot: 8080
+```
+
+#### yaml基础语法
+
+说明：语法要求严格！
+
+1、空格不能省略
+
+2、以缩进来控制层级关系，只要是左边对齐的一列数据都是同一个层级的。
+
+3、属性和值的大小写都是十分敏感的。
+
+##### **字面量：普通的值  [ 数字，布尔值，字符串  ]**
+
+字面量直接写在后面就可以 ， 字符串默认不用加上双引号或者单引号；
+
+```yaml
+k: v
+```
+
+注意：
+
+- “ ” 双引号，不会转义字符串里面的特殊字符 ， 特殊字符会作为本身想表示的意思；
+
+  比如 ：name: "kuang \n shen"  输出 ：kuang  换行  shen
+
+- '' 单引号，会转义特殊字符 ， 特殊字符最终会变成和普通字符一样输出
+
+  比如 ：name: ‘kuang \n shen’  输出 ：kuang  \n  shen
+
+##### **对象、Map（键值对）**
+
+```yaml
+# 对象、Map格式
+k: 
+    v1:
+    v2:
+```
+
+在下一行来写对象的属性和值的关系，注意缩进；比如：
+
+```yaml
+student:
+    name: qinjiang
+    age: 3
+```
+
+行内写法：
+
+```yaml
+student: {name: qinjiang,age: 3}
+```
+
+##### **数组（ List、set ）**
+
+用 - 值表示数组中的一个元素,比如：
+
+```yaml
+pets:
+ - cat
+ - dog
+ - pig
+```
+
+```yaml
+pets: [cat,dog,pig]
+```
 
 
-### yaml直接给实体类赋值
+
+
+
+### 注入配置文件
+
+#### yaml直接给实体类赋值
 
 ```java
 @ConfigurationProperties(prefix = "person1")
@@ -408,7 +686,27 @@ person1:
 
 
 
-### 通过@Value直接赋值
+#### 配置文件占位符
+
+```yaml
+person:
+    name: qinjiang${random.uuid} # 随机uuid
+    age: ${random.int}  # 随机int
+    happy: false
+    birth: 2000/01/01
+    maps: {k1: v1,k2: v2}
+    lists:
+      - code
+      - girl
+      - music
+    dog:
+      name: ${person.hello:other}_旺财
+      age: 1
+```
+
+
+
+#### 通过@Value直接赋值
 
 ```java
 @Component
@@ -420,25 +718,11 @@ public class Dog {
   // ....
 ```
 
-两种方式的对比：
+#### 加载指定的配置文件
 
-|                | @ConfigurationProperties | @Value       |
-| -------------- | ------------------------ | ------------ |
-| 功能           | 批量                     | 一个一个指定 |
-| 松散绑定       | 支持                     | 不支持       |
-| SpEL           | 不支持                   | 支持         |
-| JSR303数据校验 | 支持                     | 不支持       |
-| 复杂类型封装   | 支持                     | 不支持       |
+**@PropertySource ：**加载指定的配置文件；
 
-yaml支持松散语法（驼峰命名和-连接是可以绑定的）、JSR303数据校验。
-
-选择：
-
-- 首选yaml
-- 在某些只需要获取配置文件中的某个值是，可以使用@Value
-- 专门编写一个JavaBean来和配置文件进行映射，就直接使用@ConfigurationProperties
-
-### 加载指定的配置文件
+**@configurationProperties**：默认从全局配置文件中获取值；
 
  ```java
  @Component
@@ -465,7 +749,43 @@ yaml支持松散语法（驼峰命名和-连接是可以绑定的）、JSR303数
 >
 > Could not autowire. No beans of 'long' type found.
 
-### JSR303校验
+
+
+两种方式的对比：
+
+|                | @ConfigurationProperties | @Value       |
+| -------------- | ------------------------ | ------------ |
+| 功能           | 批量                     | 一个一个指定 |
+| 松散绑定       | 支持                     | 不支持       |
+| SpEL           | 不支持                   | 支持         |
+| JSR303数据校验 | 支持                     | 不支持       |
+| 复杂类型封装   | 支持                     | 不支持       |
+
+- @ConfigurationProperties只需要写一次即可 ， @Value则需要每个字段都添加
+
+- yaml支持松散语法（驼峰命名和-连接是可以绑定的）
+- JSR303数据校验，就是我们可以在字段是增加一层过滤器验证 ， 可以保证数据的合法性
+- 复杂类型封装，yml中可以封装对象 ， 使用value就不支持
+
+选择：
+
+- 首选yaml
+- 在某些只需要获取配置文件中的某个值是，可以使用@Value
+- 专门编写一个JavaBean来和配置文件进行映射，就直接使用@ConfigurationProperties
+
+
+
+> properties配置文件在写中文的时候，会有乱码 ， 我们需要去IDEA中设置编码格式为UTF-8；
+>
+> settings-->FileEncodings 中配置；
+>
+> ![](images/image-20231112132218524.png)
+
+
+
+### JSR303数据校验
+
+Springboot中可以用@validated来校验数据，如果数据异常则会统一抛出异常，方便异常中心统一处理。
 
 ```xml
 <dependency>
@@ -481,17 +801,16 @@ yaml支持松散语法（驼峰命名和-连接是可以绑定的）、JSR303数
 </dependency>
 ```
 
-
-
 ```java
-@Component
-@ConfigurationProperties(prefix = "teacher")
-@Validated
-public class Teacher {
-    @Email
-    private String email;
-  
-  // ...
+
+@Component //注册bean
+@ConfigurationProperties(prefix = "person")
+@Validated  //数据校验
+public class Person {
+
+    @Email(message="邮箱格式错误") //name必须是邮箱格式
+    private String name;
+}
 ```
 
 如果格式不对，会出现类似如下信息(默认错误信息可通过参数修改)：
@@ -502,7 +821,40 @@ public class Teacher {
 
 校验有很多注解格式可以使用。
 
+常见参数:
 
+```java
+@NotNull(message="名字不能为空")
+private String userName;
+@Max(value=120,message="年龄最大不能查过120")
+private int age;
+@Email(message="邮箱格式错误")
+private String email;
+
+空检查
+@Null       验证对象是否为null
+@NotNull    验证对象是否不为null, 无法查检长度为0的字符串
+@NotBlank   检查约束字符串是不是Null还有被Trim的长度是否大于0,只对字符串,且会去掉前后空格.
+@NotEmpty   检查约束元素是否为NULL或者是EMPTY.
+    
+Booelan检查
+@AssertTrue     验证 Boolean 对象是否为 true  
+@AssertFalse    验证 Boolean 对象是否为 false  
+    
+长度检查
+@Size(min=, max=) 验证对象（Array,Collection,Map,String）长度是否在给定的范围之内  
+@Length(min=, max=) string is between min and max included.
+
+日期检查
+@Past       验证 Date 和 Calendar 对象是否在当前时间之前  
+@Future     验证 Date 和 Calendar 对象是否在当前时间之后  
+@Pattern    验证 String 对象是否符合正则表达式的规则
+
+.......等等
+除此以外，我们还可以自定义一些数据校验规则
+```
+
+> @Validated属于spring，而@Email、@Past等其他注解输入validation-api包
 
 ### 配置文件的位置
 
@@ -572,30 +924,60 @@ spring:
 
 
 
+以**HttpEncodingAutoConfiguration（Http编码自动配置）**为例解释自动配置原理：
+
 ```java
 // 表示这是一个配置类
 @Configuration(proxyBeanMethods = false)
 // 自动配置属性：ServerProperties
+	//进入这个ServerProperties查看，将配置文件中对应的值和ServerProperties绑定起来，并把ServerProperties加入到ioc容器中
 @EnableConfigurationProperties({ServerProperties.class})
 
-// spring的底层注解：根据不同的条件，来判断当前配置或者类是否生效
+// spring的底层@Conditional注解：
+	// 根据不同的条件，来判断当前配置或者类是否生效。就是如果满足指定的条件，整个配置类里面的配置就会生效；
+	// 这里的意思就是判断当前应用是否是web应用，如果是，当前配置类生效
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+
+	//判断当前项目有没有这个类CharacterEncodingFilter；SpringMVC中进行乱码解决的过滤器；
 @ConditionalOnClass({CharacterEncodingFilter.class})
+
+	//判断配置文件中是否存在某个配置：server.servlet.encoding；
+	//如果不存在，判断也是成立的；即使我们配置文件中不配置server.servlet.encoding=true，也是默认生效的；
 @ConditionalOnProperty(
     prefix = "server.servlet.encoding",
     value = {"enabled"},
     matchIfMissing = true
 )
 public class HttpEncodingAutoConfiguration {
+  	//已经和SpringBoot的配置文件映射了
     private final Encoding properties;
-
+		
+  	// 只有一个有参构造器的情况下，参数的值就会从容器中拿
     public HttpEncodingAutoConfiguration(ServerProperties properties) {
         this.properties = properties.getServlet().getEncoding();
     }
 
- ... 
+  	//给容器中添加一个组件，这个组件的某些值需要从properties中获取
+  	@Bean
+    @ConditionalOnMissingBean  //判断容器没有这个组件？
+    public CharacterEncodingFilter characterEncodingFilter() {
+      CharacterEncodingFilter filter = new OrderedCharacterEncodingFilter();
+      filter.setEncoding(this.properties.getCharset().name());
+      filter.setForceRequestEncoding(this.properties.shouldForce(Encoding.Type.REQUEST));
+      filter.setForceResponseEncoding(this.properties.shouldForce(Encoding.Type.RESPONSE));
+      return filter;
+    }
+		
+  	... 
 }
 ```
+
+**一句话总结 ：根据当前不同的条件判断，决定这个配置类是否生效！**
+
+- 一但这个配置类生效；这个配置类就会给容器中添加各种组件；
+- 这些组件的属性是从对应的properties类中获取的，这些类里面的每一个属性又是和配置文件绑定的；
+- 所有在配置文件中能配置的属性都是在xxxxProperties类中封装着；
+- 配置文件能配置什么就可以参照某个功能对应的这个属性类
 
 `@EnableConfigurationProperties({ServerProperties.class})`
 
@@ -653,7 +1035,7 @@ public class CacheProperties
 
 配置的名称是按照类的驼峰转换为`-`连接表示。
 
-**自动装配的精髓**：
+### 自动装配的精髓：
 
 1. SpringBoot启动会自动加载大量自动装配类。
 2. 我们看我们需要的功能有没有在SpringBoot默认写好的自动配置类当中；
@@ -665,7 +1047,30 @@ public class CacheProperties
 
 
 
-配置`debug: true`，可查看，那些自动配置类生效，那些没有。在控制面板中显示如下：
+### @Conditional及其派生的注解
+
+**自动配置类必须在一定的条件下才能生效；**
+
+**@Conditional**是spring原生注解，springboot派生了很多相关注解。
+
+作用：必须是@Conditional指定的条件成立，才给容器中添加组件，配置配里面的所有内容才生效；
+
+![](images/image-20231112192909718.png)
+
+配置`debug: true`，可查看，那些自动配置类生效，那些没有。
+
+```yaml
+#开启springboot的调试类
+debug: true
+```
+
+**Positive matches:（自动配置类启用的：正匹配）**
+
+**Negative matches:（没有启动，没有匹配成功的自动配置类：负匹配）**
+
+**Unconditional classes: （没有条件的类）**
+
+在控制面板中显示如下：
 
 ```
 ============================
@@ -718,9 +1123,220 @@ Positive matches:  生效的
 
 
 
+## 自定义starter
+
+启动器模块是一个空jar文件，仅提供辅助性依赖管理，这些依赖可能用于自动装配或者其他类库；
+
+![](images/image-20231112203255392.png)
+
+**命名归约：**
+
+官方命名：
+
+- 前缀：spring-boot-starter-xxx
+- 比如：spring-boot-starter-web....
+
+自定义命名：
+
+- xxx-spring-boot-starter
+- 比如：mybatis-spring-boot-starter
+
+### 编写启动器
+
+1. 在IDEA中新建一个空项目 spring-boot-starter-diy
 
 
-## 6 SpringBoot Web 开发
+
+2. 新建一个普通Maven模块：andyron-spring-boot-starter
+
+
+
+3. 新建一个**Springboot模块**：andyron-spring-boot-starter-autoconfigure 
+
+
+
+4. 在andyron-spring-boot-starter模块中导入自建的Springboot模块
+
+```xml
+<dependency>
+  <groupId>com.andyron</groupId>
+  <artifactId>andyron-spring-boot-starter-autoconfigure</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+
+5. andyron-spring-boot-starter-autoconfigure 中的依赖：
+
+```xml
+<dependencies>
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter</artifactId>
+  </dependency>
+
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-configuration-processor</artifactId>
+    <optional>true</optional>
+  </dependency>
+</dependencies>
+```
+
+6. 在andyron-spring-boot-starter-autoconfigure模块编写
+
+一个自己的服务：
+
+```java
+package com.andyron.andyronspringbootstarterautoconfigure;
+
+public class HelloService {
+
+    private HelloProperties helloProperties;
+
+    public HelloProperties getHelloProperties() {
+        return helloProperties;
+    }
+
+    public void setHelloProperties(HelloProperties helloProperties) {
+        this.helloProperties = helloProperties;
+    }
+
+    public String sayHello(String name){
+        return helloProperties.getPrefix() + name + helloProperties.getSuffix();
+    }
+}
+```
+
+编写HelloProperties 配置类：
+
+```java
+package com.andyron.andyronspringbootstarterautoconfigure;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(prefix = "andyron.hello")
+public class HelloProperties {
+    private String prefix;
+    private String suffix;
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+}
+```
+
+application.properties:
+
+```properties
+andyron.hello.prefix=a
+andyron.hello.suffix=b
+```
+
+编写我们的自动配置类并注入bean：
+
+```java
+@Configuration
+@ConditionalOnWebApplication
+@EnableConfigurationProperties(HelloProperties.class)
+public class HelloServiceAutoConfiguration {
+    @Autowired
+    private HelloProperties helloProperties;
+
+    @Bean
+    public HelloService helloService() {
+        HelloService helloService = new HelloService();
+        helloService.setHelloProperties(helloProperties);
+        return helloService;
+    }
+}
+```
+
+7. 在resources编写一个自己的 META-INF\spring.factories
+
+```properties
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.andyron.andyronspringbootstarterautoconfigure.HelloServiceAutoConfiguration
+```
+
+
+
+8. 把上面两个模块分配安装到Maven仓库中
+
+![](images/image-20231113111631129.png)
+
+### 测试自定义启动器
+
+1. 新建一个springboot项目
+2. 导入自定义的启动器
+
+```xml
+<dependencies>
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+  </dependency>
+
+  <dependency>
+    <groupId>org.andyron</groupId>
+    <artifactId>andyron-spring-boot-starter</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </dependency>
+</dependencies>
+```
+
+3. 编写一个Controller，测试自定义启动器中的服务
+
+```java
+
+import com.andyron.andyronspringbootstarterautoconfigure.HelloService;
+
+
+@RestController
+public class MyController {
+    @Autowired
+    private HelloService helloService;
+
+    @GetMapping("/hello")
+    public String hello() {
+        return helloService.sayHello("hello");
+    }
+}
+```
+
+4. 可以编写配置文件 application.properties，如：
+
+```properties
+andyron.hello.prefix="pppppp"
+andyron.hello.suffix="sssss"
+```
+
+5. 运行测试结果为：
+
+```
+"pppppp"hello"sssss"
+```
+
+
+
+
+
+## 6 SpringBoot Web开发
 
 SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修改那些东西？能不能呢扩展？
 
@@ -734,16 +1350,40 @@ web开发要解决的问题：
 - 拦截器
 - 国际化
 
+> **使用SpringBoot的步骤：**
+>
+> 1、创建一个SpringBoot应用，选择我们需要的模块，SpringBoot就会默认将我们的需要的模块自动配置好
+>
+> 2、手动在配置文件中配置部分配置项目就可以运行起来了
+>
+> 3、专注编写业务代码，不需要考虑以前那样一大堆的配置了。
+>
+> 要熟悉掌握开发，之前学习的自动配置的原理一定要搞明白！
+>
+> 比如SpringBoot到底帮我们配置了什么？我们能不能修改？我们能修改哪些配置？我们能不能扩展？
+>
+> - 向容器中自动配置组件 ：*** Autoconfiguration
+> - 自动配置类，封装配置文件的内容：***Properties
+>
+> 没事就找找类，看看自动装配原理！
+>
+> 我们之后来进行一个单体项目的小项目测试，让大家能够快速上手开发！
 
+### 静态资源处理
 
-### 静态资源
+springboot项目中写请求非常简单，那我们要引入我们前端资源，我们项目中有许多的静态资源，比如css，js等文件，这个SpringBoot怎么处理呢？
 
-`WebMvcAutoConfiguration`
+如果我们是一个web应用，我们的main下会有一个webapp，我们以前都是将所有的页面导在这里面的，对吧！但是我们现在的pom呢，打包方式是为jar的方式，那么这种方式SpringBoot能不能来给我们写页面呢？当然是可以的，但是SpringBoot对于静态资源放置的位置，是有规定的！
+
+SpringBoot中，SpringMVC的web配置都在`WebMvcAutoConfiguration`这个配置类里面，它的内部类`WebMvcAutoConfigurationAdapter`中有很多配置方法：
+
+`addResourceHandlers`添加资源处理
 
 ```java
 @Override
 public void addResourceHandlers(ResourceHandlerRegistry registry) {
   if (!this.resourceProperties.isAddMappings()) {
+    // 已禁用默认资源处理
     logger.debug("Default resource handling disabled");
     return;
   }
@@ -780,9 +1420,11 @@ private void addResourceHandler(ResourceHandlerRegistry registry, String pattern
 
 
 
+#### webjars
+
 什么是webjars？https://www.webjars.org/
 
-以maven等方式引入jQuery等前端静态资源。
+Webjars本质就是以jar包的方式引入静态资源，以前需要自己导入前端静态资源文件，现在可以在maven配置自动导入，比如以maven等方式引入jQuery等前端静态资源。
 
 ```xml
 <dependency>
@@ -792,21 +1434,27 @@ private void addResourceHandler(ResourceHandlerRegistry registry, String pattern
 </dependency>
 ```
 
+![](images/image-20231113115719179.png)
+
 
 
 地址栏中的`/webjars/**`就映射到包路径的`/META-INF/resources/webjars/`，如下
 
 http://localhost:8080/webjars/jquery/3.6.0/jquery.js。
 
-另外一种加载静态资源的方式：
 
-`WebMvcProperties`
+
+#### WebMvcProperties
+
+另外一种加载静态资源的方式：`WebMvcProperties`，可用与导入自己的静态资源。
 
 ```java
 private String staticPathPattern = "/**";
 ```
 
 `WebProperties`：`spring.web.resources.static-locations`
+
+`WebProperties.Resources`：
 
 ```java
 // 下面优先级从上到下，越低
@@ -827,7 +1475,7 @@ private String[] staticLocations = CLASSPATH_RESOURCE_LOCATIONS;
 
 
 
-### 首页
+### 首页处理
 
 `WebMvcAutoConfiguration`
 
@@ -847,13 +1495,25 @@ private Resource getIndexHtml(Resource location) {
 
 首页默认就是从上一节中几个静态资源目录中寻找”index.html“。
 
+另外**网站图标**也是在静态资源目录中找 favicon.ico，也可配置关掉默认图标：
+
+```properties
+spring.mvc.favicon.enabled=false
+```
+
+
+
 在templates目录中的所有页面，只能通过Controller访问，需要模板引擎支持。
 
 
 
 ### 模板引擎
 
-其实jsp就是一个模板引擎
+其实jsp就是一个模板引擎。
+
+![](images/640-20231113122211436.png)
+
+模板引擎的作用就是我们来写一个页面模板，比如有些值呢，是动态的，我们写一些表达式。而这些值，从哪来呢，就是我们在后台封装一些数据。然后把这个模板和这个数据交给我们模板引擎，模板引擎按照我们这个数据帮你把这表达式解析、填充到我们指定的位置，然后把这个数据最终生成一个我们想要的内容给我们写出去，这就是我们这个模板引擎，不管是jsp还是其他模板引擎，都是这个思想。只不过呢，就是说不同模板引擎之间，他们可能这个语法有点不一样。
 
 Thymeleaf
 
@@ -861,11 +1521,18 @@ https://www.thymeleaf.org/
 
 https://github.com/thymeleaf
 
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+```
 
 
-`spring-boot-starter-thymeleaf`
 
-`ThymeleafProperties`
+
+
+Thymeleaf的自动配置类：`ThymeleafProperties`
 
 ```java
 @ConfigurationProperties(prefix = "spring.thymeleaf")
@@ -879,6 +1546,92 @@ public class ThymeleafProperties {
   
   ...
 ```
+
+
+
+要使用thymeleaf，需要在html文件中导入命名空间的约束:
+
+```html
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+```
+
+#### Thymeleaf语法
+
+1. 可以使用任意的 th:attr 来替换Html中原生属性的值！
+
+![](images/image-20231113123300897.png)
+
+2. **表达式**
+
+```
+
+Simple expressions:（表达式语法）
+Variable Expressions: ${...}：获取变量值；OGNL；
+    1）、获取对象的属性、调用方法
+    2）、使用内置的基本对象：#18
+         #ctx : the context object.
+         #vars: the context variables.
+         #locale : the context locale.
+         #request : (only in Web Contexts) the HttpServletRequest object.
+         #response : (only in Web Contexts) the HttpServletResponse object.
+         #session : (only in Web Contexts) the HttpSession object.
+         #servletContext : (only in Web Contexts) the ServletContext object.
+
+    3）、内置的一些工具对象：
+　　　　　　#execInfo : information about the template being processed.
+　　　　　　#uris : methods for escaping parts of URLs/URIs
+　　　　　　#conversions : methods for executing the configured conversion service (if any).
+　　　　　　#dates : methods for java.util.Date objects: formatting, component extraction, etc.
+　　　　　　#calendars : analogous to #dates , but for java.util.Calendar objects.
+　　　　　　#numbers : methods for formatting numeric objects.
+　　　　　　#strings : methods for String objects: contains, startsWith, prepending/appending, etc.
+　　　　　　#objects : methods for objects in general.
+　　　　　　#bools : methods for boolean evaluation.
+　　　　　　#arrays : methods for arrays.
+　　　　　　#lists : methods for lists.
+　　　　　　#sets : methods for sets.
+　　　　　　#maps : methods for maps.
+　　　　　　#aggregates : methods for creating aggregates on arrays or collections.
+==================================================================================
+
+  Selection Variable Expressions: *{...}：选择表达式：和${}在功能上是一样；
+  Message Expressions: #{...}：获取国际化内容
+  Link URL Expressions: @{...}：定义URL；
+  Fragment Expressions: ~{...}：片段引用表达式
+
+Literals（字面量）
+      Text literals: 'one text' , 'Another one!' ,…
+      Number literals: 0 , 34 , 3.0 , 12.3 ,…
+      Boolean literals: true , false
+      Null literal: null
+      Literal tokens: one , sometext , main ,…
+      
+Text operations:（文本操作）
+    String concatenation: +
+    Literal substitutions: |The name is ${name}|
+    
+Arithmetic operations:（数学运算）
+    Binary operators: + , - , * , / , %
+    Minus sign (unary operator): -
+    
+Boolean operations:（布尔运算）
+    Binary operators: and , or
+    Boolean negation (unary operator): ! , not
+    
+Comparisons and equality:（比较运算）
+    Comparators: > , < , >= , <= ( gt , lt , ge , le )
+    Equality operators: == , != ( eq , ne )
+    
+Conditional operators:条件运算（三元运算符）
+    If-then: (if) ? (then)
+    If-then-else: (if) ? (then) : (else)
+    Default: (value) ?: (defaultvalue)
+    
+Special tokens:
+    No-Operation: _
+```
+
+
 
 
 
@@ -943,7 +1696,9 @@ public class WebMvcAutoConfiguration {
 
 ### 项目：员工管理系统
 
+springboot-03-web-project
 
+🔖 需要完善
 
 #### 首页配置
 
@@ -1426,15 +2181,15 @@ https://swagger.io/
 
    ```xml
    <dependency>
-               <groupId>io.springfox</groupId>
-               <artifactId>springfox-swagger2</artifactId>
-               <version>2.9.2</version>
-           </dependency>
-           <dependency>
-               <groupId>io.springfox</groupId>
-               <artifactId>springfox-swagger-ui</artifactId>
-               <version>2.9.2</version>
-           </dependency>
+     <groupId>io.springfox</groupId>
+     <artifactId>springfox-swagger2</artifactId>
+     <version>2.9.2</version>
+   </dependency>
+   <dependency>
+     <groupId>io.springfox</groupId>
+     <artifactId>springfox-swagger-ui</artifactId>
+     <version>2.9.2</version>
+   </dependency>
    ```
 
 3. 编写一个hello接口
@@ -1449,7 +2204,7 @@ https://swagger.io/
    }
    ```
 
-5. 测试运行：http://localhost:8080/swagger-ui.html
+5. 测试运行：http://localhost:8081/swagger-ui.html
 
 ![](images/image-20211013162217811.png)
 
@@ -1507,6 +2262,29 @@ public Docket docket() {
     .build();
 }
 ```
+
+- 构建Docket时通过select()方法配置怎么扫描接口。
+- 除了通过包路径配置扫描接口外，还可以通过配置其他方式扫描接口，这里注释一下所有的配置方式：
+
+```java
+any() // 扫描所有，项目中的所有接口都会被扫描到
+none() // 不扫描接口
+// 通过方法上的注解扫描，如withMethodAnnotation(GetMapping.class)只扫描get请求
+withMethodAnnotation(final Class<? extends Annotation> annotation)
+// 通过类上的注解扫描，如.withClassAnnotation(Controller.class)只扫描有controller注解的类中的接口
+withClassAnnotation(final Class<? extends Annotation> annotation)
+basePackage(final String basePackage) // 根据包路径扫描接口
+```
+
+- 还可以配置接口扫描过滤：
+
+```
+paths(PathSelectors.ant("/andy/**"))
+```
+
+
+
+
 
 > 我只希望swagger在生产环境中使用，在发布的时候不适用？
 >
@@ -1598,33 +2376,104 @@ public String hello2(@ApiParam("用户名") String username) {
 
 
 
+### 常用注解
 
 
 
+| Swagger注解                                            | 简单说明                                             |
+| ------------------------------------------------------ | ---------------------------------------------------- |
+| @Api(tags = "xxx模块说明")                             | 作用在模块类上                                       |
+| @ApiOperation("xxx接口说明")                           | 作用在接口方法上                                     |
+| @ApiModel("xxxPOJO说明")                               | 作用在模型类上：如VO、BO                             |
+| @ApiModelProperty(value = "xxx属性说明",hidden = true) | 作用在类方法和属性上，hidden设置为true可以隐藏该属性 |
+| @ApiParam("xxx参数说明")                               | 作用在参数、方法和字段上，类似@ApiModelProperty      |
+
+
+
+### 拓展：其他皮肤
+
+```xml
+<!-- 引入swagger-bootstrap-ui包 /doc.html-->
+<dependency>
+   <groupId>com.github.xiaoymin</groupId>
+   <artifactId>swagger-bootstrap-ui</artifactId>
+   <version>1.9.1</version>
+</dependency>
+```
+
+**http://localhost:8080/doc.html**
+
+
+
+```xml
+<!-- 引入swagger-ui-layer包 /document.html-->
+<dependency>
+   <groupId>com.zyplayer</groupId>
+   <artifactId>swagger-mg-ui</artifactId>
+   <version>1.0.6</version>
+</dependency>
+```
+
+**http://localhost:8080/document.html**
 
 ## 12 任务
 
-异步任务
-
-定时任务
-
-邮件发送 
+springboot-09-test
 
 ### 异步任务
+
+启动类加上注解开启异步任务功能
 
 ```java
 // 开启异步注解功能
 @EnableAsync
-
-
-
-// 告诉spring，这是一个异步方法
-@Async
 ```
 
+```java
+@Service
+public class AsyncService {
 
+    public void hello() {
+        // 假装正在处理数据，使用线程设置一些延时，模拟同步等待的情况
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("数据正在处理");
+    }
+}
+```
+
+```java
+@RestController
+public class AsyncController {
+
+    @Autowired
+    AsyncService asyncService;
+
+    @RequestMapping("/hello")
+    public String hello() {
+        asyncService.hello();
+        return "OK";
+    }
+}
+```
+
+此时运行，浏览器3s后响应出现OK，同时控制台打印"数据正在处理"，这是同步等待的情况。
+
+如果给AsyncService的hello方法上加一个注解：
+
+```java
+    // 告诉spring，这是一个异步方法
+    @Async
+```
+
+结果就是，浏览器立马响应出现OK，3s后控制台打印"数据正在处理"。
 
 ### 邮件发送
+
+1. 引入依赖
 
 ```xml
 <dependency>
@@ -1633,15 +2482,135 @@ public String hello2(@ApiParam("用户名") String username) {
 </dependency>
 ```
 
+看它引入的依赖，可以看到 jakarta.mail
+
+```xml
+<dependency>
+   <groupId>com.sun.mail</groupId>
+   <artifactId>jakarta.mail</artifactId>
+   <version>1.6.4</version>
+   <scope>compile</scope>
+</dependency>
+```
+
+
+
 ```java
 MailSenderAutoConfiguration
 MailSenderJndiConfiguration
 JavaMailSenderImpl
 ```
 
- 
+> 查看自动配置类：`MailSenderAutoConfiguration`  -> `MailSenderJndiConfiguration`
+>
+> ![](images/image-20231113162751644.png)
+>
+> ```java
+> @Configuration(proxyBeanMethods = false)
+> @ConditionalOnClass(Session.class)
+> @ConditionalOnProperty(prefix = "spring.mail", name = "jndi-name")
+> @ConditionalOnJndi
+> class MailSenderJndiConfiguration {
+> 
+> 	private final MailProperties properties;
+> 
+> 	MailSenderJndiConfiguration(MailProperties properties) {
+> 		this.properties = properties;
+> 	}
+> 
+> 	@Bean
+> 	JavaMailSenderImpl mailSender(Session session) {
+> 		JavaMailSenderImpl sender = new JavaMailSenderImpl();
+> 		sender.setDefaultEncoding(this.properties.getDefaultEncoding().name());
+> 		sender.setSession(session);
+> 		return sender;
+> 	}
+> ...
+> ```
+>
+> ```java
+> @ConfigurationProperties(
+>    prefix = "spring.mail"
+> )
+> public class MailProperties {
+>    private static final Charset DEFAULT_CHARSET;
+>    private String host;
+>    private Integer port;
+>    private String username;
+>    private String password;
+>    private String protocol = "smtp";
+>    private Charset defaultEncoding;
+>    private Map<String, String> properties;
+>    private String jndiName;
+> }
+> ```
+
+3. 配置文件
+
+```properties
+spring.mail.username=qq邮箱
+spring.mail.password=你的qq授权码
+spring.mail.host=smtp.qq.com
+# qq需要配置ssl
+spring.mail.properties.mail.smtp.ssl.enable=true
+```
+
+获取授权码：在QQ邮箱中的设置->账户->开启pop3和smtp服务
+
+![](images/image-20231113163315863.png)
+
+4. 测试
+
+```java
+@Test
+public void contextLoads() {
+   //邮件设置1：一个简单的邮件
+   SimpleMailMessage message = new SimpleMailMessage();
+   message.setSubject("通知-明天来狂神这听课");
+   message.setText("今晚7:30开会");
+
+   message.setTo("24736743@qq.com");
+   message.setFrom("24736743@qq.com");
+   mailSender.send(message);
+}
+
+@Test
+public void contextLoads2() throws MessagingException {
+   //邮件设置2：一个复杂的邮件
+   MimeMessage mimeMessage = mailSender.createMimeMessage();
+   MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+   helper.setSubject("通知-明天来狂神这听课");
+   helper.setText("<b style='color:red'>今天 7:30来开会</b>",true);
+
+   //发送附件
+   helper.addAttachment("1.jpg",new File(""));
+   helper.addAttachment("2.jpg",new File(""));
+
+   helper.setTo("24736743@qq.com");
+   helper.setFrom("24736743@qq.com");
+
+   mailSender.send(mimeMessage);
+}
+```
+
+fljiadhnuyocbcic
+
+
 
 ### 定时任务
+
+项目开发中经常需要执行一些定时任务，比如需要在每天凌晨的时候，分析一次前一天的日志信息，Spring为我们提供了异步执行任务调度的方式，提供了两个接口。
+
+- TaskExecutor接口
+- TaskScheduler接口
+
+两个注解：
+
+- @EnableScheduling
+- @Scheduled
+
+
 
 ```java
 TaskScheduler    任务调度者
@@ -1657,7 +2626,7 @@ Cron表达式
 ```
 秒 分 时 日 月 周几
 
-
+重用cron表达式：
 0 0 10,14,16 * * ? 每天上午10点，下午2点，4点
 0 0/30 9-17 * * ? 朝九晚五工作时间内每半小时
 0 0 12 ? * WED 表示每个星期三中午12点
@@ -1677,6 +2646,33 @@ Cron表达式
 "0 15 10 ? * 6L" 每月的最后一个星期五上午10:15触发
 "0 15 10 ? * 6L 2002-2005" 2002年至2005年的每月的最后一个星期五上午10:15触发
 "0 15 10 ? * 6#3" 每月的第三个星期五上午10:15触发
+```
+
+![](images/image-20231113161315593.png)
+
+[Cron表达式生成器](https://www.bejson.com/othertools/cron/)
+
+测试
+
+1. 在启动类上加注解
+2. 在想要定时执行的方法上加注解
+
+```java
+@Service
+public class ScheduledService {
+
+    // 在特定时间执行这个方法  Timer
+    // cron 表达式
+    // 秒 分 时 日 月 周几
+    /*
+    40 30 23 * * ?          每天23点30分40秒执行一次
+    30 0/5 18,10 * * ?      每天18和10点，每个5分钟执行一次
+     */
+    @Scheduled(cron = "0/2 * * * * ?")
+    public void hello() {
+        System.out.println("hello，你被执行了。。。");
+    }
+}
 ```
 
 
@@ -2107,9 +3103,9 @@ p61
 
 
 
+https://pdai.tech/md/spring/springboot/springboot.html
 
-
-
+https://github.com/ityouknow/spring-boot-examples
 
 
 
