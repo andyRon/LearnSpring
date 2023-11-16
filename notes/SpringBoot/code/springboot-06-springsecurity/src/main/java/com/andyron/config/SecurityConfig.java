@@ -11,22 +11,26 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  *
  * @author Andy Ron
  */
-@EnableWebSecurity
-public class SecurityConfig
-        extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity // 开启WebSecurity模式
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 链式编程
+
+    // 定制请求的授权规则
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // 定制授权请求的规则
         // 首页所有人可以访问，功能页只有对应有权限的人才能访问
-        // 授权请求的规则
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/level1/**").hasRole("VIP1")
                 .antMatchers("/level2/**").hasRole("VIP2")
                 .antMatchers("/level3/**").hasRole("VIP3");
 
-        // 没有权限默认到登录页面
 
+        // 开启自动配置的登录功能
+        // /login 请求来到登录页
+        // /login?error 重定向到这里表示登录失败
+        // 没有权限默认到登录页面
         http.formLogin()
                 .loginPage("/toLogin")// 定制登录页面loginPage，form的action就是"toLogin"
                 .usernameParameter("user").passwordParameter("pwd")  // 用户名和密码的表单name不是默认的username和password时
@@ -41,13 +45,14 @@ public class SecurityConfig
         http.csrf().disable();  // 登出失败可能的原因
 
         // 开启记住我功能，Cookie，默认存两周
-        http.rememberMe()
-                .rememberMeParameter("remember")  // 自定义接受前端的参数
+        http.rememberMe().rememberMeParameter("remember")  // 自定义接受前端的参数
         ;
     }
-
-    // 认证
-    // 密码编码：PasswordEncoder
+    /**
+     * 定义认证规则
+     *
+     * 密码编码：PasswordEncoder
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 内存中读取认证信息

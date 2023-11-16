@@ -4,12 +4,15 @@ import com.andyron.sb01.common.ResponseResult;
 import com.andyron.sb01.entity.User;
 import com.andyron.sb01.entity.param.UserParam;
 import com.andyron.sb01.service.UserService;
+import com.andyron.sb01.validation.AddValidationGroup;
+import com.andyron.sb01.validation.EditValidationGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -65,8 +68,17 @@ public class UserController {
             return ResponseEntity.badRequest().body("invalid parameter");
         }
         return ResponseEntity.ok("success");
-
     }
 
+    @PostMapping("add3")
+    public ResponseEntity<UserParam> add3(@Validated(AddValidationGroup.class) @RequestBody UserParam userParam) {
+        return ResponseEntity.ok(userParam);
+    }
+
+
+    @PostMapping("edit")
+    public ResponseEntity<UserParam> edit(@Validated(EditValidationGroup.class) @RequestBody UserParam userParam) {
+        return ResponseEntity.ok(userParam);
+    }
 
 }

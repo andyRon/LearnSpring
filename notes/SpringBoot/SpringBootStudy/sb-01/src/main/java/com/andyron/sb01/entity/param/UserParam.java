@@ -1,5 +1,6 @@
 package com.andyron.sb01.entity.param;
 
+import com.andyron.sb01.validation.EditValidationGroup;
 import com.andyron.sb01.validation.TelephoneNumber;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ import java.io.Serializable;
 @Builder
 public class UserParam implements Serializable {
     private static final long serialVersionUID = 1L;
-    @NotEmpty(message = "could not be empty")
+    @NotEmpty(message = "{user.msg.userId.notEmpty}", groups = {EditValidationGroup.class})
     private String userId;
     @NotEmpty(message = "could not be empty")
     @Email(message = "invalid email")
