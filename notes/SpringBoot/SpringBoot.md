@@ -1789,7 +1789,13 @@ http Last-Modified  过期时间
 
 
 
-## 7 Data
+## 7 Data🔖
+
+对于数据访问层，无论是 SQL(关系型数据库) 还是 NOSQL(非关系型数据库)，Spring Boot 底层都是采用 Spring Data 的方式进行统一处理。
+
+Spring Data 也是 Spring 中与 Spring Boot、Spring Cloud 等齐名的知名项目。
+
+https://spring.io/projects/spring-data
 
 ### 整合JDBC的使用
 
@@ -1881,18 +1887,45 @@ log4j
 
 安全框架：shiro、springsecurity，
 
+每一个框架的出现都是为了解决某一问题而产生了，那么Spring Security框架的出现是为了解决什么问题呢？
+
 > Spring Security is a powerful and highly customizable authentication and access-control framework. It is the de-facto standard for securing Spring-based applications.
 >
 > Spring Security is a framework that focuses on providing both authentication and authorization to Java applications. Like all Spring projects, the real power of Spring Security is found in how easily it can be extended to meet custom requirements
+>
+> Spring Security 是一个功能强大且高度可定制的身份验证和访问控制框架。它是保护基于 Spring 的应用程序的事实标准。
+>
+> Spring Security 是一个专注于为 Java 应用程序提供身份验证和授权的框架。像所有 Spring 项目一样，Spring Security 的真正力量在于它可以很容易地扩展以满足自定义要求
 
-
+之前做项目是没有使用框架是怎么控制权限的？对于权限，一般会细分为
 
 - 功能权限
 - 访问权限
 - 菜单权限，不同人不同菜单
-- 以前拦截器，过滤器：大量的原生代码~冗余
+- 以前拦截器，过滤器：大量的原生代码~冗余，Spring Scecurity就是为了解决这些问题而诞生的
+
+Spring Security 基于 Spring 框架，提供了一套 Web 应用安全性的完整解决方案。一般来说，Web 应用的安全性包括用户认证（Authentication）和用户授权（Authorization）两个部分。
+
+- 用户认证指的是**验证某个用户是否为系统中的合法主体**，也就是说用户能否访问该系统。用户认证一般要求用户提供用户名和密码。系统通过校验用户名和密码来完成认证过程。
+- 用户授权指的是**验证某个用户是否有权限执行某个操作**。在一个系统中，不同用户所具有的权限是不同的。比如对一个文件来说，有的用户只能进行读取，而有的用户可以进行修改。一般来说，系统会为不同的用户分配不同的角色，而每个角色则对应一系列的权限。
+
+对于上面提到的两种应用情景，Spring Security 框架都有很好的支持。在用户认证方面，Spring Security 框架支持主流的认证方式，包括 **HTTP 基本认证、HTTP 表单验证、HTTP 摘要认证、OpenID 和 LDAP** 等。在用户授权方面，Spring Security 提供了**基于角色的访问控制和访问控制列表（Access Control List，ACL）**，可以对应用中的领域对象进行**细粒度的控制**。
+
+### 实战
+
+springboot-06-springsecurity
 
 
+
+
+
+
+
+
+
+用户没有登录的时候，导航栏上只显示登录按钮，用户登录之后，导航栏可以显示登录的用户信息及注销按钮！还有就是，比如andy这个用户，它只有 vip2，vip3功能，那么登录则只显示这两个功能，而vip1的功能菜单不显示！
+
+### 认识SpringSecurity
 
  `spring-boot-starter-security`
 
@@ -1966,7 +1999,7 @@ http.csrf().disable();
 
 
 
-## 9 Shiro
+## 9 Shiro🔖
 
 ### 什么是Shiro 
 
@@ -2851,7 +2884,7 @@ Client port found: 2181. Client address: localhost. Client SSL: false.
 Mode: standalone
 ```
 
-
+> 注意：要释放8080端口
 
 - 启动客户端`$ ./zkCli.sh`（之后的客服端就用java），使用`ls /`列出zookeeper根下保存的所有节点：
 
@@ -2895,13 +2928,13 @@ Zookeeper：注册中心（服务注册与发现）
 
 dubbo-admin：是一个监控管理后台（网页），查看我们注册了哪些服务，哪些服务被消费了（不是必要的）
 
-dubbo本身并不是一个服务软件，它其实就是一个jar包，能够帮我们的java程序连接到zookeeper，并利用zookeeper消费、提供服务。
+dubbo本身并不是一个服务软件，它其实**就是一个jar包，能够帮我们的java程序连接到zookeeper，并利用zookeeper消费、提供服务**。
 
 为了让用户更好的管理监控众多的dubbo服务，官方提高了一个可视化的监控程序。 
 
 -  下载dubbo-admin：
 
-https://github.com/apache/dubbo-admin/tree/master
+https://github.com/apache/dubbo-admin/
 
 - 在 `dubbo-admin-server/src/main/resources/application.properties`中指定注册中心地址（如果之前zookeeper的端口没有改变，这里就不需要修改）：
 
@@ -2909,6 +2942,21 @@ https://github.com/apache/dubbo-admin/tree/master
   admin.registry.address=zookeeper://127.0.0.1:2181
   admin.config-center=zookeeper://127.0.0.1:2181
   admin.metadata-report.address=zookeeper://127.0.0.1:2181
+  ```
+
+  可以设置一些其他属性：
+
+  ```properties
+  server.port=7001
+  spring.velocity.cache=false
+  spring.velocity.charset=UTF-8
+  spring.velocity.layout-url=/templates/default.vm
+  spring.messages.fallback-to-system-locale=false
+  spring.messages.basename=i18n/message
+  spring.root.password=root
+  spring.guest.password=guest
+  
+  dubbo.registry.address=zookeeper://127.0.0.1:2181
   ```
 
   
@@ -2919,14 +2967,14 @@ https://github.com/apache/dubbo-admin/tree/master
   sudo mvn clean package -Dmaven.test.skip=true 
   ```
 
-  
+  等待。。。
 
 - 启动dubbo
 
   ```shell
   cd dubbo-admin-distribution/target
   
-  sudo java -jar dubbo-admin-0.3.0.jar
+  sudo java -jar dubbo-admin-0.6.0.jar
   ```
 
   > dubbo-admin 启动时可能回报`  Port 8080 was already in use`错误
@@ -2953,9 +3001,9 @@ https://github.com/apache/dubbo-admin/tree/master
   
   
 
-- 访问http://localhost:8080/，默认账号密码都是root
+- 默认端口是38080，访问http://localhost:38080/，默认账号密码都是root
 
-
+![](images/image-20231116105645638.png)
 
 ### 实战
 
@@ -3041,46 +3089,76 @@ https://github.com/apache/dubbo-admin/tree/master
 
 6. 开启provider-server，此时就能在dubbo-admin中观察到服务提供者
 
+![](images/image-20231116110242258.png)
+
+> **逻辑理解 ：应用启动起来，dubbo就会扫描指定的包下带有@component注解的服务，将它发布在指定的注册中心中！**
+
 7. consumer-server
 
-   ```properties
-   server.port=8002
-   
-   # 消费者取哪里拿服务，需要暴露自己的名字
-   dubbo.application.name=consumer-server
-   dubbo.registry.address=zookeeper://127.0.0.1:2181
-   ```
+```properties
+server.port=8002
 
-   ```java
-   package com.andyron.service;
-   
-   public interface TicketService {
-   
-       public String getTicket();
-   }
-   ```
+# 消费者取哪里拿服务，需要暴露自己的名字
+dubbo.application.name=consumer-server
+dubbo.registry.address=zookeeper://127.0.0.1:2181
+```
 
-   ```java
-   package com.andyron.service;
-   
-   import org.apache.dubbo.config.annotation.DubboReference;
-   import org.springframework.stereotype.Service;
-   
-   @Service  // 放入到容器中，注意不是dubbo的
-   public class UserService {
-   
-       // 想拿到provider-server提供的票，要去服务中线拿服务
-       @DubboReference // 远程引用，对应本地的@Autowired。1 POM坐标，2定义（和provider-server）路径相同的接口（TicketService）
-       TicketService ticketService;
-   
-       public void buyTicket() {
-           String ticket = ticketService.getTicket();
-           System.out.println("在注册中心拿到===>" + ticket);
-       }
-   }
-   ```
+> **本来正常步骤是需要将服务提供者的接口打包，然后用pom文件导入，我们这里使用简单的方式，直接将服务的接口拿过来，路径必须保证正确，即和服务提供者相同；**
 
-   在consumer-server中测试就能获得注册中心服务提供者提供的服务。
+```java
+package com.andyron.service;
+
+public interface TicketService {
+
+    public String getTicket();
+}
+```
+
+```java
+package com.andyron.service;
+
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.stereotype.Service;
+
+@Service  // 放入到容器中，注意不是dubbo的
+public class UserService {
+
+    // 想拿到provider-server提供的票，要去服务中线拿服务
+    @DubboReference // 远程引用，对应本地的@Autowired。1 POM坐标，2定义（和provider-server）路径相同的接口（TicketService）
+    TicketService ticketService;
+
+    public void buyTicket() {
+        String ticket = ticketService.getTicket();
+        System.out.println("在注册中心拿到===>" + ticket);
+    }
+}
+```
+
+在consumer-server中测试就能获得注册中心服务提供者提供的服务。
+
+
+
+8. 测试类
+
+```java
+@Autowired
+UserService userService;
+
+@Test
+void contextLoads() {
+  userService.buyTicket();
+}
+```
+
+测试：
+
+开启zookeeper、dubbo
+
+打开dubbo-admin实现监控【可以不用做】
+
+开启服务者
+
+消费者消费测试（消费者模块测试类）
 
 
 
@@ -3099,9 +3177,146 @@ https://github.com/apache/dubbo-admin/tree/master
 
 
 
-### 现在和未来
+## 现在和未来
 
-p61
+```
+三层架构  +  MVC
+	架构  -->  解耦
+	
+开发框架
+	Spring
+		IOC：控制反转
+			约泡：泡温泉，泡茶...，泡友
+				附近的人，打招呼，加微信，聊天，天天聊，一个一个聊 -> 然后约泡
+			浴场（容器）：温泉、茶庄、泡友
+				直接进温泉，就有人和你一起泡了
+			原来我们都自己一步一步操作，现在交给容器了！我们需要什么就去拿就可以了
+			
+		AOP：切面（本质：动态代理）
+			为了解决什么问题？在不影响业务本来的情况下，实现冬天增加功能，大量应用在日志、事务...等等方面
+		
+		Spring是一个轻量级的Java开源框架、容器
+		目的：解决企业开发的复杂性问题
+	
+	SpringBoot
+		不是新东西，就是Spring的升级版
+		新一代JavaEE的开发标准，开箱即用！ -> 拿过来就可以用
+		它自动帮我们配置了非常多的东西
+		特性：约定大约配置
+		
+
+随着公司提醒越来越多，用户越来越多！
+
+微服务脚骨 --> 新架构
+	模块化，功能化！  用户、支付、签到、娱乐、.....
+	人过于多，一台服务器解决不了；再增加服务器！  横向扩展
+	
+```
+
+
+
+> 三层架构  +  MVC
+> 	架构  -->  解耦
+> 	
+> 开发框架
+> 	Spring
+> 		IOC：控制反转
+> 			约泡：泡温泉，泡茶...，泡友
+> 				附近的人，打招呼，加微信，聊天，天天聊，一个一个聊 -> 然后约泡
+> 			浴场（容器）：温泉、茶庄、泡友
+> 				直接进温泉，就有人和你一起泡了
+> 			原来我们都自己一步一步操作，现在交给容器了！我们需要什么就去拿就可以了
+> 		
+>
+> ​		AOP：切面（本质：动态代理）
+> ​			为了解决什么问题？在不影响业务本来的情况下，实现冬天增加功能，大量应用在日志、事务...等等方面
+> ​		
+>
+> ​		Spring是一个轻量级的Java开源框架、容器
+> ​		目的：解决企业开发的复杂性问题
+>
+> 
+>
+> ​	SpringBoot
+> ​		不是新东西，就是Spring的升级版
+> ​		新一代JavaEE的开发标准，开箱即用！ -> 拿过来就可以用
+> ​		它自动帮我们配置了非常多的东西
+> ​		特性：约定大约配置			
+>
+> 
+>
+>
+> 随着公司提醒越来越多，用户越来越多！
+>
+> 微服务脚骨 --> 新架构
+> 	模块化，功能化！  用户、支付、签到、娱乐、.....
+>
+> ​	人过于多，一台服务器解决不了；再增加服务器！  ==横向扩展==
+>
+> ​	假设A服务器占用98%资源，B服务器只占用10%。  负载均衡
+>
+>
+> ​	用户非常多，而签到十分少！  给用户多一点服务器，给签到少一点服务器！
+>
+> ​	将原来的整体项目，分成模块化，用户就是单独一个项目，签到也是一个单独的项目，项目与项目之间需要通信，如何通信？
+>
+>
+> 微服务架构问题？ 分布式架构会遇到的四个核心问题？
+>
+> 	1. 这么多服务，客户端改如何去访问？
+> 	1. 这么多服务，服务之间如何进行通信？  防火墙、防盗链、安全性、统一性...
+> 	1. 这么多服务，如何治理、管理呢？   统一的服务管理平台
+> 	1. 服务挂了，怎么办？
+>
+>
+> 解决方案：
+>
+> ​	springcloud，一套生态，就是来解决以上分布式架构的4个问题
+>
+> ​	想使用springcloud，必须要掌握springboot
+>
+> ​	1 spring cloud Netflix  一站式解决方案（目前已经停止维护）
+>
+> ​		API网关，zuul组件
+>
+> ​		Feign  -> httpclient  -> http同行方式，同步并阻塞
+>
+> ​		服务注册与发现 ，Eureka
+>
+> ​		熔断机制， Hystrix
+>
+> ​	2 Apache Dubbo   +  zookeeper  （不完善）
+>
+> ​		API网关：没有！要么找第三方组件，要么自己实现
+>
+> ​		Dubbo
+>
+> ​		服务注册与发现，zookeeper，动物园管理者
+>
+> ​		熔断机制：没有！ 借助Hystrix
+>
+> ​	3 springcloud alibaba 一站式解决方案
+>
+>
+> 又有提出了一种方案：
+>
+> ​	服务网格（Service Mesh）：下一代微服务标准
+>
+> ​	代表解决方案： [istio](https://istio.io/)		
+>
+>
+> 万变不离其宗，一通百通
+>
+> ​	1 API网关，服务路由
+>
+> ​	2 HTTP，RPC，异步调用
+>
+> ​	3 服务注册与发现，高可用
+>
+> ​	4 熔断机制，服务降级
+>
+> 
+> 为什么哟啊解决这些问题？  本质：网络不可靠。
 
 
 

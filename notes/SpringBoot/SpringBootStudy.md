@@ -69,13 +69,67 @@ public class UserController {
 
 **Spring Validation是对hibernate validation的二次封装**，用于支持spring mvc参数自动校验。
 
+### 案列
+
+1. 添加依赖
+2. 请求参数封装
+3. Controller中获取参数绑定结果
+4. 检验结果
 
 
-Validation分组校验
+
+#### Validation分组校验
+
+UserParam既可以作为add的参数（id为空），又可以作为update的参数（id不能为空），需要分组校验
+
+1. 定义分组接口（不需要实现）
+
+```java
+public interface AddValidationGroup {
+}
+public interface EditValidationGroup {
+}
+```
+
+2. 在UserParam的userId字段添加分组
+
+```java
+@NotEmpty(message = "{user.msg.userId.notEmpty}", groups = {EditValidationGroup.class}) // 这里
+private String userId;
+```
 
 
 
-@Validated和@Valid什么区别？
+3. controller中的接口使用校验时使用分组
+
+```java
+@PostMapping("add")
+public ResponseEntity<UserParam> add(@Validated(AddValidationGroup.class) @RequestBody UserParam userParam) {
+  return ResponseEntity.ok(userParam);
+}
+```
+
+
+
+
+
+### Validation分组校验
+
+在检验Controller的入参是否符合规范时，使用@Validated或者@Valid在基本验证功能上没有太多区别。但是在分组、注解地方、嵌套验证等功能上两个有所不同：
+
+- **分组**
+
+@Validated：提供了一个分组功能，可以在入参验证时，根据不同的分组采用不同的验证机制，这个网上也有资料，不详述。@Valid：作为标准JSR-303规范，还没有吸收分组的功能。
+
+- **注解地方**
+
+@Validated：可以用在类型、方法和方法参数上。但是不能用在成员属性（字段）上
+
+@Valid：可以用在方法、构造函数、方法参数和成员属性（字段）上
+
+- **嵌套类型**
+
+比如本文例子中的address是user的一个嵌套属性, 只能用@Valid
 
 
 
