@@ -194,3 +194,37 @@ public ResponseEntity<UserParam> add(@Validated(AddValidationGroup.class) @Reque
 
 - **spring validation**：spring validation对hibernate validation进行了二次封装，在springmvc模块中添加了自动校验，并将校验信息封装进了特定的类中
 
+
+
+## 如何提供多个版本接口 sb-02
+
+https://pdai.tech/md/spring/springboot/springboot-x-interface-version.html
+
+> 在以SpringBoot开发Restful接口时，由于模块，系统等业务的变化，需要对同一接口提供不同版本的参数实现（老的接口还有模块或者系统在用，不能直接改，所以需要不同版本）。如何更加优雅的实现多版本接口呢？
+
+
+
+### 有哪些控制接口多版本的方式？
+
+- 相同URL，用**不同的版本参数**区分
+  - `api.pdai.tech/user?version=v1` 表示 v1版本的接口, 保持原有接口不动
+  - `api.pdai.tech/user?version=v2` 表示 v2版本的接口，更新新的接口
+- 区分**不同的接口域名**，不同的版本有不同的子域名, 路由到不同的实例:
+  - `v1.api.pdai.tech/user` 表示 v1版本的接口, 保持原有接口不动, 路由到instance1
+  - `v2.api.pdai.tech/user` 表示 v2版本的接口，更新新的接口, 路由到instance2
+- 网关路由不同子目录到**不同的实例**（不同package也可以）
+  - `api.pdai.tech/v1/user` 表示 v1版本的接口, 保持原有接口不动, 路由到instance1
+  - `api.pdai.tech/v2/user` 表示 v2版本的接口，更新新的接口, 路由到instance2
+- **同一实例**，用注解隔离不同版本控制
+  - `api.pdai.tech/v1/user` 表示 v1版本的接口, 保持原有接口不动，匹配@ApiVersion("1")的handlerMapping
+  - `api.pdai.tech/v2/user` 表示 v2版本的接口，更新新的接口，匹配@ApiVersion("2")的handlerMapping
+
+这里主要展示第四种单一实例中如何优雅的控制接口的版本。
+
+
+
+
+
+## websocket sb-03
+
+https://blog.csdn.net/qq_42402854/article/details/130948270

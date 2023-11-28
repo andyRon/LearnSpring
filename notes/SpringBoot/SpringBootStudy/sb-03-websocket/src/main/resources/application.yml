@@ -1,0 +1,6 @@
+server:
+  port: 8081
+spring:
+  thymeleaf:
+    check-template-location: true
+    template-resolver-order: 1
