@@ -8,10 +8,11 @@ public class User {
     private String name;
 
     public User() {
-        System.out.println("User的无参数构造方法");
+        System.out.println("User被无参数构造创建");
     }
 
     public User(String name) {
+        System.out.println("User被有参数构造创建");
         this.name = name;
     }
 
@@ -24,6 +25,6 @@ public class User {
     }
 
     public void show() {
-        System.out.println("name=" + name);
+        System.out.println("User:(name=" + name + ")");
     }
 }

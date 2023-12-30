@@ -4,22 +4,22 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- 无参构造创建bean -->
-<!--    <bean id="user" class="com.andyron.pojo.User">-->
-<!--        <property name="name" value="戎先生"></property>-->
-<!--    </bean>-->
+    <bean id="user" class="com.andyron.pojo.User">
+        <property name="name" value="戎先生"></property>
+    </bean>
 
     <!-- 有参构造创建方式1 -->
-<!--    <bean id="user" class="com.andyron.pojo.User">-->
-<!--        <constructor-arg index="0" value="Mr.Ron"></constructor-arg>-->
-<!--    </bean>-->
+    <bean id="user_1" class="com.andyron.pojo.User">
+        <constructor-arg index="0" value="Mr.Ron"></constructor-arg>
+    </bean>
 
     <!-- 有参构造创建方式2 -->
-<!--    <bean id="user" class="com.andyron.pojo.User">-->
-<!--        <constructor-arg type="java.lang.String" value="Tom"></constructor-arg>-->
-<!--    </bean>-->
+    <bean id="user_2" class="com.andyron.pojo.User">
+        <constructor-arg type="java.lang.String" value="Tom"></constructor-arg>
+    </bean>
 
     <!-- 有参构造创建方式3 -->
-    <bean id="user" class="com.andyron.pojo.User">
+    <bean id="user_3" class="com.andyron.pojo.User">
         <constructor-arg name="name" value="Andy"></constructor-arg>
     </bean>
 
