@@ -16,5 +16,7 @@ public class TestUser {
         user.setPhone("13553575588");
         user.setMessage("test a custom");
         myService.testParams(user);
+
+
     }
 }

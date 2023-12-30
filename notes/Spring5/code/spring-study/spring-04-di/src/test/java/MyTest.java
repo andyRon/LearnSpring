@@ -24,6 +24,8 @@ public class MyTest {
         System.out.println(user.hashCode());
         System.out.println(user2.hashCode());
         System.out.println(user == user2);
+
+
     }
 
 }
