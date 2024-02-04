@@ -18,7 +18,7 @@ public class UrlResourceDemo {
             System.out.println(url.getFilename());
             System.out.println(url.getURI());
             System.out.println(url.getDescription());
-            System.out.println(url.getInputStream().read()); // 首个字符的十进制数
+            System.out.println(url.getInputStream().read()); // 首个字符的十进制数 l 108
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

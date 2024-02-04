@@ -1,5 +1,4 @@
 spring6
------
 
 https://www.bilibili.com/video/BV1kR4y1b7Qc
 
@@ -112,7 +111,7 @@ spring core提供了IOC,DI,Bean配置装载创建的核心实现。核心概念�
 ```java
 // dom4j解析beans.xml文件，从中获取class属性值，类的全类名
  // 通过反射机制调用无参数构造方法创建对象
- Class clazz = Class.forName("com.atguigu.spring6.bean.HelloWorld");
+ Class clazz = Class.forName("com.andyron.spring6.bean.HelloWorld");
  //Object obj = clazz.newInstance();
  Object object = clazz.getDeclaredConstructor().newInstance();
 ```
@@ -204,7 +203,7 @@ DI（Dependency Injection）：依赖注入，依赖注入实现了控制反转�
 
 #### IoC容器在Spring的实现
 
-Spring 的 IoC 容器就是 IoC思想的一个落地的产品实现。IoC容器中管理的组件也叫做 bean。在创建 bean 之前，首先需要创建IoC 容器。Spring 提供了IoC 容器的两种实现方式：
+Spring 的 IoC容器就是 IoC思想的一个落地的产品实现。IoC容器中管理的组件也叫做bean。在创建 bean 之前，首先需要创建IoC 容器。Spring 提供了IoC 容器的两种实现方式：
 
 1. **BeanFactory**
 
@@ -212,18 +211,18 @@ Spring 的 IoC 容器就是 IoC思想的一个落地的产品实现。IoC容器�
 
 2. **ApplicationContext**
 
-BeanFactory 的子接口，提供了更多高级特性。面向 Spring 的使用者，几乎所有场合都使用 ApplicationContext 而不是底层的 BeanFactory。
+BeanFactory 的子接口，提供了更多高级特性。面向 Spring 的使用者，几乎所有场合都使用 `ApplicationContext` 而不是底层的 BeanFactory。
 
 **ApplicationContext的主要实现类**
 
 ![](images/image-20230501231641898.png)
 
-| 类型名                             | 简介                                                                                           |
-| ------------------------------- | -------------------------------------------------------------------------------------------- |
-| ClassPathXmlApplicationContext  | 通过读取类路径下的 XML 格式的配置文件创建 IOC 容器对象                                                             |
-| FileSystemXmlApplicationContext | 通过文件系统路径读取 XML 格式的配置文件创建 IOC 容器对象                                                            |
-| ConfigurableApplicationContext  | ApplicationContext 的子接口，包含一些扩展方法 refresh() 和 close() ，让 ApplicationContext 具有启动、关闭和刷新上下文的能力。 |
-| WebApplicationContext           | 专门为 Web 应用准备，基于 Web 环境创建 IOC 容器对象，并将对象引入存入 ServletContext 域中。                                |
+| 类型名                            | 简介                                                         |
+| --------------------------------- | ------------------------------------------------------------ |
+| `ClassPathXmlApplicationContext`  | 通过读取类路径下的 XML 格式的配置文件创建 IOC 容器对象       |
+| `FileSystemXmlApplicationContext` | 通过文件系统路径读取 XML 格式的配置文件创建 IOC 容器对象     |
+| `ConfigurableApplicationContext`  | ApplicationContext 的子接口，包含一些扩展方法 refresh() 和 close() ，让 ApplicationContext 具有启动、关闭和刷新上下文的能力。 |
+| `WebApplicationContext`           | 专门为 Web 应用准备，基于 Web 环境创建 IOC 容器对象，并将对象引入存入 ServletContext 域中。 |
 
 https://xie.infoq.cn/article/75405cc2cb4d512e80e8065a1?utm_source=rss&utm_medium=article
 
@@ -308,6 +307,21 @@ java中，instanceof运算符用于判断前面的对象是否是后面的类，
     <value><![CDATA[a < b]]></value>
 </property>
 ```
+
+
+
+```
+2024-02-01 09:38:47 301 [main] DEBUG org.springframework.context.support.ClassPathXmlApplicationContext - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@5023bb8b
+2024-02-01 09:38:47 365 [main] DEBUG org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loaded 2 bean definitions from class path resource [bean-di.xml]
+2024-02-01 09:38:47 378 [main] DEBUG org.springframework.beans.factory.support.DefaultListableBeanFactory - Creating shared instance of singleton bean 'book'
+无参数构造执行了。。。
+2024-02-01 09:38:47 395 [main] DEBUG org.springframework.beans.factory.support.DefaultListableBeanFactory - Creating shared instance of singleton bean 'bookCon'
+2024-02-01 09:38:47 402 [main] WARN org.springframework.core.LocalVariableTableParameterNameDiscoverer - Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.andyron.spring6.iocxml.di.Book
+有参数构造执行了。。。
+Book{bname='大数据', author='andy', others='null'}
+```
+
+
 
 #### 实验五：为对象类型属性赋值
 
@@ -676,7 +690,7 @@ public class MyBeanPost implements BeanPostProcessor {
 
 `FactoryBean`是Spring提供的一种整合第三方框架的常用机制。和普通的bean不同，配置一个FactoryBean类型的bean，在获取bean的时候得到的并不是class属性中配置的这个类的对象，而是getObject()方法的返回值。通过这种机制，Spring可以帮我们把复杂组件创建的详细过程和繁琐细节都屏蔽起来，只把最简洁的使用界面展示给我们。
 
-将来我们整合Mybatis时，Spring就是通过FactoryBean机制来帮我们创建SqlSessionFactory对象的。🔖
+将来我们整合Mybatis时，Spring就是通过FactoryBean机制来帮我们创建`SqlSessionFactory`对象的。
 
 ```java
 public class MyFactoryBean implements FactoryBean<User> {
@@ -701,6 +715,14 @@ ApplicationContext context = new ClassPathXmlApplicationContext("bean-factorybea
 User user = context.getBean("user", User.class);
 System.out.println(user);
 ```
+
+
+
+> 在MyBatis中，当我们需要扫描Mapper的时候，需要添加@MapperScan注解完成对Mapper对象的扫描，@MapperScan导入MapperScannerRegistrar类完成扫描。
+>
+> 但是Mapper类都是接口，无法被实例化，那么为什么在Spring中能够直接注入Mapper对象呢？
+>
+> 实际上Mybatis是通过FactoryBean对象创建Mapper对象的代理对象，完成Mapper接口的注入。
 
 #### 实验十三：基于xml自动装配
 
@@ -777,7 +799,7 @@ public class UserDaoImpl implements UserDao {
 > 
 > 若在IOC中，没有任何一个兼容类型的bean能够为属性赋值，则该属性不装配，即值为默认值null
 > 
-> 若在IOC中，有多个兼容类型的bean能够为属性赋值，则抛出异常NoUniqueBeanDefinitionException
+> 若在IOC中，有多个兼容类型的bean能够为属性赋值，则抛出异常`NoUniqueBeanDefinitionException`
 
 > 自动装配方式：byName
 > 
@@ -862,12 +884,12 @@ Spring 默认不使用注解装配 Bean，因此我们需要在 Spring 的 XML �
 
 Spring 提供了以下多个注解，这些注解可以直接标注在 Java 类上，将它们定义成 Spring Bean。
 
-| 注解          | 说明                                                                                                           |
-| ----------- | ------------------------------------------------------------------------------------------------------------ |
-| @Component  | 该注解用于描述 Spring 中的 Bean，它是一个泛化的概念，仅仅表示容器中的一个组件（Bean），并且可以作用在应用的任何层次，例如 Service 层、Dao 层等。  使用时只需将该注解标注在相应类上即可。 |
-| @Repository | 该注解用于将数据访问层（Dao 层）的类标识为 Spring 中的 Bean，其功能与 @Component 相同。                                                   |
-| @Service    | 该注解通常作用在业务层（Service 层），用于将业务层的类标识为 Spring 中的 Bean，其功能与 @Component 相同。                                        |
-| @Controller | 该注解通常作用在控制层（如SpringMVC 的 Controller），用于将控制层的类标识为 Spring 中的 Bean，其功能与 @Component 相同。                          |
+| 注解          | 说明                                                         |
+| ------------- | ------------------------------------------------------------ |
+| `@Component`  | 该注解用于描述 Spring 中的 Bean，它是一个泛化的概念，仅仅表示容器中的一个组件（Bean），并且可以作用在应用的任何层次，例如 Service 层、Dao 层等。  使用时只需将该注解标注在相应类上即可。 |
+| `@Repository` | 该注解用于将数据访问层（Dao层）的类标识为 Spring 中的 Bean，其功能与 @Component 相同。 |
+| `@Service`    | 该注解通常作用在业务层（Service层），用于将业务层的类标识为 Spring 中的 Bean，其功能与 @Component 相同。 |
+| `@Controller` | 该注解通常作用在控制层（如SpringMVC 的 Controller），用于将控制层的类标识为 Spring 中的 Bean，其功能与 @Component 相同。 |
 
 ```java
 @Component(value = "user") // 类似 <bean id="user" class="...">，value默认值就是类名（首字母小写）可省略
@@ -903,63 +925,63 @@ public @interface Autowired {
 ##### 场景一：属性注入
 
 ```java
-    // 第一种方式 属性注入
-    @Autowired
-    private UserService userService;
+// 第一种方式 属性注入
+@Autowired
+private UserService userService;
 ```
 
 ##### 场景二：set注入
 
 ```java
-    // 第二种方式 set方式注入
-    private UserService userService;
-    @Autowired
-    public void setUserService1(UserService userService) {
-        this.userService = userService;
-    }
+// 第二种方式 set方式注入
+private UserService userService;
+@Autowired
+public void setUserService1(UserService userService) {
+  this.userService = userService;
+}
 ```
 
 ##### 场景三：构造方法注入
 
 ```java
-    // 第三种方式 构造方法注入
-    private UserService userService;
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+// 第三种方式 构造方法注入
+private UserService userService;
+@Autowired
+public UserController(UserService userService) {
+  this.userService = userService;
+}
 ```
 
 ##### 场景四：形参上注入
 
 ```java
-    // 第四种方式 形参上注入
-    private UserService userService;
-    public UserController(@Autowired UserService userService) {
-        this.userService = userService;
-    }
+// 第四种方式 形参上注入
+private UserService userService;
+public UserController(@Autowired UserService userService) {
+  this.userService = userService;
+}
 ```
 
 ##### 场景五：只有一个构造函数，无注解
 
 ```java
-    // 第五种方式 只有一个有参构造函数式，不需要@Autowired
-    private UserService userService;
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+// 第五种方式 只有一个有参构造函数式，不需要@Autowired
+private UserService userService;
+public UserController(UserService userService) {
+  this.userService = userService;
+}
 ```
 
 ##### 场景六：@Autowired注解和@Qualifier注解联合
 
 ```java
-    // 第六种方式：两个注解，根据名称注入
-    @Autowired
-    @Qualifier(value = "userRedisDaoImpl")
-    private UserDao userDao;
+// 第六种方式：两个注解，根据名称注入
+@Autowired
+@Qualifier(value = "userRedisDaoImpl")
+private UserDao userDao;
 ```
 
-当UserDao有多个实现bean时，可使用@`Qualifier`进行根据名称装配。
+当UserDao有多个实现bean时，可使用`@Qualifier`进行根据名称装配。
 
 #### 实验二：@Resource注入
 
@@ -1625,7 +1647,7 @@ public class SpringTestJunit4 {
 
 **C：一致性(Consistency)**
 
-事务的一致性指的是在一个事务执行之前和执行之后数据库都必须处于一致性状态。
+事务的一致性指的是**在一个事务执行之前和执行之后数据库都必须处于一致性状态**。
 
 如果事务成功地完成，那么系统中所有变化将正确地应用，系统处于有效状态。
 
@@ -1944,7 +1966,7 @@ Java的标准java.net.URL类和各种URL前缀的标准处理程序无法满足�
 
 ### 8.2 Resource接口
 
-Spring 的 Resource 接口位于 org.springframework.core.io 中。 旨在成为一个更强大的接口，用于抽象对低级资源的访问。以下显示了Resource接口定义的方法
+Spring 的 `Resource` 接口位于 `org.springframework.core.io` 中。 旨在成为一个更强大的接口，用于**抽象对低级资源的访问**。以下显示了Resource接口定义的方法
 
 ```java
 public interface Resource extends InputStreamSource {
@@ -1977,13 +1999,11 @@ public interface Resource extends InputStreamSource {
 }
 ```
 
-Resource接口继承了InputStreamSource接口，提供了很多InputStreamSource所没有的方法。InputStreamSource接口，只有一个方法：
+Resource接口继承了`InputStreamSource`接口，提供了很多InputStreamSource所没有的方法。InputStreamSource接口，只有一个方法：
 
 ```java
 public interface InputStreamSource {
-
     InputStream getInputStream() throws IOException;
-
 }
 ```
 
@@ -2007,7 +2027,9 @@ getFilename(): 资源的文件名是什么 例如：最后一部分的文件名 
 
 ### 8.3 Resource的实现类
 
-Resource 接口是 Spring 资源访问策略的抽象，它本身并不提供任何资源访问实现，具体的资源访问由该接口的实现类完成——每个实现类代表一种资源访问策略。Resource一般包括这些实现类：UrlResource、ClassPathResource、FileSystemResource、ServletContextResource、InputStreamResource、ByteArrayResource
+Resource 接口是 Spring 资源访问策略的抽象，它本身并不提供任何资源访问实现，具体的资源访问由该接口的实现类完成——每个实现类代表一种资源访问策略。Resource一般包括这些实现类：UrlResource、ClassPathResource、FileSystemResource、ServletContextResource、InputStreamResource、ByteArrayResource等。
+
+
 
 #### 1 UrlResource访问网络资源
 
@@ -2041,23 +2063,43 @@ InputStreamResource 是给定的输入流(InputStream)的Resource实现。它的
 
 ### 8.4 Resource类图
 
-### 8.5 ResourceLoader 接口
+![](images/image-20240204163759533.png)
+
+### 8.5 ResourceLoader接口
 
 Spring 提供如下两个标志性接口：
 
-**（1）ResourceLoader ：** 该接口实现类的实例可以获得一个Resource实例。
+1. `ResourceLoader`：该接口实现类的实例可以获得一个Resource实例。
 
-**（2） ResourceLoaderAware ：** 该接口实现类的实例将获得一个ResourceLoader的引用。
+2. `ResourceLoaderAware`：该接口实现类的实例将获得一个ResourceLoader的引用。
 
 在ResourceLoader接口里有如下方法：
 
-（1）**Resource getResource（String location）** ： 该接口仅有这个方法，用于返回一个Resource实例。ApplicationContext实现类都实现ResourceLoader接口，因此ApplicationContext可直接获取Resource实例。
+`Resource getResource(String location)`： 该接口仅有这个方法，用于返回一个Resource实例。`ApplicationContext`实现类都实现ResourceLoader接口，因此ApplicationContext可直接获取Resource实例。
+
+```java
+ApplicationContext ctx = new ClassPathXmlApplicationContext();
+Resource res = ctx.getResource("andyron.txt");
+System.out.println(res.getFilename());
+```
+
+```java
+ApplicationContext ctx = new FileSystemXmlApplicationContext();
+Resource res = ctx.getResource("andyron.txt");
+System.out.println(res.getFilename());
+```
+
+
 
 #### ResourceLoader 总结
 
-Spring将采用和ApplicationContext相同的策略来访问资源。也就是说，如果ApplicationContext是FileSystemXmlApplicationContext，res就是FileSystemResource实例；如果ApplicationContext是ClassPathXmlApplicationContext，res就是ClassPathResource实例
+Spring将采用和ApplicationContext相同的策略来访问资源。也就是说，
 
-当Spring应用需要进行资源访问时，实际上并不需要直接使用Resource实现类，而是调用ResourceLoader实例的getResource()方法来获得资源，ReosurceLoader将会负责选择Reosurce实现类，也就是确定具体的资源访问策略，从而将应用程序和具体的资源访问策略分离开来
+- 如果ApplicationContext是FileSystemXmlApplicationContext，res就是FileSystemResource实例；
+
+- 如果ApplicationContext是ClassPathXmlApplicationContext，res就是ClassPathResource实例
+
+当Spring应用需要进行资源访问时，实际上并不需要直接使用Resource实现类，而是调用ResourceLoader实例的`getResource()`方法来获得资源，ReosurceLoader将会负责选择Reosurce实现类，也就是**确定具体的资源访问策略，从而将应用程序和具体的资源访问策略分离开来**。
 
 另外，使用ApplicationContext访问资源时，可通过不同前缀指定强制使用指定的ClassPathResource、FileSystemResource等实现类
 
@@ -2069,24 +2111,147 @@ Resource res = ctx.getResource("http://localhost:8080/beans.xml");
 
 ### 8.6 ResourceLoaderAware接口
 
-🔖p75
+ResourceLoaderAware接口实现类的实例将**获得一个ResourceLoader的引用**，ResourceLoaderAware接口也提供了一个`setResourceLoade()`方法，该方法将由Spring容器负责调用，Spring容器会将一个Resourceloader对象作为该方法的参数传入。
+
+如果把实现ResourceLoaderAware接口的Bean类部署在Spring容器中，Spring容器会将自身当成ResourceLoader作为setResourceLoader()方法的参数传入。由于ApplicationContext的实现类都实现了ResourceLoader接口，Spring容器自身完全可作为ResorceLoader使用。
+
+```java
+public class TestBean implements ResourceLoaderAware {
+
+    private ResourceLoader resourceLoader;
+
+    @Override
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
+
+    public ResourceLoader getResourceLoader() {
+        return resourceLoader;
+    }
+}
+```
+
+```xml
+<bean id="testBean" class="com.andyron.resourceloaderaware.TestBean"></bean>
+```
+
+```java
+ApplicationContext context = new ClassPathXmlApplicationContext("bean.xml");
+TestBean testBean = context.getBean("testBean", TestBean.class);
+ResourceLoader resourceLoader = testBean.getResourceLoader();
+
+System.out.println(context == resourceLoader);  // true
+```
 
 ### 8.7 使用Resource 作为属性
 
 >  通俗的讲就是，通过依赖注入的方式，把资源位置从代码中转移到配置文件中。
 
-前面介绍了 Spring 提供的资源访问策略，但这些依赖访问策略要么需要使用 Resource 实现类，要么需要使用 ApplicationContext 来获取资源。实际上，当应用程序中的 Bean 实例需要访问资源时，Spring 有更好的解决方法：直接利用依赖注入。从这个意义上来看，Spring 框架不仅充分利用了策略模式来简化资源访问，而且还将策略模式和 IoC 进行充分地结合，最大程度地简化了 Spring 资源访问。
+前面介绍了 Spring 提供的资源访问策略，但这些依赖访问策略要么需要使用 Resource 实现类，要么需要使用 ApplicationContext 来获取资源。
 
-归纳起来，**如果 Bean 实例需要访问资源，有如下两种解决方案：**
+实际上，当应用程序中的 Bean 实例需要访问资源时，Spring 有更好的解决方法：直接利用依赖注入。从这个意义上来看，Spring 框架不仅充分利用了**策略模式**来简化资源访问，而且还将策略模式和 IoC 进行充分地结合，最大程度地简化了 Spring 资源访问。
+
+归纳起来，**如果Bean实例需要访问资源，有如下两种解决方案：**
 
 - **代码中获取 Resource 实例。**
 - **使用依赖注入。**
 
-对于第一种方式，当程序获取 Resource 实例时，总需要提供 Resource 所在的位置，不管通过 FileSystemResource 创建实例，还是通过 ClassPathResource 创建实例，或者通过 ApplicationContext 的 getResource() 方法获取实例，都需要提供资源位置。这意味着：资源所在的物理位置将被耦合到代码中，如果资源位置发生改变，则必须改写程序。因此，通常建议采用第二种方法，让 Spring 为 Bean 实例**依赖注入**资源。
+对于第一种方式，当程序获取 Resource 实例时，总需要提供 Resource 所在的位置，不管通过 FileSystemResource 创建实例，还是通过 ClassPathResource 创建实例，或者通过 ApplicationContext 的 getResource() 方法获取实例，都需要提供资源位置。这意味着：资源所在的物理位置将被耦合到代码中，**如果资源位置发生改变，则必须改写程序**。因此，通常建议采用第二种方法，让 Spring 为 Bean 实例**依赖注入**资源。
+
+```java
+package com.andyron.di;
+
+import org.springframework.core.io.Resource;
+
+public class ResourceBean {
+    private Resource res;
+
+    public Resource getRes() {
+        return res;
+    }
+
+    public void setRes(Resource res) {
+        this.res = res;
+    }
+
+    public void parse(){
+        System.out.println(res.getFilename());
+        System.out.println(res.getDescription());
+    }
+}
+
+```
+
+```xml
+    <bean id="resourceBean" class="com.andyron.di.ResourceBean" >
+        <!-- 可以使用file:、http:、ftp:等前缀强制Spring采用对应的资源访问策略 -->
+        <!-- 如果不采用任何前缀，则Spring将采用与该ApplicationContext相同的资源访问策略来访问资源 -->
+        <property name="res" value="classpath:andy.txt"/>
+    </bean>
+```
+
+
+
+```java
+ApplicationContext context = new ClassPathXmlApplicationContext("bean-di.xml");
+ResourceBean resourceBean = context.getBean("resourceBean", ResourceBean.class);
+resourceBean.parse();
+```
+
+资源位置就写到的配置文件中，而不是代码中。
 
 ### 8.8 应用程序上下文和资源路径
 
-🔖p77
+不管以怎样的方式创建ApplicationContext实例，都需要为ApplicationContext指定配置文件，Spring允许使用一份或多分XML配置文件。当程序创建ApplicationContext实例时，通常也是以Resource的方式来访问配置文件的，所以ApplicationContext完全支持ClassPathResource、 FilesystemResource. ServletContextResource等资源访问方式。
+
+ApplicationContext确定资源访问策略通常有两种方法：
+
+#### 1 使用ApplicationContext实现类指定访问策略
+
+创建ApplicationContext对象时，通常可以使用如下实现类：
+
+- ClassPathXMLApplicationContext：对应使用ClassPathResource进行资源访问。
+
+- FilesystemXmlApplicationContext：对应使用FileSystemResource进行资源访问。
+
+- XmlWebApplicationContext ：对应使用SerwletContextResource进行资源访问。
+
+当使用ApplicationContext的不同实现类时，就意味着Spring使用响应的资源访问策略。
+
+#### 2 使用前缀指定访问策略
+
+##### 普通：
+
+```java
+ApplicationContext context = new ClassPathXmlApplicationContext("classpath:bean.xml");
+        Resource resource = context.getResource("andy.txt");
+        System.out.println(resource.getDescription());
+```
+
+##### classpath通配符使用
+
+`classpath*：`前缀提供了加载多个XML配置文件的能力，当使用`classpath*：`前缀来指定XML配置文件时，系统将搜索类加载路径，找到所有与文件名匹配的文件，分别加载文件中的配管定义，最后合并成一个
+
+```java
+ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:bean.xml");
+
+```
+
+使用`classpath：`前缀，Spring则只加载第一个符合条件的XML文件
+
+注意：`classpath*：`前缀仅对ApplicationContext有效。实际情况是，创建ApplicationContext时，分别访问多个配置文件（通过ClassLoader的getResource方法实现）。因此，`classpath*：`前缀不可用于Resource。
+
+##### 通配符其他方式
+
+```java
+ApplicationContext context = new ClassPathXmlApplicationContext("classpath:bean*.xml");
+```
+
+```java
+ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:bean*.xml");
+```
+
+
 
 ## 9 国际化：i18n
 
@@ -2350,11 +2515,17 @@ public class CannotBlankValidator implements ConstraintValidator<CannotBlank, St
 
 ## 11 提前编译：AOT
 
-### 11.1、AOT概述
+### AOT概述
 
-![](images/image-20230507012559909.png)
+- **JIT**（JUST IN TIME），动态编译（实时），边运行边编译在程序运行时候，动态生成代码。【程序运行过程中，把字节码转换硬盘上直接运行机器码，部署到环境过程】
 
-#### 11.1.1、JIT与AOT的区别
+​	缺点：启动比较慢，编译时候需要占用运行时候资源
+
+- **AOT**（ahead of time），运行前编译，提前编译可以把源代码直接转换机器码，启动快，内存占用低。【在程序运行之前，就把字节码转换机器码】
+
+​	缺点：运行时候不能优化，程序安装时间过长。
+
+### JIT与AOT的区别
 
 JIT和AOT 这个名词是指两种不同的编译方式，这两种编译方式的主要区别在于是否在“运行时”进行编译
 
@@ -2378,38 +2549,139 @@ AOT 编译能直接将源代码转化为机器码，内存占用低，启动速�
 
 **简单来讲，**Java 虚拟机加载已经预编译成二进制库，可以直接执行。不必等待及时编译器的预热，减少 Java 应用给人带来“第一次运行慢” 的不良体验。
 
-在程序运行前编译，可以避免在运行时的编译性能消耗和内存消耗
-可以在程序运行初期就达到最高性能，程序启动速度快
-运行产物只有机器码，打包体积小
+在程序运行前编译，可以避免在运行时的编译性能消耗和内存消耗；可以在程序运行初期就达到最高性能，程序启动速度快；运行产物只有机器码，打包体积小。
 
 **AOT的缺点**
 
-由于是静态提前编译，不能根据硬件情况或程序运行情况择优选择机器指令序列，理论峰值性能不如JIT
+由于是静态提前编译，不能根据硬件情况或程序运行情况择优选择机器指令序列，理论峰值性能不如JIT。
 没有动态能力，同一份产物不能跨平台运行
+
+
 
 第一种即时编译 (JIT) 是默认模式，Java Hotspot 虚拟机使用它在运行时将字节码转换为机器码。后者提前编译 (AOT)由新颖的 GraalVM 编译器支持，并允许在构建时将字节码直接静态编译为机器码。
 
-现在正处于云原生，降本增效的时代，Java 相比于 Go、Rust 等其他编程语言非常大的弊端就是启动编译和启动进程非常慢，这对于根据实时计算资源，弹性扩缩容的云原生技术相冲突，Spring6 借助 AOT 技术在运行时内存占用低，启动速度快，逐渐的来满足 Java 在云原生时代的需求，对于大规模使用 Java 应用的商业公司可以考虑尽早调研使用 JDK17，通过云原生技术为公司实现降本增效。
+现在正处于云原生，降本增效的时代，Java 相比于Go、Rust等其他编程语言非常大的弊端就是**启动编译和启动进程非常慢**，这对于根据实时计算资源，弹性扩缩容的云原生技术相冲突，Spring6 借助 AOT技术在运行时内存占用低，启动速度快，逐渐的来满足 Java 在云原生时代的需求，对于大规模使用 Java应用的商业公司可以考虑尽早调研使用JDK17，通过云原生技术为公司实现降本增效。
 
-#### 11.1.2、Graalvm
+### Graalvm
 
-Spring6 支持的 AOT 技术，这个 GraalVM  就是底层的支持，Spring 也对 GraalVM 本机映像提供了一流的支持。GraalVM 是一种高性能 JDK，旨在加速用 Java 和其他 JVM 语言编写的应用程序的执行，同时还为 JavaScript、Python 和许多其他流行语言提供运行时。 GraalVM 提供两种运行 Java 应用程序的方法：在 HotSpot JVM 上使用 Graal 即时 (JIT) 编译器或作为提前 (AOT) 编译的本机可执行文件。 GraalVM 的多语言能力使得在单个应用程序中混合多种编程语言成为可能，同时消除了外语调用成本。GraalVM 向 HotSpot Java 虚拟机添加了一个用 Java 编写的高级即时 (JIT) 优化编译器。
+Spring6 支持的 AOT 技术，这个 GraalVM  就是底层的支持，Spring 也对 GraalVM 本机映像提供了一流的支持。GraalVM 是一种高性能 JDK，旨在加速用 Java 和其他 JVM 语言编写的应用程序的执行，同时还为 JavaScript、Python 和许多其他流行语言提供运行时。 GraalVM提供两种运行 Java 应用程序的方法：在 HotSpot JVM 上使用 Graal 即时 (JIT) 编译器或作为提前 (AOT) 编译的本机可执行文件。 GraalVM 的多语言能力使得在**单个应用程序中混合多种编程语言**成为可能，同时消除了外语调用成本。GraalVM 向 HotSpot Java 虚拟机添加了一个用 Java 编写的高级即时 (JIT) 优化编译器。
 
 GraalVM 具有以下特性：
 
-（1）一种高级优化编译器，它生成更快、更精简的代码，需要更少的计算资源
+1. 一种高级优化编译器，它生成更快、更精简的代码，需要更少的计算资源
 
-（2）AOT 本机图像编译提前将 Java 应用程序编译为本机二进制文件，立即启动，无需预热即可实现最高性能
+2. AOT 本机图像编译提前将 Java 应用程序编译为本机二进制文件，立即启动，无需预热即可实现最高性能
 
-（3）Polyglot 编程在单个应用程序中利用流行语言的最佳功能和库，无需额外开销
+3. Polyglot编程在单个应用程序中利用流行语言的最佳功能和库，无需额外开销
 
-（4）高级工具在 Java 和多种语言中调试、监视、分析和优化资源消耗
+4. 高级工具在 Java 和多种语言中调试、监视、分析和优化资源消耗
 
 总的来说对云原生的要求不算高短期内可以继续使用 2.7.X 的版本和 JDK8，不过 Spring 官方已经对 Spring6 进行了正式版发布。
 
-#### 11.1.3、Native Image
+### Native Image
 
-目前业界除了这种在JVM中进行AOT的方案，还有另外一种实现Java AOT的思路，那就是直接摒弃JVM，和C/C++一样通过编译器直接将代码编译成机器代码，然后运行。这无疑是一种直接颠覆Java语言设计的思路，那就是GraalVM Native Image。它通过C语言实现了一个超微缩的运行时组件 —— Substrate VM，基本实现了JVM的各种特性，但足够轻量、可以被轻松内嵌，这就让Java语言和工程摆脱JVM的限制，能够真正意义上实现和C/C++一样的AOT编译。这一方案在经过长时间的优化和积累后，已经拥有非常不错的效果，基本上成为Oracle官方首推的Java AOT解决方案。
-Native Image 是一项创新技术，可将 Java 代码编译成独立的本机可执行文件或本机共享库。在构建本机可执行文件期间处理的 Java 字节码包括所有应用程序类、依赖项、第三方依赖库和任何所需的 JDK 类。生成的自包含本机可执行文件特定于不需要 JVM 的每个单独的操作系统和机器体系结构。
+目前业界除了这种在JVM中进行AOT的方案，还有另外一种实现Java AOT的思路，那就是**直接摒弃JVM，和C/C++一样通过编译器直接将代码编译成机器代码，然后运行**。这无疑是一种直接颠覆Java语言设计的思路，那就是GraalVM Native Image。它通过C语言实现了一个超微缩的运行时组件 —— Substrate VM，基本实现了JVM的各种特性，但足够轻量、可以被轻松内嵌，这就让Java语言和工程摆脱JVM的限制，能够真正意义上实现和C/C++一样的AOT编译。这一方案在经过长时间的优化和积累后，已经拥有非常不错的效果，基本上成为Oracle官方首推的Java AOT解决方案。
+Native Image 是一项创新技术，可将Java代码编译成独立的本机可执行文件或本机共享库。在构建本机可执行文件期间处理的Java字节码包括所有应用程序类、依赖项、第三方依赖库和任何所需的 JDK 类。生成的自包含本机可执行文件特定于不需要 JVM 的每个单独的操作系统和机器体系结构。
 
-🔖
+### 演示Native Image构建过程
+
+#### 第一步，安装GraalVM编辑器
+
+https://www.graalvm.org/downloads/
+
+https://www.graalvm.org/latest/docs/getting-started/macos/
+
+```shell
+# macos上查看文件扩展属性
+$ xattr graalvm-jdk-21_macos-aarch64_bin.tar.gz
+com.apple.metadata:kMDItemWhereFroms
+com.apple.provenance
+com.apple.quarantine
+```
+
+
+
+```shell
+# 递归地删除指定目录中的全部文件的“quarantine”扩展属性。
+# 因为在macOS系统中，当你从网络或其他未知来源下载并打开文件时，系统会将该文件标记为“quarantine”，以防止其潜在的安全风险。
+sudo xattr -r -d com.apple.quarantine graalvm-jdk-21_macos-aarch64_bin.tar.gz
+
+tar -xzf graalvm-jdk-21_macos-aarch64_bin.tar.gz
+
+sudo mv graalvm-jdk-21.0.2+13.1 /Library/Java/JavaVirtualMachines
+```
+
+
+
+```shell
+$ /usr/libexec/java_home -V
+Matching Java Virtual Machines (5):
+    21.0.2 (arm64) "Oracle Corporation" - "Oracle GraalVM 21.0.2+13.1" /Library/Java/JavaVirtualMachines/graalvm-jdk-21.0.2+13.1/Contents/Home
+    21.0.1 (arm64) "Oracle Corporation" - "Java SE 21.0.1" /Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home
+    17.0.5 (arm64) "Azul Systems, Inc." - "Zulu 17.38.21" /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+    11.0.17 (arm64) "Azul Systems, Inc." - "Zulu 11.60.19" /Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home
+    1.8.0_352 (arm64) "Azul Systems, Inc." - "Zulu 8.66.0.15" /Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home
+/Library/Java/JavaVirtualMachines/graalvm-jdk-21.0.2+13.1/Contents/Home
+```
+
+配置Java_Home
+
+
+
+```shell
+$ java -version
+java version "21.0.2" 2024-01-16 LTS
+Java(TM) SE Runtime Environment Oracle GraalVM 21.0.2+13.1 (build 21.0.2+13-LTS-jvmci-23.1-b30)
+Java HotSpot(TM) 64-Bit Server VM Oracle GraalVM 21.0.2+13.1 (build 21.0.2+13-LTS-jvmci-23.1-b30, mixed mode, sharing)
+```
+
+
+
+##### 安装native-image插件
+
+macOS安装的GraalVM，自带native-image工具
+
+
+
+#### 第二部，安装C++编译环境
+
+安装Visual Studio软件，其中包含C++编译环境
+
+mac中，这部可以省略
+
+#### 第三步，编写java代码，编译，构建，生成可执行文件
+
+User.java:
+
+```java
+public class User {
+	public static void main(String[] args) {
+		System.out.println("hello graalvm");
+	}
+}
+```
+
+```shell
+$ javac User.java
+$ native-image User
+$ ./user
+hello graalvm
+```
+
+直接生成一个可执行文件`user`。
+
+```shell
+$ ll
+total 14664
+-rw-r--r--  1 andyron  staff   415B  2  4 20:29 User.class
+-rw-r--r--  1 andyron  staff   105B  2  4 20:29 User.java
+-rwxr-xr-x  1 andyron  staff   7.1M  2  4 20:31 user
+```
+
+可以看到这个User最终打包产出的二进制文件大小为7.1M，这是包含了SVM和JDK各种库后的大小，虽然相比C/C++的二进制文件来说体积偏大，但是对比完整JVM来说，可以说是已经是非常小了。
+
+相比于使用JVM运行，Native Image的速度要快上不少，cpu占用也更低一些，从官方提供的各类实验数据也可以看出Native Image对于启动速度和内存占用带来的提升是非常显著的：
+
+![](images/image-20240204203654929.png)
+
+![](images/image-20240204203715474.png)

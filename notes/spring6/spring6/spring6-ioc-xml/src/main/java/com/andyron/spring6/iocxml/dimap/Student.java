@@ -13,7 +13,7 @@ public class Student {
     private List<Lesson> lessonList;
 
     public void run() {
-        System.out.println("学生编号：" + sid + "学生名字：" + sname);
+        System.out.println("学生编号：" + sid + "， 学生名字：" + sname);
         System.out.println(teacherMap);
         System.out.println(lessonList);
     }

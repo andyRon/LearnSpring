@@ -31,7 +31,7 @@ public class AnnotationApplicationContext implements ApplicationContext {
 
     /**
      * 创建有参数构造，传递包路径，设置包扫描规则
-     * 当前包及其子包，哪个类有@Bean注解，就把这个鳄梨通过反射实例化
+     * 当前包及其子包，哪个类有@Bean注解，就把这个类通过反射实例化
      */
     public AnnotationApplicationContext(String basePackage) {
         try {
