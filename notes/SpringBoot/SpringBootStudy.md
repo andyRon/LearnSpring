@@ -228,3 +228,22 @@ https://pdai.tech/md/spring/springboot/springboot-x-interface-version.html
 ## websocket sb-03
 
 https://blog.csdn.net/qq_42402854/article/details/130948270
+
+websocket协议是基于TCP的一种新的网络协议,它实现了浏览器与服务器的**全双工通讯**——允许服务器主动发起信息个客户端,websocket是一种持久协议,http是非持久协议。
+
+在WebSocket应用程序中，服务器发布WebSocket端点，客户端使用url连接到服务器。建立连接后，服务器和客户端就可以互相发送消息。客户端通常连接到一台服务器，服务器接受多个客户端的连接。
+
+> WebSocket的最大特点就是，服务器可以主动向客户端推送信息，客户端也可以主动向服务器发送信息，是真正的双向平等对话。
+
+### WebSocket特点：
+
+1. 建立在 TCP 协议之上，服务器端的实现比较容易。
+2. 与 HTTP 协议有着良好的兼容性。默认端口也是80和443，并且握手阶段采用 HTTP 协议，因此握手时不容易屏蔽，能通过各种 HTTP 代理服务器。
+3. 数据格式比较轻量，性能开销小，通信高效。
+4. 可以发送文本，也可以发送二进制数据。
+5. 没有同源限制，客户端可以与任意服务器通信。
+6. 协议标识符是ws（如果加密，则为wss），服务器网址就是 URL。
+
+![](images/44572af02afa461dbb88c72a8261ea1c.png)
+
+![](images/image-20240327131451158.png)
